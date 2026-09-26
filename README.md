@@ -66,93 +66,95 @@ Accessibility considerations
 
 📁 Project Structure
 
-travel-genesis/
+```text
+Travel-Genesis/
+├── assets/                          # Centralized static assets
+│   ├── brand/                       # Logos and brand graphics
+│   │   ├── logo.png
+│   │   └── travel-logo.png
+│   ├── icons/                       # Shared UI icons
+│   │   ├── eye-open.png
+│   │   └── eye-close.png
+│   └── images/                      # Destination photos and cards
+│       ├── destinations/            # London.png, Tokyo, Japan.png, etc.
+│       └── onboarding/              # Onboarding hero images
 │
-├── Home-screen/
-│   ├── home.html
-│   ├── home.css
-│   └── home.js
+├── shared/                          # Global CSS, utilities & navigation
+│   ├── css/
+│   │   ├── design-system.css        # Master design system & tokens
+│   │   └── shared-nav.css           # Header & desktop navigation styles
+│   └── js/
+│       └── shared-nav.js            # Universal navigation component
 │
-├── Profile/
-│   ├── profile.html
-│   ├── profile.css
-│   └── profile.js
+├── pages/                           # Grouped logically by user journey
+│   ├── onboarding/                  # Splash & onboarding walkthrough
+│   │   ├── splash/                  # splash.html, .css, .js
+│   │   ├── step-1/                  # onboarding.html, .css, .js
+│   │   └── step-2/                  # onboarding2.html, .css, .js
+│   │
+│   ├── auth/                        # User authentication flow
+│   │   ├── login/                   # login.html, .css, .js
+│   │   ├── signup/                  # signup.html, .css, .js
+│   │   └── confirmation/            # confirmation.html, .css, .js
+│   │
+│   ├── booking/                     # Core search, flight & seat booking
+│   │   ├── home/                    # home.html, .css, .js
+│   │   ├── search/                  # search.html, .css, .js
+│   │   ├── flight-details/          # flight.html, .css, .js
+│   │   ├── seat-selection/          # seat.html, .css, .js
+│   │   ├── booking-details/         # bookings.html, .css, .js
+│   │   └── date-picker/             # datepicker.html, .css, .js
+│   │
+│   ├── payment/                     # Payment & checkout
+│   │   └── checkout/                # payment.html, .css, .js
+│   │
+│   ├── trips/                       # My trips, e-tickets, cancellation
+│   │   ├── trip-list/               # trip.html, .css, .js
+│   │   ├── e-ticket/                # e-ticket.html, .css, .js
+│   │   ├── cancel-booking/          # cancelbooking.html, .css, .js
+│   │   └── cancel-confirmation/     # cancelconfirmation.html, .css, .js
+│   │
+│   └── user/                        # Profile, preferences, and account management
+│       ├── profile/                 # profile.html, .css, .js
+│       ├── settings/                # settings.html, .css, .js
+│       ├── notifications/           # notification.html, .css, .js
+│       ├── explore/                 # explore.html, .css, .js
+│       ├── delete-account/          # delete.html, .css, .js
+│       └── logout/                  # logout.html, .css, .js
 │
-├── settings/
-│   ├── settings.html
-│   ├── settings.css
-│   └── settings.js
+├── scripts/
+│   ├── server.js                    # Zero-dependency local dev server
+│   └── check-links.js               # Comprehensive automated link audit
 │
-├── notification/
-│   ├── notification.html
-│   ├── notification.css
-│   └── notification.js
-│
-├── E-ticket/
-│   ├── e_tickect.html
-│   ├── e_ticket.css
-│   └── e_ticket.js
-│
-├── Explore/
-│   ├── explore.html
-│   ├── explore.css
-│   └── explore.js
-│
-├── Trip/
-│   ├── trip.html
-│   ├── trip.css
-│   └── trip.js
-│
-├── Search screen/
-│   ├── search.html
-│   ├── search.css
-│   └── search.js
-│
-├── flightdetails/
-│   ├── flight.html
-│   ├── flight.css
-│   └── flight.js
-│
-├── City-images/
-│   ├── London.png
-│   ├── Sydney.png
-│   ├── Tokyo.png
-│   └── [other destination images]
-│
-├── icons/
-│   └── [various SVG and PNG icons]
-│
-└── README.md 
-Note other pages followos as well.......
+├── index.html                       # Entry gateway splash page
+├── package.json                     # Project scripts (dev, start, check)
+├── .gitignore
+└── README.md
+```
 
-🚀 Installation
-Prerequisites
+🚀 Installation & Running
 
-A modern web browser (Chrome, Firefox, Safari, Edge)
-A local web server (optional but recommended)
+Prerequisites:
+- [Node.js](https://nodejs.org/) (v16+) or any modern web browser
 
-Live Server (VS Code extension)
-Python HTTP Server
-XAMPP/WAMP
+Steps:
 
-
-
-Steps
-
-Clone the repository
-git clone https://github.com/yourusername/travel-genesis.git
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/travel-genesis.git
    cd travel-genesis
-   Open with a local server
-Option A: Using VS Code Live Server
+   ```
 
-Install Live Server extension
-Right-click on index.html in Home-screen folder
-Select "Open with Live Server"
+2. Start the local development server:
+   ```bash
+   npm run dev
+   ```
+   Open your browser at `http://localhost:3000`.
 
-Navigate the app
-
-Start at the home page
-Use bottom navigation to explore different sections
+3. Verify project link integrity:
+   ```bash
+   npm run check
+   ```
 
 💻 Usage
 For End Users

@@ -1,0 +1,182 @@
+/* ==========================================================================
+   TRAVELGENESIS - ONBOARDING STEP 2
+   ========================================================================== */
+
+.onboarding-screen {
+     background-color: var(--tg-surface);
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+}
+
+.ambient-glow.glow-top {
+     position: absolute;
+     width: 320px;
+     height: 320px;
+     background: radial-gradient(circle, rgba(0, 122, 140, 0.12) 0%, transparent 70%);
+     top: -100px;
+     right: -80px;
+     border-radius: 50%;
+     pointer-events: none;
+}
+
+.content-container {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     padding: 36px 28px;
+     position: relative;
+     z-index: 10;
+     height: 100%;
+}
+
+/* Top Meta / Stepper */
+.top-meta {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     width: 100%;
+}
+
+.top-meta .header-badge {
+     padding: 4px 12px;
+     background: var(--tg-primary-light);
+     color: var(--tg-primary);
+     font-size: 12px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.5px;
+     border-radius: var(--tg-radius-pill);
+}
+
+.top-meta .tg-indicator-dots {
+     margin: 0;
+}
+
+/* Globe Hero Section */
+.hero-globe-section {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     margin: 20px 0;
+}
+
+.globe-halo {
+     position: absolute;
+     width: 220px;
+     height: 220px;
+     border-radius: 50%;
+     background: radial-gradient(circle, rgba(0, 122, 140, 0.25) 0%, rgba(92, 225, 230, 0.05) 60%, transparent 80%);
+     animation: tgPulseGlow 4s ease-in-out infinite alternate;
+}
+
+.globe-card {
+     width: 190px;
+     height: 190px;
+     border-radius: 50%;
+     background: #FFFFFF;
+     box-shadow: 0 20px 50px -10px rgba(0, 122, 140, 0.3), 0 0 0 8px rgba(224, 242, 245, 0.6);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     position: relative;
+     z-index: 2;
+     overflow: hidden;
+     animation: tgFloat 4s ease-in-out infinite;
+}
+
+.globe-img {
+     width: 112%;
+     height: 112%;
+     object-fit: cover;
+     border-radius: 50%;
+}
+
+.brand-pill {
+     margin-top: 18px;
+     padding: 6px 18px;
+     background: rgba(255, 255, 255, 0.95);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     border: 1px solid var(--tg-border);
+     border-radius: var(--tg-radius-pill);
+     font-family: var(--tg-font-heading);
+     font-size: 14px;
+     font-weight: 700;
+     color: var(--tg-text-main);
+     box-shadow: var(--tg-shadow-sm);
+     display: flex;
+     align-items: center;
+     gap: 6px;
+     z-index: 3;
+}
+
+.brand-pill .highlight {
+     color: var(--tg-primary);
+}
+
+/* Copywriting */
+.text-content {
+     text-align: center;
+     margin: 10px 0 24px;
+}
+
+.main-heading {
+     font-size: 30px;
+     font-weight: 700;
+     line-height: 1.25;
+     color: var(--tg-text-main);
+     margin-bottom: 12px;
+     letter-spacing: -0.5px;
+}
+
+.main-heading .accent-text {
+     background: var(--tg-primary-gradient);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+}
+
+.sub-text {
+     font-size: 15px;
+     color: var(--tg-text-muted);
+     line-height: 1.55;
+     max-width: 320px;
+     margin: 0 auto;
+}
+
+/* Actions */
+.actions-area {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 16px;
+     width: 100%;
+}
+
+.get-started-button {
+     width: 100%;
+     padding: 16px 28px;
+     font-size: 17px;
+}
+
+.signin-prompt {
+     font-size: 14px;
+     color: var(--tg-text-muted);
+     margin: 0;
+}
+
+.signin-anchor {
+     color: var(--tg-primary);
+     font-weight: 600;
+     text-decoration: none;
+     transition: color var(--tg-transition-fast);
+}
+
+.signin-anchor:hover {
+     color: var(--tg-primary-hover);
+     text-decoration: underline;
+}

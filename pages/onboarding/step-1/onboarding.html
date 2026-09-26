@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelGenesis - Explore New Places</title>
+    <link rel="stylesheet" href="../../../shared/css/design-system.css">
+    <link rel="stylesheet" href="onboarding.css">
+</head>
+
+<body>
+    <div class="phone-container">
+        <div class="content">
+            <!-- Header Section -->
+            <div class="header">
+                <div class="header-badge">Step 1 of 2</div>
+                <h1 class="onboarding-title">Explore New Places</h1>
+                <p class="onboarding-desc">Travel around the world with just a tap, and enjoy your best holiday with ease.</p>
+                
+                <!-- Step Indicator Dots -->
+                <div class="tg-indicator-dots">
+                    <div class="tg-dot active"></div>
+                    <div class="tg-dot"></div>
+                </div>
+            </div>
+
+            <!-- Image Section with Gradient Vignette -->
+            <div class="hero-image-wrapper">
+                <img src="../../../assets/images/onboarding/image.png" alt="Tropical Paradise" class="main-image">
+                <div class="image-gradient-overlay"></div>
+
+                <!-- Floating Info Badge on image -->
+                <div class="floating-badge">
+                    <span class="badge-icon">✈️</span>
+                    <span class="badge-text">500+ Top Destinations</span>
+                </div>
+
+                <!-- Buttons Overlay -->
+                <div class="buttons-container">
+                    <a href="#" class="tg-btn-secondary btn-skip" id="skipBtn">Skip</a>
+                    <a href="#" class="tg-btn btn-next" id="nextBtn">
+                        Next
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+    <script src="onboarding.js"></script>
+</body>
+
+</html>

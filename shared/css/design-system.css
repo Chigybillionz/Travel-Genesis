@@ -1,0 +1,362 @@
+/* ==========================================================================
+   TRAVELGENESIS MASTER DESIGN SYSTEM
+   Modern, Premium, Responsive Mobile-First Design Architecture
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  /* Brand Primary Colors */
+  --tg-primary: #007A8C;
+  --tg-primary-hover: #006373;
+  --tg-primary-dark: #004D5A;
+  --tg-primary-light: #E0F2F5;
+  --tg-primary-ultralight: #F0F9FA;
+  --tg-primary-gradient: linear-gradient(135deg, #007A8C 0%, #00A6B8 100%);
+  --tg-primary-glow: 0 10px 25px -5px rgba(0, 122, 140, 0.35);
+
+  /* Secondary & Accent Colors */
+  --tg-accent-purple: #7928CA;
+  --tg-accent-lilac: #E0B8FF;
+  --tg-accent-coral: #FF5A5F;
+  --tg-accent-gold: #FFB703;
+  --tg-accent-amber: #F59E0B;
+  --tg-accent-green: #10B981;
+
+  /* Neutral Spectrum */
+  --tg-bg-desktop: #0D1B2A;
+  --tg-bg-app: #F8FAFC;
+  --tg-surface: #FFFFFF;
+  --tg-surface-alt: #F1F5F9;
+  --tg-border: #E2E8F0;
+  --tg-border-light: #F1F5F9;
+
+  /* Text Colors */
+  --tg-text-main: #0F172A;
+  --tg-text-body: #334155;
+  --tg-text-muted: #64748B;
+  --tg-text-light: #94A3B8;
+  --tg-text-white: #FFFFFF;
+
+  /* Typography */
+  --tg-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --tg-font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  /* Border Radii */
+  --tg-radius-xs: 6px;
+  --tg-radius-sm: 10px;
+  --tg-radius-md: 16px;
+  --tg-radius-lg: 24px;
+  --tg-radius-xl: 32px;
+  --tg-radius-pill: 9999px;
+
+  /* Shadows */
+  --tg-shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+  --tg-shadow-md: 0 8px 16px -2px rgba(15, 23, 42, 0.06);
+  --tg-shadow-lg: 0 16px 32px -4px rgba(15, 23, 42, 0.08);
+  --tg-shadow-xl: 0 24px 48px -8px rgba(15, 23, 42, 0.12);
+  --tg-shadow-floating: 0 20px 40px -10px rgba(0, 122, 140, 0.22);
+  --tg-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --tg-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --tg-transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --tg-transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Universal Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  font-family: var(--tg-font-family);
+  color: var(--tg-text-main);
+  background-color: var(--tg-bg-desktop);
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(0, 122, 140, 0.2) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(121, 40, 202, 0.15) 0px, transparent 50%),
+    linear-gradient(180deg, #09131D 0%, #0F2027 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile App Chassis Frame (Beautiful on Desktop, Native on Mobile) */
+.tg-app-container,
+.phone-container,
+.onboarding-screen,
+.splash-screen,
+.container,
+.payment-container,
+.input-box {
+  width: 100%;
+  max-width: 414px;
+  height: 100vh;
+  max-height: 896px;
+  background-color: var(--tg-surface);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: 42px;
+  transition: all var(--tg-transition-smooth);
+}
+
+/* Hide scrollbars but keep functionality */
+.tg-app-container::-webkit-scrollbar,
+.phone-container::-webkit-scrollbar,
+.container::-webkit-scrollbar {
+  display: none;
+}
+.tg-app-container,
+.phone-container,
+.container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Responsive adjustment for actual mobile viewport */
+@media (max-width: 480px) {
+  html, body {
+    background: var(--tg-surface);
+  }
+  .tg-app-container,
+  .phone-container,
+  .onboarding-screen,
+  .splash-screen,
+  .container,
+  .payment-container,
+  .input-box {
+    max-width: 100% !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Standard Phone Status Bar / Home Indicator */
+.home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background-color: rgba(15, 23, 42, 0.2);
+  border-radius: var(--tg-radius-pill);
+  z-index: 99;
+  pointer-events: none;
+  transition: background-color var(--tg-transition-normal);
+}
+
+.home-indicator.light {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Common Typography Classes */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--tg-font-heading);
+  color: var(--tg-text-main);
+  letter-spacing: -0.02em;
+}
+
+/* Reusable UI Components */
+
+/* Modern Action Buttons */
+.tg-btn,
+.btn-next,
+.get-started-button,
+.submit-btn,
+.continue-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--tg-primary-gradient);
+  color: var(--tg-text-white);
+  font-family: var(--tg-font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: var(--tg-radius-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--tg-primary-glow);
+  transition: all var(--tg-transition-normal);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.tg-btn::after,
+.btn-next::after,
+.get-started-button::after,
+.submit-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.6s ease;
+}
+
+.tg-btn:hover::after,
+.btn-next:hover::after,
+.get-started-button:hover::after,
+.submit-btn:hover::after {
+  left: 100%;
+}
+
+.tg-btn:hover,
+.btn-next:hover,
+.get-started-button:hover,
+.submit-btn:hover,
+.continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -4px rgba(0, 122, 140, 0.45);
+}
+
+.tg-btn:active,
+.btn-next:active,
+.get-started-button:active,
+.submit-btn:active,
+.continue-btn:active {
+  transform: scale(0.98);
+}
+
+/* Secondary & Skip Button */
+.tg-btn-secondary,
+.btn-skip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  background: transparent;
+  color: var(--tg-text-muted);
+  font-family: var(--tg-font-family);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--tg-radius-pill);
+  border: 1.5px solid var(--tg-border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--tg-transition-normal);
+}
+
+.tg-btn-secondary:hover,
+.btn-skip:hover {
+  background: var(--tg-surface-alt);
+  color: var(--tg-text-main);
+  border-color: var(--tg-text-light);
+}
+
+.tg-btn-secondary:active,
+.btn-skip:active {
+  transform: scale(0.98);
+}
+
+/* Modern Pill Dots Indicator */
+.tg-indicator-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--tg-radius-pill);
+  background-color: var(--tg-border);
+  transition: all var(--tg-transition-normal);
+}
+
+.tg-dot.active {
+  width: 24px;
+  background: var(--tg-primary-gradient);
+  box-shadow: 0 2px 8px rgba(0, 122, 140, 0.35);
+}
+
+/* Glassmorphism Card Effect */
+.tg-glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow-card);
+}
+
+/* Smooth Universal Micro-Animations */
+@keyframes tgFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tgSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tgFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes tgPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 122, 140, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 122, 140, 0.6);
+  }
+}
+
+@keyframes tgSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: tgFadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: tgSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: tgFloat 3s ease-in-out infinite;
+}
