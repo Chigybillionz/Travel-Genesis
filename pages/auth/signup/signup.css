@@ -383,7 +383,7 @@ html, body {
 
     .auth-header {
         flex: none;
-        padding: 36px 24px 28px;
+        padding: 72px 24px 32px;
     }
 
     .logo-wrapper svg {
