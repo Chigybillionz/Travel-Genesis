@@ -5,38 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TravelGenesis - Explore New Places</title>
+    <meta name="description" content="Discover 500+ top destinations worldwide. Start your travel journey with TravelGenesis.">
     <link rel="stylesheet" href="../../../shared/css/design-system.css">
     <link rel="stylesheet" href="onboarding.css">
 </head>
 
 <body>
-    <div class="phone-container">
-        <div class="content">
-            <!-- Header Section -->
-            <div class="header">
+    <div class="onboarding-page">
+        <!-- Hero Image Side -->
+        <div class="hero-side">
+            <img src="../../../assets/images/onboarding/image.png" alt="Tropical Paradise Destination" class="hero-image">
+            <div class="hero-overlay"></div>
+
+            <!-- Floating Info Badge -->
+            <div class="floating-badge">
+                <span class="badge-icon">✈️</span>
+                <span class="badge-text">500+ Top Destinations</span>
+            </div>
+        </div>
+
+        <!-- Content Side -->
+        <div class="content-side">
+            <div class="content-inner">
+                <!-- Step Badge -->
                 <div class="header-badge">Step 1 of 2</div>
+
+                <!-- Title -->
                 <h1 class="onboarding-title">Explore New Places</h1>
+
+                <!-- Description -->
                 <p class="onboarding-desc">Travel around the world with just a tap, and enjoy your best holiday with ease.</p>
-                
+
                 <!-- Step Indicator Dots -->
                 <div class="tg-indicator-dots">
                     <div class="tg-dot active"></div>
                     <div class="tg-dot"></div>
                 </div>
-            </div>
 
-            <!-- Image Section with Gradient Vignette -->
-            <div class="hero-image-wrapper">
-                <img src="../../../assets/images/onboarding/image.png" alt="Tropical Paradise" class="main-image">
-                <div class="image-gradient-overlay"></div>
-
-                <!-- Floating Info Badge on image -->
-                <div class="floating-badge">
-                    <span class="badge-icon">✈️</span>
-                    <span class="badge-text">500+ Top Destinations</span>
-                </div>
-
-                <!-- Buttons Overlay -->
+                <!-- Buttons -->
                 <div class="buttons-container">
                     <a href="#" class="tg-btn-secondary btn-skip" id="skipBtn">Skip</a>
                     <a href="#" class="tg-btn btn-next" id="nextBtn">
@@ -48,10 +54,9 @@
                     </a>
                 </div>
             </div>
-
-            <div class="home-indicator"></div>
         </div>
     </div>
+
     <script src="onboarding.js"></script>
 </body>
 

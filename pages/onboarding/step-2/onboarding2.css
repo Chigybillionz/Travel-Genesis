@@ -1,182 +1,365 @@
 /* ==========================================================================
-   TRAVELGENESIS - ONBOARDING STEP 2
+   TRAVELGENESIS - ONBOARDING STEP 2 (Full-Screen Desktop Layout)
+   Premium dark centered layout with globe hero
    ========================================================================== */
 
-.onboarding-screen {
-     background-color: var(--tg-surface);
-     position: relative;
-     overflow: hidden;
-     display: flex;
-     flex-direction: column;
+/* ── Override design-system body centering ──────────────────────────────── */
+html, body {
+    background: #0A1220 !important;
+    background-image: none !important;
+    display: block !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
 }
 
-.ambient-glow.glow-top {
-     position: absolute;
-     width: 320px;
-     height: 320px;
-     background: radial-gradient(circle, rgba(0, 122, 140, 0.12) 0%, transparent 70%);
-     top: -100px;
-     right: -80px;
-     border-radius: 50%;
-     pointer-events: none;
+/* ── Full-Viewport Container ──────────────────────────────────────────── */
+.onboarding-page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0, 122, 140, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 75% 20%, rgba(92, 225, 230, 0.03) 0%, transparent 55%),
+        linear-gradient(170deg, #0A1220 0%, #0F1E30 30%, #122A3E 55%, #0D1F2E 80%, #0A1220 100%);
+    padding: 40px;
 }
 
+/* ── Atmospheric Ambient Glows ─────────────────────────────────────────── */
+.ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.glow-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 122, 140, 0.08) 0%, transparent 70%);
+    top: -150px;
+    right: -100px;
+    filter: blur(60px);
+    animation: glowDrift 10s ease-in-out infinite alternate;
+}
+
+.glow-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(92, 225, 230, 0.05) 0%, transparent 70%);
+    bottom: -120px;
+    left: -100px;
+    filter: blur(70px);
+    animation: glowDrift 12s ease-in-out infinite alternate-reverse;
+}
+
+.glow-3 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(121, 40, 202, 0.04) 0%, transparent 70%);
+    top: 60%;
+    right: 20%;
+    filter: blur(80px);
+    animation: glowPulse 8s ease-in-out infinite;
+}
+
+/* Subtle star particles */
+.onboarding-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 18% 22%, rgba(255, 255, 255, 0.1), transparent),
+        radial-gradient(1px 1px at 82% 18%, rgba(255, 255, 255, 0.08), transparent),
+        radial-gradient(1px 1px at 55% 78%, rgba(255, 255, 255, 0.06), transparent),
+        radial-gradient(1px 1px at 35% 55%, rgba(92, 225, 230, 0.07), transparent),
+        radial-gradient(1px 1px at 90% 65%, rgba(255, 255, 255, 0.05), transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── Content Container ─────────────────────────────────────────────────── */
 .content-container {
-     flex: 1;
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-     padding: 36px 28px;
-     position: relative;
-     z-index: 10;
-     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    max-width: 520px;
+    width: 100%;
+    animation: contentFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Top Meta / Stepper */
+/* ── Top Meta / Stepper ────────────────────────────────────────────────── */
 .top-meta {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 40px;
 }
 
-.top-meta .header-badge {
-     padding: 4px 12px;
-     background: var(--tg-primary-light);
-     color: var(--tg-primary);
-     font-size: 12px;
-     font-weight: 700;
-     text-transform: uppercase;
-     letter-spacing: 0.5px;
-     border-radius: var(--tg-radius-pill);
+.header-badge {
+    padding: 6px 16px;
+    background: rgba(92, 225, 230, 0.1);
+    color: #5CE1E6;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: var(--tg-radius-pill);
+    border: 1px solid rgba(92, 225, 230, 0.15);
 }
 
-.top-meta .tg-indicator-dots {
-     margin: 0;
+.tg-indicator-dots {
+    margin: 0 !important;
 }
 
-/* Globe Hero Section */
+.tg-dot {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.tg-dot.active {
+    background: linear-gradient(135deg, #5CE1E6, #00A6B8) !important;
+}
+
+/* ── Globe Hero Section ────────────────────────────────────────────────── */
 .hero-globe-section {
-     position: relative;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     margin: 20px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 36px;
 }
 
 .globe-halo {
-     position: absolute;
-     width: 220px;
-     height: 220px;
-     border-radius: 50%;
-     background: radial-gradient(circle, rgba(0, 122, 140, 0.25) 0%, rgba(92, 225, 230, 0.05) 60%, transparent 80%);
-     animation: tgPulseGlow 4s ease-in-out infinite alternate;
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 122, 140, 0.15) 0%, rgba(92, 225, 230, 0.04) 50%, transparent 75%);
+    animation: haloPulse 5s ease-in-out infinite alternate;
 }
 
 .globe-card {
-     width: 190px;
-     height: 190px;
-     border-radius: 50%;
-     background: #FFFFFF;
-     box-shadow: 0 20px 50px -10px rgba(0, 122, 140, 0.3), 0 0 0 8px rgba(224, 242, 245, 0.6);
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     position: relative;
-     z-index: 2;
-     overflow: hidden;
-     animation: tgFloat 4s ease-in-out infinite;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow:
+        0 25px 60px -15px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 40px rgba(92, 225, 230, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    animation: tgFloat 4.5s ease-in-out infinite;
 }
 
 .globe-img {
-     width: 112%;
-     height: 112%;
-     object-fit: cover;
-     border-radius: 50%;
+    width: 112%;
+    height: 112%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .brand-pill {
-     margin-top: 18px;
-     padding: 6px 18px;
-     background: rgba(255, 255, 255, 0.95);
-     backdrop-filter: blur(10px);
-     -webkit-backdrop-filter: blur(10px);
-     border: 1px solid var(--tg-border);
-     border-radius: var(--tg-radius-pill);
-     font-family: var(--tg-font-heading);
-     font-size: 14px;
-     font-weight: 700;
-     color: var(--tg-text-main);
-     box-shadow: var(--tg-shadow-sm);
-     display: flex;
-     align-items: center;
-     gap: 6px;
-     z-index: 3;
+    margin-top: 20px;
+    padding: 8px 22px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--tg-radius-pill);
+    font-family: var(--tg-font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
 }
 
 .brand-pill .highlight {
-     color: var(--tg-primary);
+    color: #5CE1E6;
 }
 
-/* Copywriting */
+/* ── Copywriting ───────────────────────────────────────────────────────── */
 .text-content {
-     text-align: center;
-     margin: 10px 0 24px;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .main-heading {
-     font-size: 30px;
-     font-weight: 700;
-     line-height: 1.25;
-     color: var(--tg-text-main);
-     margin-bottom: 12px;
-     letter-spacing: -0.5px;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin-bottom: 16px;
+    letter-spacing: -0.8px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .main-heading .accent-text {
-     background: var(--tg-primary-gradient);
-     -webkit-background-clip: text;
-     -webkit-text-fill-color: transparent;
+    background: linear-gradient(135deg, #5CE1E6 0%, #00A6B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .sub-text {
-     font-size: 15px;
-     color: var(--tg-text-muted);
-     line-height: 1.55;
-     max-width: 320px;
-     margin: 0 auto;
+    font-size: 16px;
+    color: rgba(200, 215, 230, 0.55);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-/* Actions */
+/* ── Actions ───────────────────────────────────────────────────────────── */
 .actions-area {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 16px;
-     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    max-width: 360px;
 }
 
 .get-started-button {
-     width: 100%;
-     padding: 16px 28px;
-     font-size: 17px;
+    width: 100%;
+    padding: 18px 28px;
+    font-size: 17px;
 }
 
 .signin-prompt {
-     font-size: 14px;
-     color: var(--tg-text-muted);
-     margin: 0;
+    font-size: 14px;
+    color: rgba(200, 215, 230, 0.45);
+    margin: 0;
 }
 
 .signin-anchor {
-     color: var(--tg-primary);
-     font-weight: 600;
-     text-decoration: none;
-     transition: color var(--tg-transition-fast);
+    color: #5CE1E6;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--tg-transition-fast);
 }
 
 .signin-anchor:hover {
-     color: var(--tg-primary-hover);
-     text-decoration: underline;
+    color: #A8F5FF;
+    text-decoration: underline;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────────────────── */
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glowDrift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -20px) scale(1.1); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+@keyframes haloPulse {
+    0% { transform: scale(0.85); opacity: 0.5; }
+    100% { transform: scale(1.1); opacity: 0.9; }
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .onboarding-page {
+        padding: 32px 24px;
+    }
+
+    .globe-card {
+        width: 160px;
+        height: 160px;
+    }
+
+    .globe-halo {
+        width: 220px;
+        height: 220px;
+    }
+
+    .main-heading {
+        font-size: 30px;
+    }
+
+    .sub-text {
+        font-size: 15px;
+    }
+
+    .glow-1 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .glow-2 {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .onboarding-page {
+        padding: 24px 20px;
+    }
+
+    .top-meta {
+        margin-bottom: 28px;
+    }
+
+    .globe-card {
+        width: 140px;
+        height: 140px;
+    }
+
+    .globe-halo {
+        width: 180px;
+        height: 180px;
+    }
+
+    .hero-globe-section {
+        margin-bottom: 28px;
+    }
+
+    .main-heading {
+        font-size: 26px;
+        letter-spacing: -0.5px;
+    }
+
+    .sub-text {
+        font-size: 14px;
+    }
+
+    .text-content {
+        margin-bottom: 32px;
+    }
+
+    .get-started-button {
+        padding: 16px 24px;
+        font-size: 16px;
+    }
 }

@@ -93,9 +93,6 @@ html, body {
 
 /* Mobile App Chassis Frame (Beautiful on Desktop, Native on Mobile) */
 .tg-app-container,
-.phone-container,
-.onboarding-screen,
-.splash-screen,
 .container,
 .payment-container,
 .input-box {
@@ -133,9 +130,6 @@ html, body {
     background: var(--tg-surface);
   }
   .tg-app-container,
-  .phone-container,
-  .onboarding-screen,
-  .splash-screen,
   .container,
   .payment-container,
   .input-box {
