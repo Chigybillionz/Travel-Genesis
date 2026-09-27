@@ -1,24 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#loginForm");
   const passwordInput = document.querySelector("#password");
-  const eyeIcon = document.querySelector("#eyeicon");
+  const eyeToggle = document.querySelector("#eyeToggle");
   const email = document.querySelector("#email");
-  const signupLink = document.querySelector("#signup-link");
 
-  // Toggle password visibility
-  if (eyeIcon && passwordInput) {
-    eyeIcon.addEventListener("click", function () {
+  // Toggle password visibility (SVG-based)
+  if (eyeToggle && passwordInput) {
+    eyeToggle.addEventListener("click", function () {
+      const eyeClosed = eyeToggle.querySelector(".eye-closed");
+      const eyeOpen = eyeToggle.querySelector(".eye-open");
       const currentType = passwordInput.getAttribute("type");
+
       if (currentType === "password") {
-        // Password is currently HIDDEN, so we're going to SHOW it
         passwordInput.setAttribute("type", "text");
-        eyeIcon.src = "../../../assets/icons/eye-open.png"; // Open eye
-        eyeIcon.alt = "Hide password";
+        eyeClosed.style.display = "none";
+        eyeOpen.style.display = "block";
       } else {
-        // Password is currently VISIBLE, so we're going to HIDE it
         passwordInput.setAttribute("type", "password");
-        eyeIcon.src = "../../../assets/icons/eye-close.png"; // Closed eye
-        eyeIcon.alt = "Show password";
+        eyeClosed.style.display = "block";
+        eyeOpen.style.display = "none";
       }
     });
   }
@@ -68,13 +68,4 @@ document.addEventListener("DOMContentLoaded", () => {
       input.classList.remove("error-border");
     });
   });
-
-  // Handle sign up link click
-  if (signupLink) {
-    signupLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      console.log("Sign up link clicked! Navigating to Sign Up page...");
-      window.location.href = "../../auth/signup/signup.html";
-    });
-  }
 });

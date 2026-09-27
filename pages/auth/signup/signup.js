@@ -3,22 +3,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const termsCheckbox = document.querySelector("#terms");
   const signupBtn = document.querySelector("#submitBtn");
   const passwordInput = document.querySelector("#password");
-  const eyeIcon = document.querySelector("#eyeicon");
+  const eyeToggle = document.querySelector("#eyeToggle");
   const fullnameInput = document.querySelector("#fullname");
   const emailInput = document.querySelector("#email");
 
-  // Password visibility toggle
-  if (eyeIcon && passwordInput) {
-    eyeIcon.addEventListener("click", function () {
+  // Password visibility toggle (SVG-based)
+  if (eyeToggle && passwordInput) {
+    eyeToggle.addEventListener("click", function () {
+      const eyeClosed = eyeToggle.querySelector(".eye-closed");
+      const eyeOpen = eyeToggle.querySelector(".eye-open");
       const currentType = passwordInput.getAttribute("type");
+
       if (currentType === "password") {
         passwordInput.setAttribute("type", "text");
-        eyeIcon.src = "../../../assets/icons/eye-open.png";
-        eyeIcon.alt = "Hide password";
+        eyeClosed.style.display = "none";
+        eyeOpen.style.display = "block";
       } else {
         passwordInput.setAttribute("type", "password");
-        eyeIcon.src = "../../../assets/icons/eye-close.png";
-        eyeIcon.alt = "Show password";
+        eyeClosed.style.display = "block";
+        eyeOpen.style.display = "none";
       }
     });
   }
@@ -107,14 +110,4 @@ document.addEventListener("DOMContentLoaded", () => {
       input.classList.remove("error-border");
     });
   });
-});
-
-// Sign in redirect
-document.addEventListener("DOMContentLoaded", function () {
-  const signIn = document.getElementById("sign-in");
-  if (signIn) {
-    signIn.addEventListener("click", function () {
-      window.location.href = "../../auth/login/login.html";
-    });
-  }
 });
