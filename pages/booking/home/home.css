@@ -105,7 +105,7 @@
  }
 
  .see-all {
-   color: #007a8c;
+   color: var(--color-primary-dark);
    text-decoration: none;
    font-size: 14px;
    font-weight: 600;
@@ -200,8 +200,8 @@
  .book-btn {
    width: 100%;
    padding: 12px;
-   background: linear-gradient(135deg, #00a6b8 0%, #007a8c 100%);
-   color: #fff;
+   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+   color: var(--tg-text-main);
    border: none;
    border-radius: 10px;
    font-size: 14px;
@@ -256,7 +256,7 @@
  }
 
  .nav-item.active {
-   color: #007a8c;
+   color: var(--color-primary-dark);
  }
 
  .nav-icon {
@@ -316,7 +316,7 @@
    }
 
    .desktop-nav a.active {
-     color: #007a8c;
+     color: var(--color-primary-dark);
    }
 
    .desktop-nav a::after {
@@ -327,7 +327,7 @@
      transform: translateX(-50%);
      width: 0;
      height: 3px;
-     background: linear-gradient(90deg, #00a6b8 0%, #007a8c 100%);
+     background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
      transition: width 0.3s ease;
      border-radius: 3px 3px 0 0;
    }
@@ -337,7 +337,7 @@
    }
 
    .desktop-nav a:hover {
-     color: #007a8c;
+     color: var(--color-primary-dark);
    }
 
    /* Hide mobile bottom nav */

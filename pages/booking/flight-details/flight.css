@@ -267,8 +267,8 @@
  .continue-btn {
      width: 100%;
      padding: 18px;
-     background: #007a8c;
-     color: white;
+     background: var(--color-primary-dark);
+     color: var(--tg-text-main);
      border: none;
      border-radius: 12px;
      font-size: 17px;

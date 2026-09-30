@@ -32,7 +32,7 @@ html, body {
 /* ── Left: Brand Panel (Teal Gradient) ─────────────────────────────────── */
 .auth-header {
     flex: 0 0 45%;
-    background: linear-gradient(165deg, #007A8C 0%, #00A6B8 35%, #009BAB 65%, #007A8C 100%);
+    background: var(--color-primary-gradient);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -167,8 +167,8 @@ html, body {
 
 .input-wrapper input:focus {
     background: #FFFFFF;
-    border-color: #007A8C;
-    box-shadow: 0 0 0 3px rgba(0, 122, 140, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft), inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 /* Password eye toggle */
@@ -193,7 +193,7 @@ html, body {
 }
 
 .eye-toggle:hover {
-    color: #007A8C;
+    color: var(--color-primary);
 }
 
 /* ── Checkbox ──────────────────────────────────────────────────────────── */
@@ -209,7 +209,7 @@ html, body {
     height: 18px;
     min-width: 18px;
     margin-top: 1px;
-    accent-color: #007A8C;
+    accent-color: var(--color-primary);
     cursor: pointer;
 }
 
@@ -223,7 +223,7 @@ html, body {
 }
 
 .checkbox-group a {
-    color: #007A8C;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
 }
@@ -236,9 +236,9 @@ html, body {
 .auth-btn {
     width: 100%;
     padding: 16px 28px;
-    background: linear-gradient(135deg, #007A8C 0%, #00A6B8 100%);
-    color: #FFFFFF;
-    font-family: 'Outfit', sans-serif;
+    background: var(--color-primary-gradient);
+    color: var(--tg-text-main);
+    font-family: var(--tg-font-heading);
     font-size: 17px;
     font-weight: 600;
     border: none;
@@ -248,7 +248,7 @@ html, body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 8px 24px -4px rgba(0, 122, 140, 0.35);
+    box-shadow: var(--color-primary-glow);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -264,7 +264,7 @@ html, body {
 
 .auth-btn:not(:disabled):hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px -4px rgba(0, 122, 140, 0.45);
+    box-shadow: var(--color-primary-glow);
 }
 
 .auth-btn:not(:disabled):active {
@@ -287,10 +287,10 @@ html, body {
 }
 
 .auth-btn.is-active {
-    background: linear-gradient(135deg, #007A8C 0%, #00A6B8 100%);
+    background: var(--color-primary-gradient);
     cursor: pointer;
     opacity: 1;
-    box-shadow: 0 8px 24px -4px rgba(0, 122, 140, 0.35);
+    box-shadow: var(--color-primary-glow);
 }
 
 /* ── Switch Link ───────────────────────────────────────────────────────── */
@@ -302,14 +302,14 @@ html, body {
 }
 
 .switch-link a {
-    color: #007A8C;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s;
 }
 
 .switch-link a:hover {
-    color: #005A66;
+    color: var(--color-primary-hover);
     text-decoration: underline;
 }
 
@@ -323,7 +323,7 @@ html, body {
 }
 
 .terms-footer a {
-    color: #007A8C;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 500;
 }

@@ -895,7 +895,7 @@
  .success-title {
      font-size: 26px;
      font-weight: 600;
-     color: #007a8c;
+     color: var(--color-primary-dark);
      margin-bottom: 16px;
  }
 
@@ -923,7 +923,7 @@
  }
 
  .success-btn.primary {
-     background-color: #007a8c;
+     background-color: var(--color-primary-dark);
      color: white;
  }
 
@@ -934,7 +934,7 @@
 
  .success-btn.secondary {
      background-color: #b3e5fc;
-     color: #007a8c;
+     color: var(--color-primary-dark);
  }
 
  .success-btn.secondary:hover {

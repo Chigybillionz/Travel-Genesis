@@ -6,14 +6,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  /* Brand Primary Colors */
-  --tg-primary: #007A8C;
-  --tg-primary-hover: #006373;
-  --tg-primary-dark: #004D5A;
-  --tg-primary-light: #E0F2F5;
-  --tg-primary-ultralight: #F0F9FA;
-  --tg-primary-gradient: linear-gradient(135deg, #007A8C 0%, #00A6B8 100%);
-  --tg-primary-glow: 0 10px 25px -5px rgba(0, 122, 140, 0.35);
+  /* Brand Primary Colors (Derived from Landing Page) */
+  --color-primary: #5CE1E6;
+  --color-primary-hover: #4BCAD0;
+  --color-primary-active: #3AB4B9;
+  --color-primary-dark: #00A6B8;
+  --color-primary-light: #A8F5FF;
+  --color-primary-soft: rgba(92, 225, 230, 0.15);
+  --color-primary-ultralight: rgba(92, 225, 230, 0.05);
+  --color-primary-gradient: linear-gradient(135deg, #5CE1E6 0%, #00A6B8 100%);
+  --color-primary-glow: 0 10px 25px -5px rgba(92, 225, 230, 0.4);
+
+  /* Aliases for existing --tg- vars to not break anything unupdated yet */
+  --tg-primary: var(--color-primary);
+  --tg-primary-hover: var(--color-primary-hover);
+  --tg-primary-dark: var(--color-primary-dark);
+  --tg-primary-light: var(--color-primary-light);
+  --tg-primary-ultralight: var(--color-primary-ultralight);
+  --tg-primary-gradient: var(--color-primary-gradient);
+  --tg-primary-glow: var(--color-primary-glow);
 
   /* Secondary & Accent Colors */
   --tg-accent-purple: #7928CA;
@@ -24,8 +35,12 @@
   --tg-accent-green: #10B981;
 
   /* Neutral Spectrum */
-  --tg-bg-desktop: #0D1B2A;
-  --tg-bg-app: #F8FAFC;
+  --color-bg-dark: #0D1B2A; /* Deep Navy from Onboarding */
+  --color-bg-darker: #020A10; /* Deeper Navy from Splash */
+  --color-bg-light: #F8FAFC;
+  
+  --tg-bg-desktop: var(--color-bg-dark);
+  --tg-bg-app: var(--color-bg-light);
   --tg-surface: #FFFFFF;
   --tg-surface-alt: #F1F5F9;
   --tg-border: #E2E8F0;
@@ -181,16 +196,16 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
   width: 100%;
   padding: 16px 24px;
-  background: var(--tg-primary-gradient);
-  color: var(--tg-text-white);
+  background: var(--color-primary-gradient);
+  color: var(--tg-text-main); /* Dark text on bright cyan for contrast */
   font-family: var(--tg-font-heading);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: var(--tg-radius-pill);
   border: none;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: var(--tg-primary-glow);
+  box-shadow: var(--color-primary-glow);
   transition: all var(--tg-transition-normal);
   user-select: none;
   position: relative;

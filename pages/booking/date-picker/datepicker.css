@@ -178,13 +178,13 @@ body {
 
 .day.available-date:hover {
     background-color: #e8f4f8;
-    border-color: #007a8c;
+    border-color: var(--color-primary-dark);
 }
 
 .day.today-date {
-    border: 2px solid #007a8c;
+    border: 2px solid var(--color-primary-dark);
     font-weight: 600;
-    color: #007a8c;
+    color: var(--color-primary-dark);
     background-color: #ffffff;
 }
 
@@ -193,10 +193,10 @@ body {
 }
 
 .day.selected, .day.today-date.selected {
-    background-color: #007a8c;
+    background-color: var(--color-primary-dark);
     color: #ffffff;
     font-weight: 600;
-    border-color: #007a8c;
+    border-color: var(--color-primary-dark);
 }
 
 /* Footer Styles */
@@ -209,8 +209,8 @@ body {
 .next-btn {
     width: 100%;
     padding: 14px;
-    background-color: #007a8c;
-    color: #ffffff;
+    background-color: var(--color-primary-dark);
+    color: var(--tg-text-main);
     border: none;
     border-radius: 8px;
     font-size: 16px;

@@ -98,7 +98,7 @@ body {
 
 .card-top-accent {
     height: 4px;
-    background: linear-gradient(90deg, #00a6b8 0%, #007a8c 100%);
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     width: 100%;
 }
 
@@ -160,7 +160,7 @@ body {
     position: relative;
     background: #fff;
     padding: 0 16px;
-    color: #007a8c;
+    color: var(--color-primary-dark);
     font-size: 20px;
 }
 
@@ -204,7 +204,7 @@ body {
 }
 
 .primary-btn {
-    background: #007a8c;
+    background: var(--color-primary-dark);
     color: white;
 }
 
@@ -251,7 +251,7 @@ body {
 }
 
 .nav-item.active {
-    color: #007a8c;
+    color: var(--color-primary-dark);
 }
 
 .nav-icon {

@@ -131,7 +131,7 @@
      width: 70px;
      height: 70px;
      border-radius: 50%;
-     background: #007a8c;
+     background: var(--color-primary-dark);
      display: flex;
      align-items: center;
      justify-content: center;
@@ -192,7 +192,7 @@
  .btn {
      width: 100%;
      padding: 18px 32px;
-     background: #007a8c;
+     background: var(--color-primary-dark);
      color: #fff;
      border: none;
      border-radius: 12px;
