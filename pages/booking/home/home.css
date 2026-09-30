@@ -350,35 +350,38 @@
      padding: 20px 0 16px;
    }
 
-   /* Remove the old expanded styles and add this instead */
    .carousel-wrapper {
      transition: all 0.3s ease;
    }
 
+   /* Desktop Default: 4 Column Grid, No Horizontal Scroll */
    .carousel {
-     display: flex;
-     gap: 12px;
-     overflow-x: auto;
-     scroll-behavior: smooth;
-     -webkit-overflow-scrolling: touch;
-     scrollbar-width: none;
-     padding: 0 20px;
-     max-height: 300px;
-     transition: all 0.5s ease;
-   }
-
-   /* When expanded - 2 columns */
-   .carousel-wrapper.expanded .carousel {
      display: grid !important;
-     grid-template-columns: repeat(2, 1fr) !important;
-     gap: 12px !important;
+     grid-template-columns: repeat(4, 1fr) !important;
+     gap: 24px !important;
+     padding: 0 !important;
+     overflow: hidden !important;
      max-height: none !important;
-     overflow-y: visible !important;
-     padding: 0 20px 20px !important;
    }
 
-   /* Make cards full width in expanded mode */
+   /* Make cards fill their grid cell naturally */
+   .destination-card {
+     min-width: 100% !important;
+     max-width: 100% !important;
+   }
+
+   /* Hide anything past the 4th card when NOT expanded */
+   .carousel-wrapper:not(.expanded) .destination-card:nth-child(n+5) {
+     display: none !important;
+   }
+
+   /* When expanded, the display:none is lifted, and they gracefully drop to a second row */
+   .carousel-wrapper.expanded .carousel {
+     grid-template-columns: repeat(4, 1fr) !important;
+     padding-bottom: 20px !important;
+   }
+
    .carousel-wrapper.expanded .destination-card {
-     min-width: 100%;
-     max-width: 100%;
+     min-width: 100% !important;
+     max-width: 100% !important;
    }
