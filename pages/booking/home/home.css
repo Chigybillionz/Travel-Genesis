@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
  * {
    margin: 0;
    padding: 0;
@@ -5,17 +7,25 @@
  }
 
  body {
-   font-family: 'Poppins', sans-serif;
-   background-color: #f0f4f8;
+   font-family: 'Outfit', sans-serif;
+   background-color: #f4f7fb;
+   background-image: radial-gradient(circle at 0% 0%, #ffffff 0%, transparent 50%), radial-gradient(circle at 100% 100%, #eef2f6 0%, transparent 50%);
    min-height: 100vh;
  }
 
  .top-header {
-   background: #fff;
+   background: rgba(255, 255, 255, 0.7);
+   backdrop-filter: blur(15px);
+   -webkit-backdrop-filter: blur(15px);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
    padding: 12px 20px;
    display: flex;
    justify-content: space-between;
    align-items: center;
+   position: sticky;
+   top: 0;
+   z-index: 100;
+   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
  }
 
  .user-info {
@@ -83,29 +93,36 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
-   padding: 16px 20px 12px;
-   background: #f0f4f8;
+   padding: 24px 20px 12px;
+   background: transparent;
  }
 
  .section-title {
-   font-size: 15px;
-   font-weight: 600;
-   color: #1a1a1a;
+   font-size: 18px;
+   font-weight: 700;
+   color: #1a1a24;
+   letter-spacing: -0.3px;
  }
 
  .see-all {
-   color: #4a9da8;
+   color: #0072ff;
    text-decoration: none;
    font-size: 14px;
-   font-weight: 500;
+   font-weight: 600;
    display: flex;
    align-items: center;
    gap: 4px;
+   transition: all 0.2s ease;
+ }
+
+ .see-all:hover {
+   opacity: 0.7;
+   transform: translateX(2px);
  }
 
  .carousel-wrapper {
-   background: #e8f0f5;
-   padding: 16px 0 20px;
+   background: transparent;
+   padding: 12px 0 24px;
  }
 
  .carousel {
@@ -123,25 +140,40 @@
  }
 
  .destination-card {
-   min-width: 170px;
-   max-width: 170px;
-   background: #fff;
-   border-radius: 12px;
+   min-width: 180px;
+   max-width: 180px;
+   background: rgba(255, 255, 255, 0.85);
+   backdrop-filter: blur(10px);
+   border-radius: 16px;
    overflow: hidden;
-   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
    flex-shrink: 0;
+   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   border: 1px solid rgba(255, 255, 255, 0.6);
+ }
+
+ .destination-card:hover {
+   transform: translateY(-8px) scale(1.02);
+   box-shadow: 0 20px 40px rgba(0, 114, 255, 0.12);
+   border-color: rgba(255, 255, 255, 0.9);
  }
 
  .card-image-wrapper {
    position: relative;
    width: 100%;
-   height: 140px;
+   height: 160px;
+   overflow: hidden;
  }
 
  .card-image {
    width: 100%;
    height: 100%;
    object-fit: cover;
+   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+ }
+
+ .destination-card:hover .card-image {
+   transform: scale(1.1);
  }
 
  .destination-label {
@@ -162,20 +194,26 @@
 
  .book-btn {
    width: 100%;
-   padding: 10px;
-   background: #87e2f0;
+   padding: 12px;
+   background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
    color: #fff;
    border: none;
-   border-radius: 8px;
+   border-radius: 10px;
    font-size: 14px;
    font-weight: 600;
    cursor: pointer;
-   transition: all 0.3s;
-   font-family: 'Poppins', sans-serif;
+   transition: all 0.3s ease;
+   font-family: 'Outfit', sans-serif;
+   box-shadow: 0 4px 15px rgba(0, 114, 255, 0.25);
+ }
+
+ .book-btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 8px 25px rgba(0, 114, 255, 0.35);
  }
 
  .book-btn:active {
-   background: #007a8c;
+   transform: translateY(1px);
  }
 
 
@@ -245,33 +283,56 @@
      padding: 16px 40px;
    }
 
-   /* Show desktop nav */
    .desktop-nav {
      display: flex;
-     background: #fff;
+     background: rgba(255, 255, 255, 0.85);
+     backdrop-filter: blur(15px);
+     -webkit-backdrop-filter: blur(15px);
      padding: 0 40px;
      justify-content: center;
-     gap: 60px;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+     gap: 80px;
+     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+     border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+     position: sticky;
+     top: 74px; /* Adjusting top to account for top-header height */
+     z-index: 90;
    }
 
    .desktop-nav a {
      text-decoration: none;
      color: #6b7280;
      font-weight: 500;
-     padding: 18px 0;
+     padding: 22px 10px;
      border-bottom: 3px solid transparent;
-     transition: all 0.3s;
-     font-size: 15px;
+     transition: all 0.3s ease;
+     font-size: 16px;
+     letter-spacing: 0.3px;
+     position: relative;
    }
 
    .desktop-nav a.active {
-     color: #007a8c;
-     border-bottom-color: #007a8c;
+     color: #0072ff;
+   }
+
+   .desktop-nav a::after {
+     content: '';
+     position: absolute;
+     bottom: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 0;
+     height: 3px;
+     background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+     transition: width 0.3s ease;
+     border-radius: 3px 3px 0 0;
+   }
+
+   .desktop-nav a:hover::after, .desktop-nav a.active::after {
+     width: 100%;
    }
 
    .desktop-nav a:hover {
-     color: #007a8c;
+     color: #0072ff;
    }
 
    /* Hide mobile bottom nav */
