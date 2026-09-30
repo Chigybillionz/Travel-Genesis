@@ -55,4 +55,50 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "../../booking/booking-details/bookings.html";
     });
   }
+
+  // Seat Pagination Logic
+  const seatRows = document.querySelectorAll('.seat-row');
+  const prevSeatsBtn = document.getElementById('prev-seats-btn');
+  const nextSeatsBtn = document.getElementById('next-seats-btn');
+
+  let currentSeatPage = 0;
+  const rowsPerPage = 4;
+  const totalPages = Math.ceil(seatRows.length / rowsPerPage);
+
+  function updateSeatPagination() {
+    seatRows.forEach((row, index) => {
+      if (index >= currentSeatPage * rowsPerPage && index < (currentSeatPage + 1) * rowsPerPage) {
+        row.style.display = 'grid'; // Because seat-row uses grid
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (prevSeatsBtn) {
+      prevSeatsBtn.style.display = currentSeatPage === 0 ? 'none' : 'block';
+    }
+    if (nextSeatsBtn) {
+      nextSeatsBtn.style.display = currentSeatPage === totalPages - 1 ? 'none' : 'block';
+    }
+  }
+
+  if (nextSeatsBtn) {
+    nextSeatsBtn.addEventListener('click', () => {
+      if (currentSeatPage < totalPages - 1) {
+        currentSeatPage++;
+        updateSeatPagination();
+      }
+    });
+  }
+
+  if (prevSeatsBtn) {
+    prevSeatsBtn.addEventListener('click', () => {
+      if (currentSeatPage > 0) {
+        currentSeatPage--;
+        updateSeatPagination();
+      }
+    });
+  }
+
+  updateSeatPagination();
 });

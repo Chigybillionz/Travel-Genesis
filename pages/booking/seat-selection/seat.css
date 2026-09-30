@@ -176,6 +176,30 @@
      box-shadow: 0 5px 15px rgba(26, 163, 184, 0.3);
  }
 
+ .seat-navigation {
+     display: flex;
+     justify-content: space-between;
+     margin-top: 30px;
+     width: 100%;
+ }
+
+ .nav-btn {
+     background: #d4e9ec;
+     color: #0d5c6e;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 8px;
+     font-size: 16px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.2s ease;
+ }
+
+ .nav-btn:hover {
+     background: #b8dce1;
+     transform: translateY(-2px);
+ }
+
  /* Mobile - Extra Small Devices (up to 480px) */
  @media (max-width: 480px) {
      body {
