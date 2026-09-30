@@ -124,12 +124,12 @@
  .seat {
      width: 100%;
      aspect-ratio: 1;
-     max-width: 65px;
+     max-width: 150px; /* Allow seats to grow larger on big screens */
      border-radius: 8px;
      display: flex;
      align-items: center;
      justify-content: center;
-     font-size: clamp(12px, 3vw, 16px);
+     font-size: clamp(12px, 2.5vw, 20px);
      font-weight: 600;
      cursor: pointer;
      transition: all 0.2s ease;
@@ -224,6 +224,7 @@
 
      .container {
          padding: 40px;
+         max-width: 800px;
      }
 
      .title {
@@ -251,5 +252,29 @@
      .airplane {
          padding: 50px 40px 60px;
          margin-bottom: 30px;
+     }
+ }
+
+ /* Large Desktop */
+ @media (min-width: 1025px) {
+     .container {
+         max-width: 1000px;
+         padding: 50px;
+     }
+     
+     .seats-grid {
+         gap: 22px;
+     }
+     
+     .airplane {
+         padding: 70px 60px 80px;
+     }
+ }
+
+ /* Extra Large Desktop */
+ @media (min-width: 1440px) {
+     .container {
+         max-width: 1200px;
+         padding: 60px;
      }
  }
