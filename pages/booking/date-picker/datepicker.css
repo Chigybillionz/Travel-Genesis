@@ -76,6 +76,9 @@ body {
 }
 
 .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
 
@@ -84,6 +87,39 @@ body {
     font-weight: 600;
     text-align: center;
     color: #1f1f1f;
+    flex: 1;
+}
+
+.nav-month-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    color: #1f1f1f;
+    transition: background-color 0.2s ease;
+    width: 36px;
+    height: 36px;
+}
+
+.nav-month-btn:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.nav-month-btn:disabled, .nav-month-btn.disabled {
+    color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.desktop-only-spacer {
+    display: none;
+}
+
+.mobile-only-btn {
+    display: flex;
 }
 
 .weekdays {
@@ -121,23 +157,46 @@ body {
 }
 
 .day:not(.empty) {
+    /* Removed old generic styles, now relying on .available-date and .past-date */
+}
+
+.day.empty, .day.past-date {
+    cursor: default;
+    background-color: transparent;
+}
+
+.day.past-date {
+    color: #b0b0b0;
+    pointer-events: none;
+    user-select: none;
+}
+
+.day.available-date {
     background-color: #f9f9f9;
     color: #1f1f1f;
 }
 
-.day:not(.empty):hover {
+.day.available-date:hover {
     background-color: #e8f4f8;
     border-color: #007a8c;
 }
 
-.day.selected {
+.day.today-date {
+    border: 2px solid #007a8c;
+    font-weight: 600;
+    color: #007a8c;
+    background-color: #ffffff;
+}
+
+.day.today-date:hover {
+    background-color: #e8f4f8;
+}
+
+.day.selected, .day.today-date.selected {
     background-color: #007a8c;
     color: #ffffff;
     font-weight: 600;
-}
-
-.day.empty {
-    cursor: default;
+    border-color: #007a8c;
 }
 
 /* Footer Styles */
@@ -219,6 +278,15 @@ body {
         max-width: 1200px;
         margin: 0 auto;
         width: 100%;
+    }
+
+    .desktop-only-spacer {
+        display: block;
+        width: 36px;
+    }
+
+    .mobile-only-btn {
+        display: none !important;
     }
 }
 

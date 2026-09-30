@@ -6,22 +6,21 @@
 
  body {
      font-family: 'Segoe UI', sans-serif;
-     /* background: #f5f5f5; */
      min-height: 100vh;
-     padding: 20px;
+     padding: 40px 20px;
      display: flex;
-     align-items: center;
      justify-content: center;
+     align-items: flex-start; /* Allow scrolling by aligning top */
  }
 
  .container {
      width: 100%;
-     max-width: 400px;
+     max-width: 600px;
      margin: 0 auto;
-     /* background: white; */
      border-radius: 10px;
-     /* padding: 20px; */
      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+     padding: 20px; /* Added padding to contain elements nicely */
+     background-color: white; /* Added background so box-shadow makes sense */
  }
 
  .header {
@@ -98,35 +97,39 @@
  .column-labels {
      display: grid;
      grid-template-columns: repeat(5, 1fr);
-     gap: 8px;
+     gap: 2%; /* fluid gap */
      justify-items: center;
      margin-bottom: 10px;
-     font-size: 12px;
+     font-size: 14px;
      font-weight: 600;
      color: #666;
+     width: 100%;
  }
 
  .seats-grid {
      display: flex;
      flex-direction: column;
-     gap: 8px;
+     gap: 12px;
+     width: 100%;
  }
 
  .seat-row {
      display: grid;
      grid-template-columns: repeat(5, 1fr);
-     gap: 8px;
+     gap: 2%; /* fluid gap */
      justify-items: center;
+     width: 100%;
  }
 
  .seat {
-     width: 45px;
-     height: 45px;
+     width: 100%;
+     aspect-ratio: 1;
+     max-width: 65px;
      border-radius: 8px;
      display: flex;
      align-items: center;
      justify-content: center;
-     font-size: 12px;
+     font-size: clamp(12px, 3vw, 16px);
      font-weight: 600;
      cursor: pointer;
      transition: all 0.2s ease;
@@ -176,177 +179,67 @@
  /* Mobile - Extra Small Devices (up to 480px) */
  @media (max-width: 480px) {
      body {
-         padding: 10px;
-     }
-
-     .container {
-         padding: 15px;
+         padding: 20px 10px;
      }
 
      .title {
          font-size: 16px;
      }
 
-     .seat {
-         width: 40px;
-         height: 40px;
-         font-size: 11px;
-     }
-
      .legend {
          font-size: 11px;
-         gap: 45px;
-     }
-
-     .legend-box {
-         width: 14px;
-         height: 14px;
+         gap: 15px;
+         justify-content: center;
      }
 
      .airplane {
          padding: 20px 15px 30px;
      }
+     
+     .seat {
+         border-radius: 6px;
+     }
  }
 
  /* Tablet - iPad (481px - 768px) */
  @media (min-width: 481px) and (max-width: 768px) {
-     .container {
-         max-width: 500px;
-         padding: 25px;
-     }
-
      .title {
          font-size: 20px;
      }
 
-     .seat {
-         width: 55px;
-         height: 55px;
-         font-size: 13px;
-     }
-
-     .seat-row {
-         gap: 10px;
-     }
-
-     .column-labels {
-         gap: 10px;
-         font-size: 13px;
-     }
-
-     .legend {
-         font-size: 13px;
-         gap: 20px;
-     }
-
-     .legend-box {
-         width: 18px;
-         height: 18px;
+     .seats-grid {
+         gap: 16px;
      }
 
      .airplane {
          padding: 35px 25px 45px;
      }
-
-     .continue-btn {
-         padding: 18px;
-         font-size: 18px;
-     }
  }
 
- /* iPad Pro / Small Desktop (769px - 1024px) */
- @media (min-width: 769px) and (max-width: 1024px) {
-     .container {
-         max-width: 600px;
-         padding: 30px;
-     }
-
-     .title {
-         font-size: 22px;
-     }
-
-     .seat {
-         width: 65px;
-         height: 65px;
-         font-size: 14px;
-         border-radius: 10px;
-     }
-
-     .seat-row {
-         gap: 12px;
-     }
-
-     .seats-grid {
-         gap: 12px;
-     }
-
-     .column-labels {
-         gap: 12px;
-         font-size: 14px;
-         margin-bottom: 15px;
-     }
-
-     .legend {
-         font-size: 14px;
-         gap: 25px;
-     }
-
-     .legend-box {
-         width: 20px;
-         height: 20px;
-     }
-
-     .airplane {
-         padding: 40px 30px 50px;
-         margin-bottom: 25px;
-     }
-
-     .continue-btn {
-         padding: 20px;
-         font-size: 18px;
-         border-radius: 10px;
-     }
-
-     .back-btn {
-         font-size: 28px;
-     }
- }
-
- /* Desktop / MacBook (1025px and up) */
- @media (min-width: 1025px) {
+ /* Desktop and up */
+ @media (min-width: 769px) {
      body {
-         padding: 40px;
+         padding: 60px 40px;
      }
 
      .container {
-         max-width: 700px;
          padding: 40px;
-         border-radius: 15px;
      }
 
      .title {
          font-size: 24px;
      }
-
-     .seat {
-         width: 75px;
-         height: 75px;
-         font-size: 15px;
-         border-radius: 12px;
+     
+     .header {
+         margin-bottom: 30px;
      }
-
-     .seat-row {
-         gap: 15px;
+     
+     .back-btn {
+         font-size: 32px;
      }
 
      .seats-grid {
-         gap: 15px;
-     }
-
-     .column-labels {
-         gap: 15px;
-         font-size: 15px;
-         margin-bottom: 20px;
+         gap: 18px;
      }
 
      .legend {
@@ -355,55 +248,8 @@
          margin-bottom: 30px;
      }
 
-     .legend-box {
-         width: 22px;
-         height: 22px;
-         border-radius: 4px;
-     }
-
      .airplane {
          padding: 50px 40px 60px;
          margin-bottom: 30px;
-     }
-
-     .continue-btn {
-         padding: 22px;
-         font-size: 20px;
-         border-radius: 12px;
-     }
-
-     .back-btn {
-         font-size: 32px;
-     }
-
-     .header {
-         margin-bottom: 30px;
-     }
- }
-
- /* Large Desktop (1440px and up) */
- @media (min-width: 1440px) {
-     .container {
-         max-width: 800px;
-         padding: 50px;
-     }
-
-     .seat {
-         width: 85px;
-         height: 85px;
-         font-size: 16px;
-     }
-
-     .seat-row {
-         gap: 18px;
-     }
-
-     .seats-grid {
-         gap: 18px;
-     }
-
-     .column-labels {
-         gap: 18px;
-         font-size: 16px;
      }
  }
