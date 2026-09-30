@@ -98,7 +98,7 @@ body {
 
 .card-top-accent {
     height: 4px;
-    background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+    background: linear-gradient(90deg, #00a6b8 0%, #007a8c 100%);
     width: 100%;
 }
 
@@ -160,7 +160,7 @@ body {
     position: relative;
     background: #fff;
     padding: 0 16px;
-    color: #0072ff;
+    color: #007a8c;
     font-size: 20px;
 }
 
@@ -204,7 +204,7 @@ body {
 }
 
 .primary-btn {
-    background: #0072ff;
+    background: #007a8c;
     color: white;
 }
 
@@ -251,7 +251,7 @@ body {
 }
 
 .nav-item.active {
-    color: #0072ff;
+    color: #007a8c;
 }
 
 .nav-icon {

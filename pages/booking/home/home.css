@@ -105,7 +105,7 @@
  }
 
  .see-all {
-   color: #0072ff;
+   color: #007a8c;
    text-decoration: none;
    font-size: 14px;
    font-weight: 600;
@@ -159,7 +159,7 @@
 
  .destination-card:hover {
    transform: translateY(-8px) scale(1.02);
-   box-shadow: 0 20px 40px rgba(0, 114, 255, 0.12);
+   box-shadow: 0 20px 40px rgba(0, 122, 140, 0.12);
    border-color: rgba(255, 255, 255, 0.9);
  }
 
@@ -200,7 +200,7 @@
  .book-btn {
    width: 100%;
    padding: 12px;
-   background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+   background: linear-gradient(135deg, #00a6b8 0%, #007a8c 100%);
    color: #fff;
    border: none;
    border-radius: 10px;
@@ -209,12 +209,12 @@
    cursor: pointer;
    transition: all 0.3s ease;
    font-family: 'Outfit', sans-serif;
-   box-shadow: 0 4px 15px rgba(0, 114, 255, 0.25);
+   box-shadow: 0 4px 15px rgba(0, 122, 140, 0.25);
  }
 
  .book-btn:hover {
    transform: translateY(-2px);
-   box-shadow: 0 8px 25px rgba(0, 114, 255, 0.35);
+   box-shadow: 0 8px 25px rgba(0, 122, 140, 0.35);
  }
 
  .book-btn:active {
@@ -316,7 +316,7 @@
    }
 
    .desktop-nav a.active {
-     color: #0072ff;
+     color: #007a8c;
    }
 
    .desktop-nav a::after {
@@ -327,7 +327,7 @@
      transform: translateX(-50%);
      width: 0;
      height: 3px;
-     background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+     background: linear-gradient(90deg, #00a6b8 0%, #007a8c 100%);
      transition: width 0.3s ease;
      border-radius: 3px 3px 0 0;
    }
@@ -337,7 +337,7 @@
    }
 
    .desktop-nav a:hover {
-     color: #0072ff;
+     color: #007a8c;
    }
 
    /* Hide mobile bottom nav */
