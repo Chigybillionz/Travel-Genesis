@@ -235,36 +235,148 @@ body {
 }
 
 @media (min-width: 1024px) {
-    .app-container {
-        max-width: 100%;
-        border-radius: 0;
+    /* Advanced Desktop Dashboard Layout */
+    .profile-dashboard-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 40px;
+        max-width: 1100px;
+        margin: 60px auto 100px auto;
+        padding: 0 40px;
+        align-items: start;
     }
 
-    .bottom-nav {
-        max-width: 100%;
-    }
-
+    /* Sidebar Profile Card */
     .profile-header {
-        padding: 60px 50px 50px;
+        padding: 50px 30px;
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+        position: sticky;
+        top: 120px;
     }
 
     .profile-avatar {
-        width: 160px;
-        height: 160px;
+        width: 140px;
+        height: 140px;
+        margin: 0 auto 24px;
+        border-radius: 24px;
     }
 
+    .profile-name {
+        font-size: 26px;
+    }
+
+    /* Main Content Area */
     .main-content {
-        max-width: 600px;
-        margin: 0 auto;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
     }
 
+    /* Grid of Cards */
     .profile-menu {
-        gap: 14px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
     }
 
     .menu-item {
-        padding: 20px 26px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 32px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0,0,0,0.03);
+        min-height: 160px;
+        position: relative;
+    }
+
+    .menu-item:hover {
+        background: #ffffff;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .menu-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .menu-item i {
+        /* Hide the small right chevron on large cards, or turn it into an accent icon */
+        position: absolute;
+        bottom: 32px;
+        right: 32px;
+        width: 40px;
+        height: 40px;
+        background: #f5f5f5;
+        border-radius: 50%;
+        color: #0072ff;
+        font-size: 14px;
+    }
+    
+    .menu-item:hover i {
+        background: #0072ff;
+        color: #ffffff;
+    }
+
+    .menu-left span {
+        font-size: 20px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    /* SVG icon inside cards */
+    .menu-left svg {
+        width: 32px;
+        height: 32px;
+        padding: 12px;
+        box-sizing: content-box;
+        background: #f0f7ff;
+        border-radius: 16px;
+    }
+
+    /* Logout and Delete Button span full width and behave like rows */
+    #logoutBtn, #deleteAccountBtn {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 80px;
+        padding: 24px 32px;
+    }
+
+    #logoutBtn .menu-left, #deleteAccountBtn .menu-left {
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    #logoutBtn .menu-left svg, #deleteAccountBtn .menu-left svg {
+        padding: 10px;
+        width: 24px;
+        height: 24px;
+    }
+
+    #logoutBtn .menu-left span, #deleteAccountBtn .menu-left span {
         font-size: 16px;
-        border-radius: 12px;
+        font-weight: 500;
+    }
+    
+    #logoutBtn i, #deleteAccountBtn i {
+        position: static;
+        width: auto;
+        height: auto;
+        background: transparent;
+        color: inherit;
+    }
+    
+    #logoutBtn:hover i, #deleteAccountBtn:hover i {
+        background: transparent;
+        color: inherit;
     }
 }

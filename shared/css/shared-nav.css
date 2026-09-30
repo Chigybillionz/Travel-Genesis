@@ -87,7 +87,7 @@
 
    .integrated-nav {
        display: flex;
-       gap: 72px; /* Increased horizontal breathing room */
+       gap: 120px; /* Widely spaced */
        height: 100%;
        align-items: center;
    }
