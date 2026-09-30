@@ -115,6 +115,11 @@
    transition: all 0.2s ease;
  }
 
+ .see-all svg {
+   transform: rotate(90deg);
+   transition: transform 0.3s ease;
+ }
+
  .see-all:hover {
    opacity: 0.7;
    transform: translateX(2px);

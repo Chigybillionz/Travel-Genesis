@@ -59,7 +59,7 @@ function toggleDropdown(carouselWrapper, carousel, seeAllLink) {
     carousel.style.display = "flex"; // Back to horizontal scroll
     carousel.style.flexWrap = "nowrap";
     seeAllLink.innerHTML =
-      'See all <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.79175 10.2083L8.60425 6.99996L3.79175 3.79163L4.37508 2.91663L10.5001 6.99996L4.37508 11.0833L3.79175 10.2083Z" fill="#007A8C" /></svg>';
+      'See all <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(90deg);"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.79175 10.2083L8.60425 6.99996L3.79175 3.79163L4.37508 2.91663L10.5001 6.99996L4.37508 11.0833L3.79175 10.2083Z" fill="#007A8C" /></svg>';
   } else {
     // Expand - Show as 2 column grid
     carouselWrapper.classList.add("expanded");
