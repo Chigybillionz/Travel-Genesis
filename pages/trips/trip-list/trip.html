@@ -27,41 +27,48 @@
         </div>
 
         <!-- CONTENT -->
-        <div class="content">
+        <div class="desktop-content-wrapper">
+            <div class="page-header">
+                <h2>My Trips</h2>
+                <p>Manage your upcoming journeys and bookings.</p>
+            </div>
 
             <div class="section-title">Pending trips</div>
 
-            <div class="trip-card">
-
-                <div class="trip-row">
-                    <div class="place">
-                        <span class="label">From</span>
-                        <span class="code">LOS</span>
-                        <span class="country">Nigeria</span>
+            <div class="trip-cards-container">
+                <div class="premium-trip-card">
+                    <div class="card-top-accent"></div>
+                    <div class="card-main">
+                        <div class="route-section">
+                            <div class="departure">
+                                <span class="airport-code">LOS</span>
+                                <span class="country-name">Nigeria</span>
+                            </div>
+                            <div class="journey-line">
+                                <div class="line-track"></div>
+                                <i class="fa-solid fa-plane flight-icon"></i>
+                            </div>
+                            <div class="arrival">
+                                <span class="airport-code">LDN</span>
+                                <span class="country-name">United Kingdom</span>
+                            </div>
+                        </div>
+                        <div class="metadata-section">
+                            <div class="meta-item">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>03-12-2025</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>7:30 AM</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="place" style="text-align:right;">
-                        <span class="label">To</span>
-                        <span class="code">LDN</span>
-                        <span class="country">United Kingdom</span>
+                    <div class="card-actions">
+                        <button class="btn primary-btn" id="viewBtn">View Tickets</button>
+                        <button class="btn ghost-btn" id="cancelBtn">Cancel Booking</button>
                     </div>
                 </div>
-
-                <!-- CENTERED AIRPLANE ICON -->
-                <div class="plane-circle">
-                    <i class="fa-solid fa-plane"></i>
-                </div>
-
-                <div class="details-row">
-                    <div class="date"><i class="fa-solid fa-calendar"></i> 03-12-2025</div>
-                    <div class="time"><i class="fa-solid fa-clock"></i> 7:30 AM</div>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn view-btn" id="viewBtn">View Tickets</button>
-                    <button class="btn cancel-btn" id="cancelBtn">Cancel Booking</button>
-                </div>
-
             </div>
         </div>
     </div>

@@ -1,19 +1,35 @@
    /* SHARED NAVIGATION STYLES FOR BEZAO TRAVEL APP */
 
-   /* Top Header Styles */
-   .top-header {
+   .integrated-header {
        display: flex;
-       background: rgba(255, 255, 255, 0.7);
+       background: rgba(255, 255, 255, 0.95);
        backdrop-filter: blur(15px);
        -webkit-backdrop-filter: blur(15px);
-       border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-       padding: 16px 40px;
+       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+       padding: 0 40px;
        justify-content: space-between;
        align-items: center;
        position: sticky;
        top: 0;
        z-index: 100;
-       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+       height: 80px;
+       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+   }
+
+   .header-left, .header-right {
+       flex: 1;
+       display: flex;
+       align-items: center;
+   }
+
+   .header-right {
+       justify-content: flex-end;
+   }
+
+   .header-center {
+       display: flex;
+       justify-content: center;
+       flex: 2;
    }
 
    .user-info {
@@ -32,8 +48,8 @@
    }
 
    .greeting {
-       font-size: 18px;
-       font-weight: 600;
+       font-size: 16px;
+       font-weight: 700;
        color: #1a1a1a;
    }
 
@@ -42,7 +58,8 @@
        color: #6b7280;
        display: flex;
        align-items: center;
-       gap: 3px;
+       gap: 4px;
+       margin-top: 2px;
    }
 
    .header-icons {
@@ -52,51 +69,47 @@
    }
 
    .icon-btn {
-       background: none;
+       background: #f3f4f6;
        border: none;
+       border-radius: 50%;
        cursor: pointer;
-       font-size: 22px;
-       color: #374151;
-       padding: 4px;
-   }
-
-   /* Desktop Navigation Styles */
-   .desktop-nav {
+       width: 44px;
+       height: 44px;
        display: flex;
-       background: rgba(255, 255, 255, 0.85);
-       backdrop-filter: blur(15px);
-       -webkit-backdrop-filter: blur(15px);
-       padding: 0 40px;
+       align-items: center;
        justify-content: center;
-       gap: 80px;
-       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-       border-bottom: 1px solid rgba(255, 255, 255, 0.7);
-       position: sticky;
-       top: 74px;
-       z-index: 90;
+       transition: background 0.2s ease;
+   }
+   
+   .icon-btn:hover {
+       background: #e5e7eb;
    }
 
-   .desktop-nav a {
+   .integrated-nav {
+       display: flex;
+       gap: 48px;
+       height: 100%;
+       align-items: center;
+   }
+
+   .integrated-nav a {
        position: relative;
        text-decoration: none;
        color: #6b7280;
-       font-weight: 500;
-       padding: 22px 10px;
-       border-bottom: 3px solid transparent;
-       transition: all 0.3s ease;
-       font-size: 16px;
+       font-weight: 600;
+       display: flex;
+       align-items: center;
+       height: 100%;
+       transition: color 0.3s ease;
+       font-size: 15px;
        letter-spacing: 0.3px;
    }
 
-   .desktop-nav a:hover {
+   .integrated-nav a:hover, .integrated-nav a.active {
        color: #0072ff;
    }
 
-   .desktop-nav a.active {
-       color: #0072ff;
-   }
-
-   .desktop-nav a::after {
+   .integrated-nav a::after {
        content: '';
        position: absolute;
        bottom: 0;
@@ -109,32 +122,20 @@
        border-radius: 3px 3px 0 0;
    }
 
-   .desktop-nav a:hover::after, .desktop-nav a.active::after {
+   .integrated-nav a:hover::after, .integrated-nav a.active::after {
        width: 100%;
    }
 
    /* Desktop Styles (768px and up) */
    @media (min-width: 768px) {
-       .top-header {
-           display: flex;
-       }
-
-       .desktop-nav {
-           display: flex;
-       }
-
        /* Hide mobile bottom nav on desktop */
        .bottom-nav {
            display: none !important;
        }
-
-       /* Adjust main content padding for desktop */
        body {
            padding-top: 0;
        }
-
        .main-content {
            padding-bottom: 0 !important;
        }
    }
-
