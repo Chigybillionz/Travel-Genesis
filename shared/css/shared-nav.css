@@ -1,13 +1,13 @@
-   SHARED NAVIGATION STYLES FOR BEZAO TRAVEL APP
+   /* SHARED NAVIGATION STYLES FOR BEZAO TRAVEL APP */
 
    /* Top Header Styles */
    .top-header {
-       display: none;
+       display: flex;
        background: rgba(255, 255, 255, 0.7);
        backdrop-filter: blur(15px);
        -webkit-backdrop-filter: blur(15px);
        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-       padding: 12px 20px;
+       padding: 16px 40px;
        justify-content: space-between;
        align-items: center;
        position: sticky;
@@ -62,7 +62,7 @@
 
    /* Desktop Navigation Styles */
    .desktop-nav {
-       display: none;
+       display: flex;
        background: rgba(255, 255, 255, 0.85);
        backdrop-filter: blur(15px);
        -webkit-backdrop-filter: blur(15px);
