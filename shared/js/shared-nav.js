@@ -63,13 +63,6 @@ function createSharedNavigation() {
 
 // Initialize navigation on page load
 function initializeSharedNavigation() {
-  // Check if we're on desktop (768px or larger)
-  const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-  if (!isDesktop) {
-    return; // Don't modify mobile view
-  }
-
   // Find the container where navigation should go
   const navContainer = document.getElementById("shared-nav-container");
 
@@ -95,7 +88,7 @@ function setActiveNavLink() {
     const page = link.getAttribute("data-page");
 
     // Check if current URL contains the page identifier
-    if (currentPath.toLowerCase().includes(page)) {
+    if (page && currentPath.toLowerCase().includes(page)) {
       link.classList.add("active");
     }
   });
@@ -141,17 +134,3 @@ function addNavigationHandlers() {
 
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", initializeSharedNavigation);
-
-// Re-initialize on window resize (desktop/mobile switch)
-let resizeTimeout;
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => {
-    const wasDesktop = document.querySelector(".integrated-nav") !== null;
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-    if (wasDesktop !== isDesktop) {
-      initializeSharedNavigation();
-    }
-  }, 250);
-});
