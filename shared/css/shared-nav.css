@@ -174,3 +174,28 @@ body {
         gap: 8px;
     }
 }
+
+/* Global Bottom Navigation Active State Override */
+.bottom-nav .nav-item {
+    color: #9ca3af !important;
+}
+.bottom-nav .nav-item svg path[fill]:not([fill="none"]),
+.bottom-nav .nav-item svg circle[fill]:not([fill="none"]) {
+    fill: #9ca3af !important;
+}
+.bottom-nav .nav-item svg path[stroke],
+.bottom-nav .nav-item svg circle[stroke] {
+    stroke: #9ca3af !important;
+}
+
+.bottom-nav .nav-item.active {
+    color: var(--color-primary-dark) !important;
+}
+.bottom-nav .nav-item.active svg path[fill]:not([fill="none"]),
+.bottom-nav .nav-item.active svg circle[fill]:not([fill="none"]) {
+    fill: var(--color-primary-dark) !important;
+}
+.bottom-nav .nav-item.active svg path[stroke],
+.bottom-nav .nav-item.active svg circle[stroke] {
+    stroke: var(--color-primary-dark) !important;
+}
