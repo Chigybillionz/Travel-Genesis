@@ -78,19 +78,41 @@ document.addEventListener("DOMContentLoaded", () => {
         isValid = false;
         errorMessage += "- Please enter your full name.\n";
         fullnameInput.classList.add("error-border");
+      } else if (fullnameInput.value.trim().length < 3) {
+        isValid = false;
+        errorMessage += "- Full name must be at least 3 characters long.\n";
+        fullnameInput.classList.add("error-border");
       }
 
       // Check Email
-      if (emailInput.value.trim() === "" || !emailInput.value.includes("@")) {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailInput.value.trim() === "") {
         isValid = false;
-        errorMessage += "- Please enter a valid email address.\n";
+        errorMessage += "- Please enter an email address.\n";
+        emailInput.classList.add("error-border");
+      } else if (!emailPattern.test(emailInput.value.trim())) {
+        isValid = false;
+        errorMessage += "- Please enter a valid email format (e.g. name@example.com).\n";
         emailInput.classList.add("error-border");
       }
 
       // Check Password
-      if (passwordInput.value.trim() === "") {
+      const pwd = passwordInput.value;
+      if (pwd === "") {
         isValid = false;
         errorMessage += "- Please enter a password.\n";
+        passwordInput.classList.add("error-border");
+      } else if (pwd.length < 8) {
+        isValid = false;
+        errorMessage += "- Password must be at least 8 characters long.\n";
+        passwordInput.classList.add("error-border");
+      } else if (!/[A-Z]/.test(pwd)) {
+        isValid = false;
+        errorMessage += "- Password must contain at least one uppercase letter.\n";
+        passwordInput.classList.add("error-border");
+      } else if (!/[0-9]/.test(pwd)) {
+        isValid = false;
+        errorMessage += "- Password must contain at least one number.\n";
         passwordInput.classList.add("error-border");
       }
 
