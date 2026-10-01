@@ -1,7 +1,10 @@
 // Back button
-document.getElementById("backBtn").addEventListener("click", function () {
-  window.location.href = "../../booking/home/home.html";
-});
+const backBtn = document.getElementById("backBtn");
+if (backBtn) {
+  backBtn.addEventListener("click", function () {
+    window.location.href = "../../booking/home/home.html";
+  });
+}
 
 // View Ticket
 document.getElementById("viewBtn").addEventListener("click", function () {
