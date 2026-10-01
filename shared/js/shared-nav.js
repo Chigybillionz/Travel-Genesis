@@ -79,16 +79,31 @@ function initializeSharedNavigation() {
 
 // Set the active navigation link based on current page
 function setActiveNavLink() {
-  const currentPath = window.location.pathname;
+  const currentPath = window.location.pathname.toLowerCase();
+  
+  // 1. Update Desktop Header Nav
   const navLinks = document.querySelectorAll(".integrated-nav a");
-
   navLinks.forEach((link) => {
     link.classList.remove("active");
-
     const page = link.getAttribute("data-page");
+    if (page && currentPath.includes(page)) {
+      link.classList.add("active");
+    }
+  });
 
-    // Check if current URL contains the page identifier
-    if (page && currentPath.toLowerCase().includes(page)) {
+  // 2. Update Mobile Bottom Nav
+  const bottomNavLinks = document.querySelectorAll(".bottom-nav .nav-item");
+  bottomNavLinks.forEach((link) => {
+    link.classList.remove("active");
+    const text = (link.textContent || "").trim().toLowerCase();
+    
+    if (currentPath.includes("home") && text.includes("home")) {
+      link.classList.add("active");
+    } else if (currentPath.includes("trip") && text.includes("trip")) {
+      link.classList.add("active");
+    } else if (currentPath.includes("explore") && text.includes("explore")) {
+      link.classList.add("active");
+    } else if (currentPath.includes("profile") && text.includes("profile")) {
       link.classList.add("active");
     }
   });
