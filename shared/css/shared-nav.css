@@ -17,9 +17,16 @@
 }
 
 #shared-nav-container {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+body {
+    padding-top: 80px; /* Prevent content from hiding behind fixed header */
+    display: block !important; /* Prevent flex-row scattering from design-system.css */
 }
 
 .header-left, .header-right {
@@ -153,6 +160,9 @@
 
 /* Mobile Styles (up to 767px) */
 @media (max-width: 767px) {
+    body {
+        padding-top: 70px !important;
+    }
     .header-center {
         display: none;
     }
