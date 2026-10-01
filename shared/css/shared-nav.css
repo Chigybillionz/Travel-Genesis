@@ -189,13 +189,13 @@ body {
 }
 
 .bottom-nav .nav-item.active {
-    color: var(--color-primary-dark) !important;
+    color: #007A8C !important;
 }
 .bottom-nav .nav-item.active svg path[fill]:not([fill="none"]),
 .bottom-nav .nav-item.active svg circle[fill]:not([fill="none"]) {
-    fill: var(--color-primary-dark) !important;
+    fill: #007A8C !important;
 }
 .bottom-nav .nav-item.active svg path[stroke],
 .bottom-nav .nav-item.active svg circle[stroke] {
-    stroke: var(--color-primary-dark) !important;
+    stroke: #007A8C !important;
 }
