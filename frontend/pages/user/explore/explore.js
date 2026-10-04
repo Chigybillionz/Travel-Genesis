@@ -12,7 +12,7 @@ const EXPLORE_CATALOG = [
     name: "Santorini Cliffside Villas",
     imageUrl: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
     rating: 4.92,
-    priceStarting: 599,
+    priceStarting: 980000,
     category: "beach",
     personas: ["leisure", "all"],
     tags: ["Aegean", "Romantic", "Island"],
@@ -25,7 +25,7 @@ const EXPLORE_CATALOG = [
     name: "Kyoto & Tokyo Heritage",
     imageUrl: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
     rating: 4.95,
-    priceStarting: 850,
+    priceStarting: 2150000,
     category: "historic",
     personas: ["adventure", "all"],
     tags: ["Temples", "Culture", "Gardens"],
@@ -38,7 +38,7 @@ const EXPLORE_CATALOG = [
     name: "Sydney Coastal Escapes",
     imageUrl: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80",
     rating: 4.91,
-    priceStarting: 920,
+    priceStarting: 1920000,
     category: "beach",
     personas: ["adventure", "all"],
     tags: ["Harbor", "Bondi Beach", "Coastal"],
@@ -51,7 +51,7 @@ const EXPLORE_CATALOG = [
     name: "Paris City of Lights",
     imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
     rating: 4.88,
-    priceStarting: 740,
+    priceStarting: 1150000,
     category: "luxury",
     personas: ["leisure", "business", "all"],
     tags: ["Romance", "Museums", "Cuisine"],
@@ -64,7 +64,7 @@ const EXPLORE_CATALOG = [
     name: "Rome Eternal City",
     imageUrl: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
     rating: 4.86,
-    priceStarting: 620,
+    priceStarting: 950000,
     category: "historic",
     personas: ["leisure", "all"],
     tags: ["Colosseum", "History", "Piazzas"],
@@ -77,7 +77,7 @@ const EXPLORE_CATALOG = [
     name: "Dubai Skyline & Safari",
     imageUrl: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
     rating: 4.9,
-    priceStarting: 520,
+    priceStarting: 820000,
     category: "luxury",
     personas: ["business", "all"],
     tags: ["Skyscrapers", "Luxury", "Desert"],
@@ -90,7 +90,7 @@ const EXPLORE_CATALOG = [
     name: "Toronto Waterfront Skyline",
     imageUrl: "https://images.unsplash.com/photo-1507992781348-310259076fa0?auto=format&fit=crop&w=800&q=80",
     rating: 4.84,
-    priceStarting: 780,
+    priceStarting: 1380000,
     category: "city",
     personas: ["business", "all"],
     tags: ["CN Tower", "Lakeside", "Culture"],
@@ -103,7 +103,7 @@ const EXPLORE_CATALOG = [
     name: "New York Iconic Metropolis",
     imageUrl: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
     rating: 4.89,
-    priceStarting: 980,
+    priceStarting: 1480000,
     category: "city",
     personas: ["business", "adventure", "all"],
     tags: ["Broadway", "Skyline", "Central Park"],
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="card-media">
           <img src="${item.imageUrl}" alt="${item.city}" class="card-img" loading="lazy" />
           <div class="card-rating-badge"><i class="fa-solid fa-star"></i> ${item.rating}</div>
-          <div class="card-price-pill">From $${item.priceStarting}</div>
+          <div class="card-price-pill">From ₦${Number(item.priceStarting).toLocaleString()}</div>
         </div>
         <div class="card-body">
           <div class="card-title-row">

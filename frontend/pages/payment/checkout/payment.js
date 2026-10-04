@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.API && API.isAuthenticated()) {
       const chosenFlight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
       const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14B"]');
-      const totalPrice = Number(localStorage.getItem("totalPrice")) || chosenFlight.price || 500;
+      const totalPrice = Number(localStorage.getItem("totalPrice")) || chosenFlight.price || 1050000; // NGN
       const user = API.getUser();
 
       API.bookings

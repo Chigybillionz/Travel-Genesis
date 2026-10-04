@@ -131,7 +131,7 @@ const totalPriceEl = document.getElementById("total-price");
 const savedPrice = localStorage.getItem("totalPrice");
 
 if (savedPrice) {
-  totalPriceEl.textContent = `$${savedPrice}`;
+  totalPriceEl.textContent = `₦${Number(savedPrice).toLocaleString()}`;
 } else {
-  totalPriceEl.textContent = "$0";
+  totalPriceEl.textContent = "₦0";
 }

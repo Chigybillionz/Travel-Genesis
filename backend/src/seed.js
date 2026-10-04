@@ -24,8 +24,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 2), // 2 days from now
     arrivalTime: new Date(Date.now() + 86400000 * 2 + 23400000), // +6.5 hours
     duration: '6h 30m',
-    price: 680,
-    currency: 'USD',
+    price: 1050000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 48,
     stops: 0,
@@ -47,8 +47,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 3), // 3 days from now
     arrivalTime: new Date(Date.now() + 86400000 * 3 + 28800000), // +8 hours
     duration: '7h 45m',
-    price: 520,
-    currency: 'USD',
+    price: 820000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 32,
     stops: 1,
@@ -70,8 +70,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 4),
     arrivalTime: new Date(Date.now() + 86400000 * 4 + 22500000),
     duration: '6h 15m',
-    price: 740,
-    currency: 'USD',
+    price: 1150000,
+    currency: 'NGN',
     flightClass: 'Business',
     availableSeats: 16,
     stops: 0,
@@ -93,8 +93,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 5),
     arrivalTime: new Date(Date.now() + 86400000 * 5 + 46800000),
     duration: '12h 45m',
-    price: 980,
-    currency: 'USD',
+    price: 1480000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 55,
     stops: 1,
@@ -116,8 +116,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 3),
     arrivalTime: new Date(Date.now() + 86400000 * 3 + 78300000),
     duration: '21h 45m',
-    price: 920,
-    currency: 'USD',
+    price: 1920000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 40,
     stops: 1,
@@ -139,8 +139,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 2),
     arrivalTime: new Date(Date.now() + 86400000 * 2 + 54900000),
     duration: '15h 15m',
-    price: 780,
-    currency: 'USD',
+    price: 1380000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 45,
     stops: 1,
@@ -162,8 +162,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 3),
     arrivalTime: new Date(Date.now() + 86400000 * 3 + 66600000),
     duration: '18h 30m',
-    price: 1150,
-    currency: 'USD',
+    price: 2150000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 30,
     stops: 1,
@@ -185,8 +185,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 2),
     arrivalTime: new Date(Date.now() + 86400000 * 2 + 25800000),
     duration: '7h 10m',
-    price: 620,
-    currency: 'USD',
+    price: 950000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 38,
     stops: 0,
@@ -208,8 +208,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 2),
     arrivalTime: new Date(Date.now() + 86400000 * 2 + 24600000),
     duration: '6h 50m',
-    price: 590,
-    currency: 'USD',
+    price: 890000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 42,
     stops: 0,
@@ -231,8 +231,8 @@ const sampleFlights = [
     departureTime: new Date(Date.now() + 86400000 * 3),
     arrivalTime: new Date(Date.now() + 86400000 * 3 + 30000000),
     duration: '8h 20m',
-    price: 640,
-    currency: 'USD',
+    price: 980000,
+    currency: 'NGN',
     flightClass: 'Economy',
     availableSeats: 25,
     stops: 1,
@@ -248,7 +248,7 @@ const sampleDestinations = [
     rating: 4.9,
     reviewsCount: 340,
     description: 'Breathtaking sunsets, whitewashed cliffside villas, and deep blue Aegean waters.',
-    priceStarting: 599,
+    priceStarting: 980000,
     isPopular: true,
     tags: ['Island', 'Romance', 'Beach', 'Luxury'],
   },
@@ -260,7 +260,7 @@ const sampleDestinations = [
     rating: 4.85,
     reviewsCount: 280,
     description: 'Serene bamboo forests, traditional wooden tea houses, and ancient shrines.',
-    priceStarting: 720,
+    priceStarting: 2150000,
     isPopular: true,
     tags: ['Culture', 'History', 'Nature'],
   },
@@ -272,7 +272,7 @@ const sampleDestinations = [
     rating: 4.8,
     reviewsCount: 520,
     description: 'The city of lights, world-class art at the Louvre, and timeless Parisian cafes.',
-    priceStarting: 450,
+    priceStarting: 1150000,
     isPopular: true,
     tags: ['City', 'Art', 'Romance', 'Food'],
   },
@@ -284,7 +284,7 @@ const sampleDestinations = [
     rating: 4.92,
     reviewsCount: 460,
     description: 'Emerald rice terraces, pristine surf beaches, and rejuvenating wellness retreats.',
-    priceStarting: 380,
+    priceStarting: 1250000,
     isPopular: true,
     tags: ['Tropical', 'Wellness', 'Adventure'],
   },
@@ -302,16 +302,16 @@ const seedData = async () => {
     await Destination.deleteMany({});
     console.log(' Cleared existing destinations');
 
-    await Flight.insertMany(sampleFlights);
-    console.log(` Seeded ${sampleFlights.length} flights`);
+    const createdFlights = await Flight.insertMany(sampleFlights);
+    console.log(` Created ${createdFlights.length} flights successfully (currency: NGN)`);
 
-    await Destination.insertMany(sampleDestinations);
-    console.log(` Seeded ${sampleDestinations.length} destinations`);
+    const createdDestinations = await Destination.insertMany(sampleDestinations);
+    console.log(` Created ${createdDestinations.length} destinations successfully`);
 
-    console.log(' Seeding completed successfully!');
+    console.log(' Seed process completed successfully!');
     process.exit(0);
   } catch (error) {
-    console.error(' Seeding failed:', error.message);
+    console.error(' Error seeding database:', error);
     process.exit(1);
   }
 };

@@ -35,7 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
     chosenFlight = {};
   }
 
-  const SEAT_PRICE = Number(localStorage.getItem("selectedFlightPrice")) || chosenFlight.price || 680;
+  // Prices are in Naira (NGN). Values under 10,000 are legacy USD from older sessions, so convert them.
+  let SEAT_PRICE = Number(localStorage.getItem("selectedFlightPrice")) || Number(chosenFlight.price) || 1050000;
+  if (SEAT_PRICE < 10000) SEAT_PRICE = SEAT_PRICE * 1500;
 
   if (routeInfoDisplay && chosenFlight.originCity && chosenFlight.destinationCity) {
     routeInfoDisplay.textContent = `${chosenFlight.originCity} (${chosenFlight.originCode || "LOS"}) ➔ ${chosenFlight.destinationCity} (${chosenFlight.destinationCode || "DEST"}) • ${chosenFlight.airline || "Flight"}`;
@@ -81,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (totalPriceDisplay) {
-      totalPriceDisplay.textContent = `$${totalPrice.toLocaleString()}`;
+      totalPriceDisplay.textContent = `₦${totalPrice.toLocaleString()}`;
     }
   }
 

@@ -28,7 +28,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "21h 45m",
         stops: "1 Stop (DOH)",
-        price: 920,
+        price: 1380000,
         badge: "100% on time",
       },
       {
@@ -46,7 +46,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "22h 45m",
         stops: "1 Stop (DOH)",
-        price: 880,
+        price: 1320000,
         badge: "Fastest route",
       },
       {
@@ -64,7 +64,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "22h 15m",
         stops: "1 Stop (SIN)",
-        price: 950,
+        price: 1425000,
         badge: "Best rated",
       },
     ],
@@ -91,7 +91,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "15h 15m",
         stops: "1 Stop (FRA)",
-        price: 780,
+        price: 1170000,
         badge: "100% on time",
       },
       {
@@ -109,7 +109,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "15h 30m",
         stops: "1 Stop (ATL)",
-        price: 740,
+        price: 1110000,
         badge: "Best price",
       },
       {
@@ -127,7 +127,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "16h 15m",
         stops: "1 Stop (LHR)",
-        price: 810,
+        price: 1215000,
         badge: "Popular choice",
       },
     ],
@@ -154,7 +154,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 30m",
         stops: "Non-stop",
-        price: 680,
+        price: 1020000,
         badge: "100% on time",
       },
       {
@@ -172,7 +172,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 30m",
         stops: "Non-stop",
-        price: 650,
+        price: 975000,
         badge: "Best service",
       },
       {
@@ -190,7 +190,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "6h 30m",
         stops: "Non-stop",
-        price: 590,
+        price: 885000,
         badge: "Great value",
       },
     ],
@@ -217,7 +217,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "13h 30m",
         stops: "Non-stop",
-        price: 850,
+        price: 1275000,
         badge: "100% on time",
       },
       {
@@ -235,7 +235,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "13h 45m",
         stops: "1 Stop (IAD)",
-        price: 820,
+        price: 1230000,
         badge: "Best price",
       },
       {
@@ -253,7 +253,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "14h 30m",
         stops: "1 Stop (DXB)",
-        price: 890,
+        price: 1335000,
         badge: "Premium",
       },
     ],
@@ -280,7 +280,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "7h 45m",
         stops: "Non-stop",
-        price: 520,
+        price: 780000,
         badge: "100% on time",
       },
       {
@@ -298,7 +298,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "7h 45m",
         stops: "1 Stop (DOH)",
-        price: 490,
+        price: 735000,
         badge: "Popular",
       },
       {
@@ -316,7 +316,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "7h 45m",
         stops: "Non-stop",
-        price: 460,
+        price: 690000,
         badge: "Budget friendly",
       },
     ],
@@ -343,7 +343,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 15m",
         stops: "Non-stop",
-        price: 740,
+        price: 1110000,
         badge: "100% on time",
       },
       {
@@ -361,7 +361,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 15m",
         stops: "1 Stop (FRA)",
-        price: 690,
+        price: 1035000,
         badge: "Fastest",
       },
       {
@@ -379,7 +379,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "6h 15m",
         stops: "1 Stop (AMS)",
-        price: 710,
+        price: 1065000,
         badge: "Overnight",
       },
     ],
@@ -406,7 +406,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "20h 45m",
         stops: "1 Stop (DOH)",
-        price: 1150,
+        price: 1725000,
         badge: "100% on time",
       },
       {
@@ -424,7 +424,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "21h 30m",
         stops: "1 Stop (DOH)",
-        price: 1080,
+        price: 1620000,
         badge: "Best price",
       },
       {
@@ -442,7 +442,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+2 days",
         duration: "21h 45m",
         stops: "1 Stop (DXB)",
-        price: 1120,
+        price: 1680000,
         badge: "Top comfort",
       },
     ],
@@ -469,7 +469,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 15m",
         stops: "1 Stop (CDG)",
-        price: 660,
+        price: 990000,
         badge: "100% on time",
       },
       {
@@ -487,7 +487,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 15m",
         stops: "1 Stop (IST)",
-        price: 620,
+        price: 930000,
         badge: "Best rate",
       },
       {
@@ -505,7 +505,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "6h 15m",
         stops: "1 Stop (AMS)",
-        price: 640,
+        price: 960000,
         badge: "Overnight",
       },
     ],
@@ -532,7 +532,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 45m",
         stops: "1 Stop (MAD)",
-        price: 670,
+        price: 1005000,
         badge: "100% on time",
       },
       {
@@ -550,7 +550,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "6h 45m",
         stops: "1 Stop (CDG)",
-        price: 640,
+        price: 960000,
         badge: "Best price",
       },
       {
@@ -568,7 +568,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "6h 45m",
         stops: "1 Stop (FRA)",
-        price: 660,
+        price: 990000,
         badge: "Overnight",
       },
     ],
@@ -595,7 +595,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "9h 30m",
         stops: "1 Stop (ATH)",
-        price: 720,
+        price: 1080000,
         badge: "100% on time",
       },
       {
@@ -613,7 +613,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "same day",
         duration: "9h 30m",
         stops: "1 Stop (IST)",
-        price: 690,
+        price: 1035000,
         badge: "Best price",
       },
       {
@@ -631,7 +631,7 @@ const FLIGHT_CATALOG = {
         arrNotice: "+1 day",
         duration: "9h 30m",
         stops: "1 Stop (DOH)",
-        price: 750,
+        price: 1125000,
         badge: "Luxury choice",
       },
     ],
@@ -805,7 +805,7 @@ function renderFlightCards(destData) {
         </div>
 
         <div class="flight-price-tag">
-          <span class="price-val">$${flight.price}</span>
+          <span class="price-val">₦${Number(flight.price).toLocaleString()}</span>
           <span class="price-sub">/ seat</span>
         </div>
 

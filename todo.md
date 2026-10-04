@@ -151,6 +151,17 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
     - Added "Why Fly with Travel Genesis" trust section highlighting best price guarantee, instant e-tickets, flexible rescheduling, and 24/7 priority support.
     - Corrected destination label typos (e.g. "TRONTO" -> "Toronto").
 
+- [x] **Task 6.8: Naira (₦) Currency & Profile Redesign**
+  - **Currency switched to Nigerian Naira (NGN):**
+    - Backend `Flight` model default currency changed to `NGN`; `seed.js` re-seeded with Naira fares (e.g. Lagos → London ₦1,050,000).
+    - All frontend prices now show `₦` with thousands separators: home cards, explore cards, flight list, seat selection total, booking details, payment fallback.
+    - Seat selection converts any old dollar-sized price left in localStorage (under 10,000) so stale sessions don't show "₦920".
+  - **Profile page redesign:**
+    - Identity banner with initials avatar, verified tick, member-since date and Edit profile button.
+    - Live stats from `/api/bookings/my-trips`: total trips, upcoming, total spent (₦), destinations.
+    - Account details, recent trips (latest 3), quick actions with unread notification badge, and a separate Account panel for Log out / Delete account.
+    - Replaced ~20KB of inline SVG/base64 with Font Awesome icons; fully responsive.
+
 ---
 
 ## Service Configuration & Ports
