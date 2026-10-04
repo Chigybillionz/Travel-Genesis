@@ -170,7 +170,7 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
   - In **Network Access**, add IP whitelist `0.0.0.0/0` (Allow access from anywhere).
   - Copy the connection string: `mongodb+srv://<user>:<password>@<cluster>.mongodb.net/travel_genesis?retryWrites=true&w=majority`.
 
-- [ ] **Task 7.2: Render Web Service Configuration**
+- [x] **Task 7.2: Render Web Service Configuration**
   - Connect GitHub repo on [Render.com](https://render.com) and create a **Web Service**.
   - **Root Directory:** `backend`
   - **Runtime:** `Node`
