@@ -167,14 +167,13 @@ function setActiveNavLink() {
 
 function navigateToAppPage(targetSubpath) {
   const curPath = window.location.pathname.toLowerCase();
-  let prefix = "../../";
-  if (curPath.includes("/pages/user/")) {
-    prefix = "../";
-  } else if (!curPath.includes("/pages/")) {
-    prefix = "pages/";
+  const pagesIndex = curPath.indexOf("/pages/");
+  if (pagesIndex !== -1) {
+    const basePath = window.location.pathname.substring(0, pagesIndex + 7);
+    window.location.href = basePath + targetSubpath;
+  } else {
+    window.location.href = "pages/" + targetSubpath;
   }
-  const destUrl = prefix + targetSubpath;
-  window.location.href = destUrl;
 }
 
 // Add click handlers for navigation
