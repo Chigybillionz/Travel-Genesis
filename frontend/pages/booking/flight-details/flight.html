@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Flight</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Choose Flight - Travel Genesis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="flight.css">
 </head>
 
@@ -13,7 +13,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <button class="back-btn" onclick="goBack()">
+            <button class="back-btn" onclick="goBack()" title="Back to Home">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
@@ -21,18 +21,17 @@
             <h1 class="header-title">Choose flight</h1>
         </div>
 
+        <!-- Route Banner Card -->
         <div class="route-card">
             <div class="route-header">
                 <div class="location">
-                    <div class="location-name" style=" font-weight: 100;
-            color: #a59c9c;">from</div>
-
-                    <div class="location-name">Lagos</div>
-                    <div class="location-country">Nigeria</div>
+                    <div class="location-label">from</div>
+                    <div class="location-name" id="origin-city">Lagos</div>
+                    <div class="location-country" id="origin-country">Nigeria</div>
                 </div>
 
                 <div class="route-center">
-                    <div class="on-time-badge">100% on time</div>
+                    <div class="on-time-badge" id="route-badge">100% on time</div>
                     <div class="plane-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#007a8c" stroke-width="2">
                             <path
@@ -42,125 +41,38 @@
                 </div>
 
                 <div class="location" style="text-align: right;">
-                    <div class="location-name" style=" font-weight: 100;
-            color: #8d8383;">to</div>
-                    <div class="location-name">London</div>
-                    <div class="location-country">Uk</div>
+                    <div class="location-label">to</div>
+                    <div class="location-name" id="dest-city">London</div>
+                    <div class="location-country" id="dest-country">UK</div>
                 </div>
             </div>
         </div>
 
-        <!-- Flights List -->
-        <div class="flights-list">
-            <!-- Flight 1 - Selected -->
-            <div class="flight-card selected" onclick="selectFlight(this)">
-                <div class="flight-header">
-                    <div class="flight-location">
-                        <div class="flight-city">Lagos</div>
-                        <div class="flight-country">Nigeria</div>
-                    </div>
-
-                    <div class="flight-center">
-                        <div class="flight-badge">100% on time</div>
-                        <div class="flight-duration">12h 30m</div>
-                    </div>
-
-                    <div class="flight-location" style="text-align: right;">
-                        <div class="flight-city">London</div>
-                        <div class="flight-country">Uk</div>
-                    </div>
-                </div>
-
-                <div class="flight-times">
-                    <div class="flight-time">
-                        <div class="time">7:00 AM</div>
-                        <div class="time-location">Nigeria</div>
-                    </div>
-
-                    <div style="width: 60px;"></div>
-
-                    <div class="flight-time" style="text-align: right;">
-                        <div class="time">7:30 PM</div>
-                        <div class="time-location">Uk</div>
-                    </div>
-                </div>
+        <!-- Quick Destination Switcher Pills -->
+        <div class="dest-switcher-section">
+            <div class="dest-switcher-header">
+                <span class="dest-switcher-title">Select Destination:</span>
+                <span class="dest-switcher-subtitle" id="active-dest-text">Sydney, Australia</span>
             </div>
-
-            <!-- Flight 2 -->
-            <div class="flight-card" onclick="selectFlight(this)">
-                <div class="flight-header">
-                    <div class="flight-location">
-                        <div class="flight-city">Lagos</div>
-                        <div class="flight-country">Nigeria</div>
-                    </div>
-
-                    <div class="flight-center">
-                        <div class="flight-badge">100% on time</div>
-                        <div class="flight-duration">12h 30m</div>
-                    </div>
-
-                    <div class="flight-location" style="text-align: right;">
-                        <div class="flight-city">London</div>
-                        <div class="flight-country">Uk</div>
-                    </div>
-                </div>
-
-                <div class="flight-times">
-                    <div class="flight-time">
-                        <div class="time">8:00 AM</div>
-                        <div class="time-location">Nigeria</div>
-                    </div>
-
-                    <div style="width: 60px;"></div>
-
-                    <div class="flight-time" style="text-align: right;">
-                        <div class="time">9:30 PM</div>
-                        <div class="time-location">Uk</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Flight 3 -->
-            <div class="flight-card" onclick="selectFlight(this)">
-                <div class="flight-header">
-                    <div class="flight-location">
-                        <div class="flight-city">Lagos</div>
-                        <div class="flight-country">Nigeria</div>
-                    </div>
-
-                    <div class="flight-center">
-                        <div class="flight-badge">100% on time</div>
-                        <div class="flight-duration">12h 30m</div>
-                    </div>
-
-                    <div class="flight-location" style="text-align: right;">
-                        <div class="flight-city">London</div>
-                        <div class="flight-country">Uk</div>
-                    </div>
-                </div>
-
-                <div class="flight-times">
-                    <div class="flight-time">
-                        <div class="time">12:30 PM</div>
-                        <div class="time-location">Nigeria</div>
-                    </div>
-
-                    <div style="width: 60px;"></div>
-
-                    <div class="flight-time" style="text-align: right;">
-                        <div class="time">1:00 AM</div>
-                        <div class="time-location">Uk</div>
-                    </div>
-                </div>
+            <div class="destination-pills-bar" id="dest-pills">
+                <!-- Dynamically populated pills -->
             </div>
         </div>
 
-        <button class="continue-btn" onclick="continueFlight()">Continue</button>
+        <!-- Flights List (Dynamically Rendered for the Selected Destination) -->
+        <div class="flights-list" id="flights-list">
+            <!-- Flight cards rendered dynamically by flight.js -->
+        </div>
+
+        <!-- Action Button -->
+        <button class="continue-btn" id="continue-btn" onclick="continueFlight()">Continue</button>
 
         <div class="home-indicator"></div>
     </div>
-    <script src="flight.js"></script>
 
+    <!-- Scripts -->
+    <script src="../../../shared/js/api.js"></script>
+    <script src="flight.js"></script>
 </body>
 
 </html>

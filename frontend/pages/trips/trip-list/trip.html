@@ -63,7 +63,7 @@
                 <div class="trips-list-column">
                     <div class="section-label">
                         <span>Upcoming Flight</span>
-                        <span class="ref-tag">Booking Ref: #TG-BK-7392</span>
+                        <span class="ref-tag" id="tripBookingRef">Booking Ref: #TG-BK-7392</span>
                     </div>
 
                     <!-- Premium Flight Card -->
@@ -74,14 +74,14 @@
                                     <i class="fa-solid fa-plane-departure"></i>
                                 </div>
                                 <div class="airline-meta">
-                                    <div class="airline-name">Qatar Airways</div>
-                                    <div class="flight-no">Flight QA-204 • Boeing 787-9 Dreamliner</div>
+                                    <div class="airline-name" id="tripAirline">Qatar Airways</div>
+                                    <div class="flight-no" id="tripFlightNo">Flight QA-204 • Scheduled</div>
                                 </div>
                             </div>
 
-                            <div class="flight-status-badge confirmed">
+                            <div class="flight-status-badge confirmed" id="tripStatusBadge">
                                 <i class="fa-solid fa-circle-check"></i>
-                                <span>Confirmed • On Schedule</span>
+                                <span id="tripStatusText">Confirmed • On Schedule</span>
                             </div>
                         </div>
 
@@ -94,14 +94,14 @@
                                 <div class="airport-detail">Murtala Muhammed Intl</div>
                                 <div class="schedule-time">
                                     <i class="fa-regular fa-clock"></i>
-                                    <span>07:30 AM</span>
+                                    <span id="tripDepTime">07:30 AM</span>
                                 </div>
-                                <div class="schedule-date">Wed, 03 Dec 2025</div>
+                                <div class="schedule-date" id="tripDepDate">Wed, 03 Dec 2025</div>
                             </div>
 
                             <!-- Flight Path Centerpiece -->
                             <div class="flight-path-center">
-                                <div class="flight-duration">6h 45m</div>
+                                <div class="flight-duration" id="tripDuration">6h 45m</div>
                                 <div class="path-visual">
                                     <div class="path-dot start"></div>
                                     <div class="path-line">
@@ -112,19 +112,19 @@
                                     </div>
                                     <div class="path-dot end"></div>
                                 </div>
-                                <div class="flight-type-pill">Non-Stop • Direct</div>
+                                <div class="flight-type-pill" id="tripFlightType">Non-Stop • Direct</div>
                             </div>
 
                             <!-- Arrival -->
                             <div class="route-node arrival-node">
-                                <div class="city-name">London</div>
-                                <div class="airport-code">LDN</div>
-                                <div class="airport-detail">London Heathrow (LHR)</div>
+                                <div class="city-name" id="tripArrCity">London</div>
+                                <div class="airport-code" id="tripArrCode">LDN</div>
+                                <div class="airport-detail" id="tripArrAirport">London Heathrow (LHR)</div>
                                 <div class="schedule-time">
                                     <i class="fa-regular fa-clock"></i>
-                                    <span>02:15 PM</span>
+                                    <span id="tripArrTime">02:15 PM</span>
                                 </div>
-                                <div class="schedule-date">Wed, 03 Dec 2025</div>
+                                <div class="schedule-date" id="tripArrDate">Wed, 03 Dec 2025</div>
                             </div>
                         </div>
 
@@ -141,7 +141,7 @@
                                 <i class="fa-solid fa-couch"></i>
                                 <div>
                                     <div class="amenity-label">Seat Assigned</div>
-                                    <div class="amenity-value">14A (Window)</div>
+                                    <div class="amenity-value" id="tripSeat">14A (Window)</div>
                                 </div>
                             </div>
                             <div class="amenity-item">

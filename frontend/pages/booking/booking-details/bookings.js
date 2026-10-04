@@ -100,6 +100,32 @@ if (savedSeats && savedSeats.length > 0) {
   bookingSeatsEl.textContent = "No seat selected";
 }
 
+// Load location and airline from chosen flight
+document.addEventListener("DOMContentLoaded", () => {
+  const locationEl = document.getElementById("booking-location");
+  const airlineEl = document.getElementById("booking-airline");
+  const chosenFlightRaw = localStorage.getItem("chosenFlight");
+  const savedLocation = localStorage.getItem("bookingLocation");
+  const savedAirline = localStorage.getItem("bookingAirline");
+
+  if (chosenFlightRaw) {
+    try {
+      const flight = JSON.parse(chosenFlightRaw);
+      if (locationEl) {
+        locationEl.textContent = `${flight.destinationCountry}, ${flight.destinationCity}`;
+      }
+      if (airlineEl) {
+        airlineEl.textContent = flight.airline || "British Airways";
+      }
+    } catch (e) {
+      console.error("Error parsing chosenFlight:", e);
+    }
+  } else {
+    if (savedLocation && locationEl) locationEl.textContent = savedLocation;
+    if (savedAirline && airlineEl) airlineEl.textContent = savedAirline;
+  }
+});
+
 // Load total price
 const totalPriceEl = document.getElementById("total-price");
 const savedPrice = localStorage.getItem("totalPrice");

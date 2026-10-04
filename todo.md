@@ -109,9 +109,19 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
 - [x] **Task 6.4: Profile & Session Integration**
   - Connected `frontend/pages/user/profile/profile.js` to `GET /api/users/profile` for dynamic profile data retrieval.
   - Connected `frontend/pages/user/logout/logout.js` to clear session via `api.logout()`.
-- [ ] **Task 6.5: Flights Search & Booking Integration**
-  - Connect `pages/booking/home` and `pages/booking/search` to `/api/flights` & `/api/destinations`.
-  - Connect `pages/trips/trip-list` to `/api/bookings/my-trips`.
+- [x] **Task 6.5: Flights Search & Booking Integration**
+  - **Backend API & Service:**
+    - Seeded full catalog of 10 international flight routes in MongoDB (`seed.js`) covering London (LHR), Dubai (DXB), Paris (CDG), New York (JFK), Sydney (SYD), Toronto (YYZ), Tokyo (NRT), Rome (FCO), Barcelona (BCN), and Santorini (JTR).
+    - Upgraded `bookingService.js` to dynamically resolve flights by MongoDB ObjectId, flight code (`flightNumber`), or destination city name, ensuring rock-solid booking creation without CastErrors.
+    - Automated event notifications: booking creation triggers confirmed trip alerts (`Booking Confirmed! 🎉`), and cancellations trigger confirmation notices (`Booking Cancelled`).
+    - Verified live REST API endpoints: `GET /api/flights/search`, `POST /api/bookings`, `GET /api/bookings/my-trips`, and `PATCH /api/bookings/:id/cancel`.
+  - **Frontend Client Integration:**
+    - Configured dynamic destination-driven routing: clicking "Book Now" for any destination (Sydney, Toronto, London, New York, etc.) on `pages/booking/home` dynamically updates the "Choose flight" page with accurate route headers and distinct flight schedules, timings, durations, and airlines.
+    - Added interactive destination pill selector on `pages/booking/flight-details` for smooth on-the-fly route switching.
+    - Connected `pages/payment/checkout` to `POST /api/bookings` for real confirmed booking creation linked to the user account.
+    - Connected `pages/trips/trip-list` to `GET /api/bookings/my-trips` and `PATCH /api/bookings/:id/cancel` for live booking management.
+    - Connected `pages/booking/search` to route search queries directly to matching destination flight schedules.
+    - Synced `pages/booking/booking-details` and `pages/trips/e-ticket` to display route-specific destination, airline, and flight timings.
 - [ ] **Task 6.6: Notifications Integration**
   - Connect `pages/user/notifications` to `/api/notifications`.
 

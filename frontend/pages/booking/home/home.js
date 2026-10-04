@@ -148,10 +148,21 @@ document.addEventListener("DOMContentLoaded", () => {
     bookbtns.forEach((bookbtn) => {
       bookbtn.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log(
-          "Book button clicked! Navigating to flight details page..."
-        );
-        window.location.href = "../../booking/flight-details/flight.html";
+        const card = this.closest(".destination-card");
+        let destination = "London";
+        let country = "UK";
+
+        if (card) {
+          destination = card.dataset.destination || destination;
+          country = card.dataset.country || country;
+        }
+
+        console.log(`Booking flight to ${destination}, ${country}...`);
+        localStorage.setItem("selectedDestinationCity", destination);
+        localStorage.setItem("selectedDestinationCountry", country);
+
+        const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}`;
+        window.location.href = targetUrl;
       });
     });
   }

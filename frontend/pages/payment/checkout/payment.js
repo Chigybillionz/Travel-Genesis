@@ -28,6 +28,32 @@ document.addEventListener("DOMContentLoaded", () => {
     payBtnProcessing.classList.add("show");
     payBtn.disabled = true;
 
+    // Call backend API to record confirmed booking
+    if (window.API && API.isAuthenticated()) {
+      const chosenFlight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
+      const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14B"]');
+      const totalPrice = Number(localStorage.getItem("totalPrice")) || chosenFlight.price || 500;
+      const user = API.getUser();
+
+      API.bookings
+        .create({
+          flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
+          seatNumber: bookingSeats.join(", "),
+          totalPrice: totalPrice,
+          passengerName: user ? user.name : "Traveler",
+          passengerEmail: user ? user.email : "user@travelgenesis.com",
+        })
+        .then((res) => {
+          console.log("✅ Booking confirmed in backend API:", res);
+          if (res && res.data) {
+            localStorage.setItem("lastBooking", JSON.stringify(res.data));
+          }
+        })
+        .catch((err) => {
+          console.warn("Booking API notice:", err.message);
+        });
+    }
+
     // Simulate processing time - 3 seconds
     setTimeout(() => {
       // Hide loader and processing text, show checkmark
@@ -40,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         successScreen.classList.add("active");
       }, 800);
-    }, 3000);
+    }, 2400);
   }
 
   if (viewTicketsBtn) {

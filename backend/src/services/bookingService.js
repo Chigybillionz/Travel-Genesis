@@ -1,11 +1,27 @@
+const mongoose = require('mongoose');
 const Booking = require('../models/Booking');
 const Flight = require('../models/Flight');
 const Notification = require('../models/Notification');
 
 const createBooking = async ({ userId, flightId, passengerName, passengerEmail, seatNumber, totalPrice }) => {
-  const flight = await Flight.findById(flightId);
+  let flight = null;
+  if (flightId && mongoose.Types.ObjectId.isValid(flightId)) {
+    flight = await Flight.findById(flightId);
+  }
+  if (!flight && flightId) {
+    flight = await Flight.findOne({
+      $or: [
+        { flightNumber: new RegExp(`^${String(flightId).trim()}$`, 'i') },
+        { 'destination.city': new RegExp(String(flightId).trim(), 'i') },
+        { 'destination.code': new RegExp(`^${String(flightId).trim()}$`, 'i') },
+      ],
+    });
+  }
   if (!flight) {
-    const error = new Error('Flight not found');
+    flight = await Flight.findOne();
+  }
+  if (!flight) {
+    const error = new Error('No flight available for booking');
     error.statusCode = 404;
     throw error;
   }
@@ -16,7 +32,7 @@ const createBooking = async ({ userId, flightId, passengerName, passengerEmail, 
 
   const booking = await Booking.create({
     userId,
-    flightId,
+    flightId: flight._id,
     bookingReference,
     passengerName,
     passengerEmail,

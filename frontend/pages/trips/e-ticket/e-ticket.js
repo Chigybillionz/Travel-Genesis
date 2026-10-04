@@ -12,7 +12,35 @@ document.addEventListener("DOMContentLoaded", function () {
   loadUserData();
   loadSelectedSeats();
   loadFlightDate();
+  loadChosenFlight();
 });
+
+// Function to load chosen flight details (destination, times, airline)
+function loadChosenFlight() {
+  const chosenFlightRaw = localStorage.getItem("chosenFlight");
+  if (!chosenFlightRaw) return;
+
+  try {
+    const flight = JSON.parse(chosenFlightRaw);
+    console.log("✈️ Loading chosen flight on e-ticket:", flight);
+
+    const destCityEl = document.getElementById("ticket-dest-city");
+    const destCountryEl = document.getElementById("ticket-dest-country");
+    const depTimeEl = document.getElementById("ticket-dep-time");
+    const arrTimeEl = document.getElementById("ticket-arr-time");
+    const arrCountryEl = document.getElementById("ticket-arr-country");
+    const airlineEl = document.getElementById("ticket-airline-name");
+
+    if (destCityEl && flight.destinationCity) destCityEl.textContent = flight.destinationCity;
+    if (destCountryEl && flight.destinationCountry) destCountryEl.textContent = flight.destinationCountry;
+    if (depTimeEl && flight.depTime) depTimeEl.textContent = flight.depTime;
+    if (arrTimeEl && flight.arrTime) arrTimeEl.textContent = flight.arrTime;
+    if (arrCountryEl && flight.destinationCountry) arrCountryEl.textContent = flight.destinationCountry;
+    if (airlineEl && flight.airline) airlineEl.textContent = `${flight.airline} (${flight.flightNumber || ""})`;
+  } catch (e) {
+    console.error("Error loading chosen flight on e-ticket:", e);
+  }
+}
 
 // Function to load user profile data from localStorage
 function loadUserData() {
