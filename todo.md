@@ -164,7 +164,7 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
 ## Phase 7: Cloud Deployment & Backend Hosting (Render & MongoDB Atlas)
 *Goal: Deploy the Node.js Express API to Render.com and connect to cloud MongoDB Atlas.*
 
-- [ ] **Task 7.1: MongoDB Atlas Cloud Database Setup**
+- [x] **Task 7.1: MongoDB Atlas Cloud Database Setup**
   - Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (M0 Sandbox).
   - Create a database user and secure password.
   - In **Network Access**, add IP whitelist `0.0.0.0/0` (Allow access from anywhere).
