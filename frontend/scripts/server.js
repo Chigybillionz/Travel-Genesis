@@ -57,6 +57,16 @@ const server = http.createServer((req, res) => {
   });
 });
 
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n⚠️  Port ${PORT} is already in use by another process.`);
+    console.log(`💡 If a dev server is already running in another window, you can use that one, or close it, or run with: $env:PORT=3001; npm run dev\n`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});
+
 server.listen(PORT, () => {
   console.log('====================================================');
   console.log(`🚀 TravelGenesis Local Server running!`);

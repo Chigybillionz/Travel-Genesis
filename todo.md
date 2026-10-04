@@ -97,8 +97,26 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
 
 ---
 
-## Next Steps to Begin:
-Once you are ready to start, we will:
-1. Create a `backend` folder alongside your `pages` and `shared` folders.
-2. Initialize `package.json` and install Express.
-3. Write the initial `server.js` file to get your `localhost:5000` server running.
+## Phase 6: Frontend-to-Backend Integration
+*Goal: Wire up client-side HTML/JS views to the live Express API.*
+
+- [x] **Task 6.1: Shared API Client & Auth State**
+  - Implemented `frontend/shared/js/api.js` for centralized HTTP requests with Bearer token authentication, user session caching, and error handling.
+- [x] **Task 6.2: Sign Up Integration**
+  - Integrated `frontend/pages/auth/signup/signup.js` with `POST /api/auth/register`, including form loading states and server validation handling.
+- [x] **Task 6.3: Sign In Integration**
+  - Integrated `frontend/pages/auth/login/login.js` with `POST /api/auth/login`, JWT storage, and direct navigation to home/dashboard.
+- [x] **Task 6.4: Profile & Session Integration**
+  - Connected `frontend/pages/user/profile/profile.js` to `GET /api/users/profile` for dynamic profile data retrieval.
+  - Connected `frontend/pages/user/logout/logout.js` to clear session via `api.logout()`.
+- [ ] **Task 6.5: Flights Search & Booking Integration**
+  - Connect `pages/booking/home` and `pages/booking/search` to `/api/flights` & `/api/destinations`.
+  - Connect `pages/trips/trip-list` to `/api/bookings/my-trips`.
+- [ ] **Task 6.6: Notifications Integration**
+  - Connect `pages/user/notifications` to `/api/notifications`.
+
+---
+
+## Service Configuration & Ports
+- **Backend API Server:** `http://localhost:5001` (running via Express & MongoDB)
+- **Frontend App Server:** `http://localhost:3000` (serving static pages & assets)

@@ -71,12 +71,43 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (isValid) {
-        window.location.href =
-          "../../auth/confirmation/confirmation.html";
-        console.log("Login attempt:", {
-          email: email.value,
-          password: passwordInput.value,
-        });
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn ? submitBtn.innerHTML : 'Sign In';
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `
+            <span>Signing In...</span>
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10"></path>
+            </svg>
+          `;
+        }
+
+        (async () => {
+          try {
+            if (window.API && window.API.auth) {
+              await window.API.auth.login({
+                email: email.value.trim(),
+                password: passwordInput.value,
+              });
+            } else {
+              // Fallback
+              localStorage.setItem("userEmail", email.value.trim());
+            }
+
+            // Redirect to home page upon successful authentication
+            window.location.href = "../../booking/home/home.html";
+          } catch (err) {
+            console.error("Login error:", err);
+            showError(err.message || "Invalid email or password. Please try again.");
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalText;
+            }
+          }
+        })();
       } else {
         showError("Please fix the following errors:\n" + errorMessage);
       }

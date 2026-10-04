@@ -16,8 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const logoutbtn = document.getElementById("btn-cancelbtn-logout");
   if (logoutbtn) {
     logoutbtn.addEventListener("click", function () {
-      console.log("returning to home page...");
-
+      console.log("Logging out user and clearing session...");
+      if (window.API) {
+        window.API.logout();
+      } else {
+        localStorage.clear();
+      }
       window.location.href = "../../auth/login/login.html";
     });
   }

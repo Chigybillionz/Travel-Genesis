@@ -123,24 +123,46 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (isValid) {
-        // **STORE THE USER'S NAME AND EMAIL**
         const fullName = fullnameInput.value.trim();
-        const firstName = fullName.split(" ")[0]; // Get first name only
-        const email = emailInput.value.trim(); // Get email
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-        // Save to localStorage
-        localStorage.setItem("userName", firstName);
-        localStorage.setItem("userFullName", fullName);
-        localStorage.setItem("userEmail", email); // Save email
+        // Visual loading state
+        const originalText = signupBtn.innerHTML;
+        signupBtn.disabled = true;
+        signupBtn.innerHTML = `
+          <span>Creating account...</span>
+          <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+          </svg>
+        `;
 
-        // Debug: Log to console to verify
-        console.log("Saved to localStorage:");
-        console.log("Full Name:", fullName);
-        console.log("Email:", email);
+        (async () => {
+          try {
+            if (window.API && window.API.auth) {
+              await window.API.auth.register({
+                name: fullName,
+                email: email,
+                password: password,
+              });
+            } else {
+              // Fallback
+              const firstName = fullName.split(" ")[0];
+              localStorage.setItem("userName", firstName);
+              localStorage.setItem("userFullName", fullName);
+              localStorage.setItem("userEmail", email);
+            }
 
-        // Redirect to confirmation page
-        window.location.href =
-          "../../auth/confirmation/confirmation.html";
+            // Redirect to confirmation page
+            window.location.href = "../../auth/confirmation/confirmation.html";
+          } catch (err) {
+            console.error("Registration error:", err);
+            showError(err.message || "Failed to create account. Please try again.");
+            signupBtn.disabled = false;
+            signupBtn.innerHTML = originalText;
+          }
+        })();
       } else {
         showError("Please fix the following errors:\n" + errorMessage);
       }

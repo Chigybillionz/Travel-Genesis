@@ -3,39 +3,41 @@ document.addEventListener("DOMContentLoaded", function () {
   loadUserProfile();
 });
 
-// Function to load user profile data from localStorage
-function loadUserProfile() {
-  // Get user data from localStorage
-  const userFullName = localStorage.getItem("userFullName");
-  const userEmail = localStorage.getItem("userEmail");
-
-  // Debug: Log to console to verify data is being retrieved
-  console.log("Loading from localStorage:");
-  console.log("Full Name:", userFullName);
-  console.log("Email:", userEmail);
-
-  // Update profile name
+// Function to load user profile data from API / localStorage
+async function loadUserProfile() {
   const profileNameElement = document.querySelector(".profile-name");
-  if (profileNameElement) {
-    if (userFullName && userFullName !== "") {
-      profileNameElement.textContent = userFullName;
-      console.log("Updated profile name to:", userFullName);
-    } else {
-      profileNameElement.textContent = "Naomi Davies"; // Default name
-      console.log("Using default name");
-    }
+  const profileEmailElement = document.querySelector(".profile-email");
+
+  // Step 1: Render fast from local cache (zero flicker)
+  const cachedName = localStorage.getItem("userFullName") || localStorage.getItem("userName");
+  const cachedEmail = localStorage.getItem("userEmail");
+
+  if (profileNameElement && cachedName) {
+    profileNameElement.textContent = cachedName;
+  }
+  if (profileEmailElement && cachedEmail) {
+    profileEmailElement.textContent = cachedEmail;
   }
 
-  // Update profile email
-  const profileEmailElement = document.querySelector(".profile-email");
-  if (profileEmailElement) {
-    if (userEmail && userEmail !== "") {
-      profileEmailElement.textContent = userEmail;
-      console.log("Updated profile email to:", userEmail);
-    } else {
-      profileEmailElement.textContent = "davilesnaomi05@gmail.com"; // Default email
-      console.log("Using default email");
+  // Step 2: Fetch fresh profile from backend if user is authenticated
+  if (window.API && window.API.isAuthenticated()) {
+    try {
+      const response = await window.API.users.getProfile();
+      if (response && response.user) {
+        const user = response.user;
+        if (profileNameElement && user.name) {
+          profileNameElement.textContent = user.name;
+        }
+        if (profileEmailElement && user.email) {
+          profileEmailElement.textContent = user.email;
+        }
+      }
+    } catch (err) {
+      console.warn("Could not sync profile from server:", err.message);
     }
+  } else if (!cachedName && !cachedEmail) {
+    if (profileNameElement) profileNameElement.textContent = "Guest Traveler";
+    if (profileEmailElement) profileEmailElement.textContent = "Sign in to view your account";
   }
 }
 

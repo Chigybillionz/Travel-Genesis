@@ -4,115 +4,278 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>My Trip Screen</title>
+    <title>My Trips - Travel Genesis</title>
+    <meta name="description" content="Manage your upcoming journeys, view boarding passes, and track flight bookings.">
 
-    <!-- FONT AWESOME -->
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="../../../shared/css/design-system.css">
     <link rel="stylesheet" href="trip.css">
     <link rel="stylesheet" href="../../../shared/css/shared-nav.css">
-
-
 </head>
 
 <body>
     <div id="shared-nav-container"></div>
 
-
-    <div class="app-container">
-
-
-
-        <!-- CONTENT -->
-        <div class="desktop-content-wrapper">
-            <div class="page-header">
-                <h2>My Trips</h2>
-                <p>Manage your upcoming journeys and bookings.</p>
-            </div>
-
-            <div class="section-title">Pending trips</div>
-
-            <div class="trip-cards-container">
-                <div class="premium-trip-card">
-                    <div class="card-top-accent"></div>
-                    <div class="card-main">
-                        <div class="route-section">
-                            <div class="departure">
-                                <span class="airport-code">LOS</span>
-                                <span class="country-name">Nigeria</span>
-                            </div>
-                            <div class="journey-line">
-                                <div class="line-track"></div>
-                                <i class="fa-solid fa-plane flight-icon"></i>
-                            </div>
-                            <div class="arrival">
-                                <span class="airport-code">LDN</span>
-                                <span class="country-name">United Kingdom</span>
-                            </div>
-                        </div>
-                        <div class="metadata-section">
-                            <div class="meta-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>03-12-2025</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fa-solid fa-clock"></i>
-                                <span>7:30 AM</span>
-                            </div>
-                        </div>
+    <div class="trips-dashboard-layout">
+        <!-- Main Content Area -->
+        <main class="trips-main-content">
+            <!-- Header Section -->
+            <header class="trips-header">
+                <div class="header-text">
+                    <div class="badge-pill">
+                        <span class="pulse-dot"></span>
+                        Active Itinerary
                     </div>
-                    <div class="card-actions">
-                        <button class="btn primary-btn" id="viewBtn">View Tickets</button>
-                        <button class="btn ghost-btn" id="cancelBtn">Cancel Booking</button>
-                    </div>
+                    <h1 class="page-title">My Trips & Bookings</h1>
+                    <p class="page-subtitle">Manage your upcoming journeys, download digital boarding passes, and stay updated in real time.</p>
                 </div>
+
+                <div class="header-action">
+                    <a href="../../booking/home/home.html" class="book-new-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Book New Flight</span>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Filter Tabs -->
+            <div class="trips-tabs">
+                <button class="tab-btn active" data-filter="upcoming">
+                    <span>Upcoming Trips</span>
+                    <span class="tab-badge" id="upcomingCount">1</span>
+                </button>
+                <button class="tab-btn" data-filter="completed">
+                    <span>Completed</span>
+                    <span class="tab-badge secondary">0</span>
+                </button>
+                <button class="tab-btn" data-filter="cancelled">
+                    <span>Cancelled</span>
+                    <span class="tab-badge secondary">0</span>
+                </button>
             </div>
-        </div>
+
+            <!-- Content Grid (Trips List + Travel Companion Sidebar) -->
+            <div class="trips-grid">
+                <!-- Trips List Column -->
+                <div class="trips-list-column">
+                    <div class="section-label">
+                        <span>Upcoming Flight</span>
+                        <span class="ref-tag">Booking Ref: #TG-BK-7392</span>
+                    </div>
+
+                    <!-- Premium Flight Card -->
+                    <article class="desktop-flight-card">
+                        <div class="flight-card-header">
+                            <div class="airline-brand">
+                                <div class="airline-logo-box">
+                                    <i class="fa-solid fa-plane-departure"></i>
+                                </div>
+                                <div class="airline-meta">
+                                    <div class="airline-name">Qatar Airways</div>
+                                    <div class="flight-no">Flight QA-204 • Boeing 787-9 Dreamliner</div>
+                                </div>
+                            </div>
+
+                            <div class="flight-status-badge confirmed">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Confirmed • On Schedule</span>
+                            </div>
+                        </div>
+
+                        <!-- Route Visualizer -->
+                        <div class="flight-route-body">
+                            <!-- Departure -->
+                            <div class="route-node departure-node">
+                                <div class="city-name">Lagos</div>
+                                <div class="airport-code">LOS</div>
+                                <div class="airport-detail">Murtala Muhammed Intl</div>
+                                <div class="schedule-time">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span>07:30 AM</span>
+                                </div>
+                                <div class="schedule-date">Wed, 03 Dec 2025</div>
+                            </div>
+
+                            <!-- Flight Path Centerpiece -->
+                            <div class="flight-path-center">
+                                <div class="flight-duration">6h 45m</div>
+                                <div class="path-visual">
+                                    <div class="path-dot start"></div>
+                                    <div class="path-line">
+                                        <div class="path-track"></div>
+                                        <div class="plane-marker">
+                                            <i class="fa-solid fa-plane"></i>
+                                        </div>
+                                    </div>
+                                    <div class="path-dot end"></div>
+                                </div>
+                                <div class="flight-type-pill">Non-Stop • Direct</div>
+                            </div>
+
+                            <!-- Arrival -->
+                            <div class="route-node arrival-node">
+                                <div class="city-name">London</div>
+                                <div class="airport-code">LDN</div>
+                                <div class="airport-detail">London Heathrow (LHR)</div>
+                                <div class="schedule-time">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span>02:15 PM</span>
+                                </div>
+                                <div class="schedule-date">Wed, 03 Dec 2025</div>
+                            </div>
+                        </div>
+
+                        <!-- Passenger & Seat Detail Bar -->
+                        <div class="flight-amenities-bar">
+                            <div class="amenity-item">
+                                <i class="fa-solid fa-user"></i>
+                                <div>
+                                    <div class="amenity-label">Passenger</div>
+                                    <div class="amenity-value" id="passengerName">Solo</div>
+                                </div>
+                            </div>
+                            <div class="amenity-item">
+                                <i class="fa-solid fa-couch"></i>
+                                <div>
+                                    <div class="amenity-label">Seat Assigned</div>
+                                    <div class="amenity-value">14A (Window)</div>
+                                </div>
+                            </div>
+                            <div class="amenity-item">
+                                <i class="fa-solid fa-suitcase-rolling"></i>
+                                <div>
+                                    <div class="amenity-label">Baggage</div>
+                                    <div class="amenity-value">2 × 23kg Included</div>
+                                </div>
+                            </div>
+                            <div class="amenity-item">
+                                <i class="fa-solid fa-door-open"></i>
+                                <div>
+                                    <div class="amenity-label">Terminal / Gate</div>
+                                    <div class="amenity-value">Terminal 2 • Gate B14</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Action Footer -->
+                        <div class="flight-card-footer">
+                            <div class="checkin-notice">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span>Online check-in opens 24 hours prior to departure.</span>
+                            </div>
+
+                            <div class="footer-buttons">
+                                <button class="action-btn cancel-btn" id="cancelBtn">
+                                    <i class="fa-solid fa-xmark"></i>
+                                    <span>Cancel Booking</span>
+                                </button>
+                                <button class="action-btn ticket-btn" id="viewBtn">
+                                    <i class="fa-solid fa-ticket"></i>
+                                    <span>View E-Ticket</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Desktop Sidebar: Travel Companion & Insights -->
+                <aside class="trips-sidebar-column">
+                    <!-- Preparation Widget -->
+                    <div class="companion-card">
+                        <div class="companion-header">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <h3>Pre-Flight Checklist</h3>
+                        </div>
+                        <ul class="checklist-items">
+                            <li class="checked">
+                                <i class="fa-solid fa-check"></i>
+                                <span>Flight reservation confirmed</span>
+                            </li>
+                            <li class="checked">
+                                <i class="fa-solid fa-check"></i>
+                                <span>E-Ticket generated & saved</span>
+                            </li>
+                            <li>
+                                <i class="fa-regular fa-circle"></i>
+                                <span>Check-in online (Opens in 48h)</span>
+                            </li>
+                            <li>
+                                <i class="fa-regular fa-circle"></i>
+                                <span>Review UK entry visa requirements</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Destination Weather Snapshot -->
+                    <div class="companion-card weather-card">
+                        <div class="companion-header">
+                            <i class="fa-solid fa-cloud-sun"></i>
+                            <h3>London Weather</h3>
+                        </div>
+                        <div class="weather-body">
+                            <div class="weather-temp">14°C</div>
+                            <div class="weather-desc">
+                                <div class="weather-condition">Partly Cloudy</div>
+                                <div class="weather-tip">Mild breeze, carry a light jacket.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Need Assistance -->
+                    <div class="companion-card support-card">
+                        <h4>Need Assistance?</h4>
+                        <p>Our dedicated TravelGenesis 24/7 concierge is available for flight changes or inquiries.</p>
+                        <a href="mailto:support@travelgenesis.com" class="support-link">
+                            <i class="fa-regular fa-envelope"></i>
+                            Contact Concierge
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </main>
     </div>
+
     <!-- Bottom Navigation (Mobile Only) -->
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active">
+        <a href="../../booking/home/home.html" class="nav-item">
             <span class="nav-icon"><svg width="16" height="18" viewBox="0 0 16 18" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M2 15.5H5V10.5C5 10.2167 5.096 9.97933 5.288 9.788C5.48 9.59667 5.71733 9.50067 6 9.5H10C10.2833 9.5 10.521 9.596 10.713 9.788C10.905 9.98 11.0007 10.2173 11 10.5V15.5H14V6.5L8 2L2 6.5V15.5ZM0 15.5V6.5C0 6.18333 0.0709998 5.88333 0.213 5.6C0.355 5.31667 0.550667 5.08333 0.8 4.9L6.8 0.4C7.15 0.133333 7.55 0 8 0C8.45 0 8.85 0.133333 9.2 0.4L15.2 4.9C15.45 5.08333 15.646 5.31667 15.788 5.6C15.93 5.88333 16.0007 6.18333 16 6.5V15.5C16 16.05 15.804 16.521 15.412 16.913C15.02 17.305 14.5493 17.5007 14 17.5H10C9.71667 17.5 9.47933 17.404 9.288 17.212C9.09667 17.02 9.00067 16.7827 9 16.5V11.5H7V16.5C7 16.7833 6.904 17.021 6.712 17.213C6.52 17.405 6.28267 17.5007 6 17.5H2C1.45 17.5 0.979333 17.3043 0.588 16.913C0.196666 16.5217 0.000666667 16.0507 0 15.5Z"
-                        fill="#007A8C" />
+                        fill="#6A6A6A" />
                 </svg>
             </span>
             <span>Home</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="../../trips/trip-list/trip.html" class="nav-item active">
             <span class="nav-icon"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M22.2226 12.4129C22.1183 17.935 17.5577 22.3267 12.0357 22.2225C6.51363 22.1183 2.1219 17.5576 2.22611 12.0356C2.33032 6.51356 6.891 2.12183 12.413 2.22604C17.935 2.33024 22.3268 6.89092 22.2226 12.4129Z"
-                        stroke="#6A6A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        stroke="#007A8C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     <path
                         d="M14.0024 7.73412L11.2487 8.80736C10.4174 9.13173 10.0023 9.29293 9.68961 9.59308C9.37787 9.89425 9.20011 10.304 8.84564 11.1204L7.66927 13.8317C6.78674 15.8654 6.3455 16.8813 6.84676 17.4018C7.34703 17.9224 8.38079 17.5208 10.4454 16.7146L13.1991 15.6414C14.0294 15.317 14.4445 15.1558 14.7572 14.8546C15.07 14.5535 15.2467 14.1457 15.6012 13.3273L16.7775 10.617C17.6601 8.58329 18.1013 7.56743 17.6001 7.04688C17.0998 6.52635 16.067 6.92794 14.0024 7.73412Z"
-                        stroke="#6A6A6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M12.2244 12.2244L12.2242 12.2344" stroke="#6A6A6A" stroke-width="2" stroke-linecap="round"
+                        stroke="#007A8C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12.2244 12.2244L12.2242 12.2344" stroke="#007A8C" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" />
                 </svg>
             </span>
             <span>My Trip</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="../../user/explore/explore.html" class="nav-item">
             <span class="nav-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M10.51 6.61715C9.99201 7.95815 9.65501 9.86215 9.65501 12.0022C9.65501 14.1422 9.99201 16.0462 10.511 17.3871C10.771 18.0602 11.063 18.5532 11.349 18.8652C11.635 19.1772 11.855 19.2502 12 19.2502C12.145 19.2502 12.366 19.1772 12.652 18.8652C12.937 18.5532 13.229 18.0602 13.489 17.3871C14.009 16.0462 14.345 14.1422 14.345 12.0022C14.345 9.86215 14.008 7.95815 13.489 6.61715C13.229 5.94415 12.937 5.45115 12.651 5.13915C12.365 4.82715 12.145 4.75415 12 4.75415C11.855 4.75415 11.634 4.82715 11.349 5.13915C11.064 5.45115 10.77 5.94415 10.51 6.61715ZM10.243 4.12715C10.698 3.62815 11.291 3.25415 12.001 3.25415C12.711 3.25415 13.304 3.62815 13.759 4.12615C14.214 4.62315 14.589 5.30115 14.889 6.07615C15.49 7.62915 15.846 9.72515 15.846 12.0022C15.846 14.2792 15.49 16.3752 14.889 17.9282C14.589 18.7022 14.214 19.3812 13.759 19.8782C13.304 20.3752 12.711 20.7502 12.001 20.7502C11.291 20.7502 10.698 20.3752 10.243 19.8782C9.78801 19.3812 9.41301 18.7031 9.11301 17.9282C8.51201 16.3752 8.15601 14.2792 8.15601 12.0022C8.15601 9.72515 8.51201 7.62915 9.11301 6.07615C9.41301 5.30115 9.78801 4.62415 10.243 4.12715Z"
                         fill="#6A6A6A" />
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M12 4.74609C11.0479 4.74609 10.1052 4.93362 9.22554 5.29797C8.34593 5.66231 7.5467 6.19634 6.87348 6.86957C6.20025 7.54279 5.66622 8.34203 5.30187 9.22164C4.93753 10.1012 4.75 11.044 4.75 11.9961C4.75 12.9482 4.93753 13.8909 5.30187 14.7705C5.66622 15.6502 6.20025 16.4494 6.87348 17.1226C7.5467 17.7958 8.34593 18.3299 9.22554 18.6942C10.1052 19.0586 11.0479 19.2461 12 19.2461C13.9228 19.2461 15.7669 18.4823 17.1265 17.1226C18.4862 15.763 19.25 13.9189 19.25 11.9961C19.25 10.0733 18.4862 8.22921 17.1265 6.86957C15.7669 5.50993 13.9228 4.74609 12 4.74609ZM3.25 11.9961C3.25 9.67545 4.17187 7.44985 5.81282 5.80891C7.45376 4.16797 9.67936 3.24609 12 3.24609C14.3206 3.24609 16.5462 4.16797 18.1872 5.80891C19.8281 7.44985 20.75 9.67545 20.75 11.9961C20.75 14.3167 19.8281 16.5423 18.1872 18.1833C16.5462 19.8242 14.3206 20.7461 12 20.7461C9.67936 20.7461 7.45376 19.8242 5.81282 18.1833C4.17187 16.5423 3.25 14.3167 3.25 11.9961Z"
-                        fill="#6A6A6A" />
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M3.25 11.99C3.25 11.7911 3.32902 11.6003 3.46967 11.4597C3.61032 11.319 3.80109 11.24 4 11.24L20 11.252C20.1989 11.252 20.3897 11.331 20.5303 11.4717C20.671 11.6123 20.75 11.8031 20.75 12.002C20.75 12.2009 20.671 12.3917 20.5303 12.5323C20.3897 12.673 20.1989 12.752 20 12.752L4 12.741C3.80109 12.741 3.61032 12.662 3.46967 12.5213C3.32902 12.3807 3.25 12.1899 3.25 11.991"
-                        fill="#6A6A6A" />
                 </svg>
             </span>
             <span>Explore</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="../../user/profile/profile.html" class="nav-item">
             <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -124,12 +287,10 @@
         </a>
         <div class="home-indicator"></div>
     </nav>
-    <script src="trip.js">
 
-    </script>
+    <script src="../../../shared/js/api.js"></script>
+    <script src="trip.js"></script>
     <script src="../../../shared/js/shared-nav.js"></script>
-
-
 </body>
 
-</html>
+</html>
