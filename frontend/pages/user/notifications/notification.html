@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications - Travel Genesis</title>
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../../shared/css/shared-nav.css">
     <link rel="stylesheet" href="notification.css">
 </head>
 
 <body>
+    <!-- Global Shared Navigation for Desktop & Mobile -->
+    <div id="shared-nav-container"></div>
+
     <div class="notification-container">
-        <!-- Status Bar -->
-        <div class="status-bar">
+        <!-- Mobile-Only Status Bar (hidden on desktop) -->
+        <div class="status-bar mobile-only">
             <span class="status-time" id="status-time">9:41</span>
             <div class="status-icons">
                 <i class="fa-solid fa-signal"></i>
@@ -23,32 +27,75 @@
             </div>
         </div>
 
-        <!-- Header -->
-        <header class="header">
+        <!-- Desktop & Mobile Header Section -->
+        <header class="notifications-header">
             <div class="header-left">
-                <button class="back-button" id="back-button" title="Back to Home">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
+                <button class="back-button mobile-only" id="back-button" title="Back to Home">
+                    <i class="fa-solid fa-arrow-left"></i>
                 </button>
-                <h1 class="header-title">Notifications</h1>
+                <div class="header-text-block">
+                    <div class="desktop-breadcrumb">
+                        <a href="../../booking/home/home.html"><i class="fa-solid fa-house"></i> Home</a>
+                        <span>/</span>
+                        <span>Notifications</span>
+                    </div>
+                    <h1 class="header-title">Notifications & Travel Alerts</h1>
+                    <p class="header-subtitle">Stay updated on your flight bookings, itinerary changes, and exclusive travel rewards.</p>
+                </div>
             </div>
-            <button class="mark-all-btn" id="mark-all-btn" title="Mark all as read">
-                <i class="fa-solid fa-check-double"></i>
-                <span>Mark all read</span>
-            </button>
+            <div class="header-actions">
+                <button class="mark-all-btn" id="mark-all-btn" title="Mark all as read">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>Mark all as read</span>
+                </button>
+            </div>
         </header>
 
+        <!-- Stats Overview Banner (Desktop Only) -->
+        <div class="notif-stats-banner">
+            <div class="stat-box">
+                <div class="stat-icon-circle blue">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-num" id="stat-total-alerts">0</span>
+                    <span class="stat-tag">Total Alerts</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon-circle red">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-num" id="stat-unread-alerts">0</span>
+                    <span class="stat-tag">Unread Messages</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon-circle green">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-num">Active</span>
+                    <span class="stat-tag">Flight Sync Status</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter Tabs Bar -->
-        <div class="filter-tabs">
-            <button class="tab-pill active" data-filter="all" id="tab-all">
-                <span>All</span>
-                <span class="tab-badge" id="count-all">0</span>
-            </button>
-            <button class="tab-pill" data-filter="unread" id="tab-unread">
-                <span>Unread</span>
-                <span class="tab-badge unread-badge" id="count-unread">0</span>
-            </button>
+        <div class="filter-tabs-wrapper">
+            <div class="filter-tabs">
+                <button class="tab-pill active" data-filter="all" id="tab-all">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>All Alerts</span>
+                    <span class="tab-badge" id="count-all">0</span>
+                </button>
+                <button class="tab-pill" data-filter="unread" id="tab-unread">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Unread</span>
+                    <span class="tab-badge unread-badge" id="count-unread">0</span>
+                </button>
+            </div>
         </div>
 
         <!-- Main Feed Area -->
@@ -56,7 +103,7 @@
             <!-- Loading Indicator -->
             <div class="notif-loading" id="notif-loading">
                 <div class="spinner"></div>
-                <p>Loading alerts...</p>
+                <p>Syncing your alerts...</p>
             </div>
 
             <!-- Dynamic Notifications List -->
@@ -64,19 +111,13 @@
 
             <!-- Empty State -->
             <div class="empty-state" id="empty-state" style="display: none;">
-                <div class="illustration">
-                    <svg width="160" height="150" viewBox="0 0 180 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M92.793 31.2886C113.251 31.2886 129.837 47.8732 129.837 68.3315V107.478C129.837 110.231 129.186 112.114 128.094 113.303C127.026 114.465 125.271 115.25 122.417 115.25C118.718 115.25 117.349 114.151 116.769 113.295C116.094 112.3 116.056 111.063 116.056 109.947C116.056 108.756 115.511 107.785 114.656 107.179C113.868 106.621 112.93 106.445 112.117 106.479C111.301 106.513 110.421 106.766 109.698 107.297C108.943 107.853 108.324 108.759 108.324 109.947C108.324 110.956 108.224 112.291 107.571 113.347C107.016 114.246 105.87 115.25 103.021 115.25C99.7427 115.25 98.5512 114.192 98.0293 113.347C97.3986 112.326 97.3643 111.051 97.3643 109.947C97.3643 107.213 95.2883 105.378 93.1436 105.164C92.0385 105.053 90.8379 105.365 89.9209 106.272C89.0067 107.176 88.5752 108.469 88.5752 109.947C88.5752 109.971 88.5752 109.996 88.5762 110.02C88.6221 111.125 88.3356 112.442 87.542 113.445C86.8033 114.378 85.4607 115.25 82.9189 115.25C80.1215 115.25 78.7479 114.638 78.0361 113.917C77.3251 113.196 76.9102 112 76.9102 109.947C76.9102 108.88 76.5101 107.927 75.7422 107.274C75.0123 106.654 74.1096 106.44 73.3096 106.48C71.7883 106.556 69.8838 107.69 69.8838 109.947C69.8837 110.628 69.4304 111.975 68.2607 113.181C67.1502 114.326 65.4759 115.25 63.1689 115.25C60.0959 115.25 58.349 114.201 57.3193 112.881C56.2314 111.487 55.75 109.54 55.75 107.478V68.3315L55.7617 67.3755C56.269 47.3592 72.6544 31.2888 92.793 31.2886Z"
-                            fill="#007A8C" stroke="#F8F8F8" stroke-width="3.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <circle cx="81.1554" cy="55.9884" r="1.76334" fill="white" />
-                        <circle cx="105.137" cy="55.9884" r="1.76334" fill="white" />
-                        <path d="M98 67L89 67" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                <div class="empty-illustration-wrapper">
+                    <div class="empty-icon-circle">
+                        <i class="fa-regular fa-bell-slash"></i>
+                    </div>
                 </div>
-                <h3 class="empty-title" id="empty-title">There's nothing here</h3>
-                <p class="empty-desc" id="empty-desc">You're all caught up with your latest travel updates.</p>
+                <h3 class="empty-title" id="empty-title">All Caught Up!</h3>
+                <p class="empty-desc" id="empty-desc">You don't have any unread notifications at the moment.</p>
                 <a href="../../booking/home/home.html" class="empty-action-btn" id="empty-action-btn">
                     <i class="fa-solid fa-plane-departure"></i>
                     <span>Explore Flights</span>
@@ -84,14 +125,15 @@
             </div>
         </main>
 
-        <!-- Bottom Home Indicator -->
-        <div class="bottom-indicator">
+        <!-- Mobile-Only Bottom Home Indicator -->
+        <div class="bottom-indicator mobile-only">
             <div class="home-bar"></div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="../../../shared/js/api.js"></script>
+    <script src="../../../shared/js/shared-nav.js"></script>
     <script src="notification.js"></script>
 </body>
 

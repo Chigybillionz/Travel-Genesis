@@ -9,28 +9,51 @@ function showError(msg) {
   requestAnimationFrame(() => toast.style.opacity = '1');
   toast.querySelector('button').onclick = () => {
     toast.style.opacity = '0';
-    setTimeout(() => { if(document.body.contains(toast)) toast.remove(); }, 300);
+    setTimeout(() => { if (document.body.contains(toast)) toast.remove(); }, 300);
   };
   setTimeout(() => {
     if (document.body.contains(toast)) {
       toast.style.opacity = '0';
-      setTimeout(() => { if(document.body.contains(toast)) toast.remove(); }, 300);
+      setTimeout(() => { if (document.body.contains(toast)) toast.remove(); }, 300);
     }
   }, 4000);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const seats = document.querySelectorAll(".seat.available, .seat.selected");
+  const seats = document.querySelectorAll(".seat");
   const backBtn = document.getElementById("back-btn");
   const continueBtn = document.getElementById("continue-btn");
+  const selectedSeatsDisplay = document.getElementById("selected-seats-display");
+  const totalPriceDisplay = document.getElementById("total-price-display");
+  const routeInfoDisplay = document.getElementById("flight-route-info");
 
-  const SEAT_PRICE = 1000;
+  // Read route info and price from storage
+  let chosenFlight = {};
+  try {
+    chosenFlight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
+  } catch (e) {
+    chosenFlight = {};
+  }
+
+  const SEAT_PRICE = Number(localStorage.getItem("selectedFlightPrice")) || chosenFlight.price || 680;
+
+  if (routeInfoDisplay && chosenFlight.originCity && chosenFlight.destinationCity) {
+    routeInfoDisplay.textContent = `${chosenFlight.originCity} (${chosenFlight.originCode || "LOS"}) ➔ ${chosenFlight.destinationCity} (${chosenFlight.destinationCode || "DEST"}) • ${chosenFlight.airline || "Flight"}`;
+  }
+
+  // Pre-selected seats from DOM or storage
   let selectedSeats = [];
+  const initialSelected = document.querySelectorAll(".seat.selected");
+  initialSelected.forEach((s) => {
+    if (s.dataset.seat) selectedSeats.push(s.dataset.seat);
+  });
 
-  // Seat selection
+  updateSelectionSummary();
+
+  // Seat click handler
   seats.forEach((seat) => {
     seat.addEventListener("click", function () {
-      if (this.classList.contains("booked")) return;
+      if (this.classList.contains("booked") || this.disabled) return;
 
       const seatNumber = this.dataset.seat;
 
@@ -41,16 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         this.classList.remove("available");
         this.classList.add("selected");
-        selectedSeats.push(seatNumber);
+        if (!selectedSeats.includes(seatNumber)) {
+          selectedSeats.push(seatNumber);
+        }
       }
 
-      // Calculate price
-      const totalPrice = selectedSeats.length * SEAT_PRICE;
-
-      console.log("Seats:", selectedSeats);
-      console.log("Total price: $" + totalPrice);
+      updateSelectionSummary();
     });
   });
+
+  function updateSelectionSummary() {
+    const totalPrice = selectedSeats.length * SEAT_PRICE;
+
+    if (selectedSeatsDisplay) {
+      selectedSeatsDisplay.textContent = selectedSeats.length > 0 ? selectedSeats.join(", ") : "None selected";
+    }
+
+    if (totalPriceDisplay) {
+      totalPriceDisplay.textContent = `$${totalPrice.toLocaleString()}`;
+    }
+  }
 
   // Back button
   if (backBtn) {
@@ -63,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (continueBtn) {
     continueBtn.addEventListener("click", () => {
       if (selectedSeats.length === 0) {
-        showError("Please select at least one seat");
+        showError("Please select at least one seat to proceed");
         return;
       }
 
@@ -78,33 +111,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Seat Pagination Logic
-  const seatRows = document.querySelectorAll('.seat-row');
-  const prevSeatsBtn = document.getElementById('prev-seats-btn');
-  const nextSeatsBtn = document.getElementById('next-seats-btn');
+  const seatRows = document.querySelectorAll(".seat-row");
+  const prevSeatsBtn = document.getElementById("prev-seats-btn");
+  const nextSeatsBtn = document.getElementById("next-seats-btn");
 
   let currentSeatPage = 0;
-  const rowsPerPage = 4;
+  const rowsPerPage = 5;
   const totalPages = Math.ceil(seatRows.length / rowsPerPage);
 
   function updateSeatPagination() {
     seatRows.forEach((row, index) => {
       if (index >= currentSeatPage * rowsPerPage && index < (currentSeatPage + 1) * rowsPerPage) {
-        row.style.display = 'grid'; // Because seat-row uses grid
+        row.style.display = "grid";
       } else {
-        row.style.display = 'none';
+        row.style.display = "none";
       }
     });
 
     if (prevSeatsBtn) {
-      prevSeatsBtn.style.display = currentSeatPage === 0 ? 'none' : 'block';
+      prevSeatsBtn.style.display = currentSeatPage === 0 ? "none" : "inline-flex";
     }
     if (nextSeatsBtn) {
-      nextSeatsBtn.style.display = currentSeatPage === totalPages - 1 ? 'none' : 'block';
+      nextSeatsBtn.style.display = currentSeatPage >= totalPages - 1 ? "none" : "inline-flex";
     }
   }
 
   if (nextSeatsBtn) {
-    nextSeatsBtn.addEventListener('click', () => {
+    nextSeatsBtn.addEventListener("click", () => {
       if (currentSeatPage < totalPages - 1) {
         currentSeatPage++;
         updateSeatPagination();
@@ -113,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (prevSeatsBtn) {
-    prevSeatsBtn.addEventListener('click', () => {
+    prevSeatsBtn.addEventListener("click", () => {
       if (currentSeatPage > 0) {
         currentSeatPage--;
         updateSeatPagination();

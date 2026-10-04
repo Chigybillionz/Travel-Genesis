@@ -149,6 +149,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    const statTotalEl = document.getElementById("stat-total-alerts");
+    const statUnreadEl = document.getElementById("stat-unread-alerts");
+    if (statTotalEl) statTotalEl.textContent = totalCount;
+    if (statUnreadEl) statUnreadEl.textContent = unreadCount;
+
     if (markAllBtn) {
       markAllBtn.disabled = unreadCount === 0;
     }

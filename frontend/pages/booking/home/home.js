@@ -49,41 +49,62 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function toggleDropdown(carouselWrapper, carousel, seeAllLink) {
-  const isExpanded = carouselWrapper.classList.contains("expanded");
+  const isExpanded = carouselWrapper.classList.toggle("expanded");
+  const isDesktop = window.innerWidth >= 769;
+
+  if (!isDesktop) {
+    if (isExpanded) {
+      carousel.style.display = "grid";
+      carousel.style.gridTemplateColumns = "repeat(2, 1fr)";
+      carousel.style.gap = "12px";
+      carousel.style.maxHeight = "none";
+      carousel.style.overflowY = "visible";
+    } else {
+      carousel.style.maxHeight = "300px";
+      carousel.style.overflowY = "hidden";
+      carousel.style.display = "flex";
+      carousel.style.flexWrap = "nowrap";
+    }
+  } else {
+    // Clear inline styles on desktop so CSS handles the 4-column grid
+    carousel.style.display = "";
+    carousel.style.gridTemplateColumns = "";
+    carousel.style.maxHeight = "";
+  }
 
   if (isExpanded) {
-    // Collapse
-    carouselWrapper.classList.remove("expanded");
-    carousel.style.maxHeight = "300px"; // Original height
-    carousel.style.overflowY = "hidden";
-    carousel.style.display = "flex"; // Back to horizontal scroll
-    carousel.style.flexWrap = "nowrap";
-    seeAllLink.innerHTML =
-      'See all <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(90deg);"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.79175 10.2083L8.60425 6.99996L3.79175 3.79163L4.37508 2.91663L10.5001 6.99996L4.37508 11.0833L3.79175 10.2083Z" fill="#007A8C" /></svg>';
+    seeAllLink.innerHTML = 'See less <i class="fa-solid fa-chevron-up"></i>';
   } else {
-    // Expand - Show as 2 column grid
-    carouselWrapper.classList.add("expanded");
+    seeAllLink.innerHTML = 'See all <i class="fa-solid fa-chevron-down"></i>';
+  }
 
-    // Change to grid layout with 2 columns
-    carousel.style.display = "grid";
-    carousel.style.gridTemplateColumns = "repeat(2, 1fr)";
-    carousel.style.gap = "12px";
-
-    // Calculate the full height needed
-    const scrollHeight = carousel.scrollHeight;
-    carousel.style.maxHeight = "none";
-    carousel.style.overflowY = "visible";
-
-    // Change text to "See less" with upward arrow
-    seeAllLink.innerHTML =
-      'See less <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-90deg);"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.79175 10.2083L8.60425 6.99996L3.79175 3.79163L4.37508 2.91663L10.5001 6.99996L4.37508 11.0833L3.79175 10.2083Z" fill="#007A8C" /></svg>';
-
-    // Smooth scroll into view
+  if (isExpanded) {
     setTimeout(() => {
       carouselWrapper.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, 100);
   }
 }
+
+// Hero Search Flights Button Handler
+document.addEventListener("DOMContentLoaded", function () {
+  const heroSearchBtn = document.getElementById("hero-search-flights-btn");
+  const quickDestSelect = document.getElementById("quick-dest-select");
+
+  if (heroSearchBtn && quickDestSelect) {
+    heroSearchBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const selectedOption = quickDestSelect.options[quickDestSelect.selectedIndex];
+      const destination = selectedOption.value;
+      const country = selectedOption.getAttribute("data-country") || "";
+
+      localStorage.setItem("selectedDestinationCity", destination);
+      localStorage.setItem("selectedDestinationCountry", country);
+
+      const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}`;
+      window.location.href = targetUrl;
+    });
+  }
+});
 // =====================================================
 // DEBUG CLICK LOGGER
 // =====================================================

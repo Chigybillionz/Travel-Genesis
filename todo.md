@@ -130,6 +130,27 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
   - Added live unread notification badge indicator to `#notification-btn` in `shared-nav.js` across the app.
   - Configured automatic welcome notification dispatch upon user registration in `authService.js`.
 
+- [x] **Task 6.7: UI / UX Modern Desktop Redesign & Seat Selection Contrast Fix**
+  - **Seat Selection Contrast & Legibility:**
+    - Restored missing CSS variable tokens (`--color-primary`, `--color-primary-dark`, `--color-primary-ultralight`, `--color-accent`) in `seat.css`.
+    - Transformed seat numbers from invisible washed-out text into crisp, high-contrast badges (Available: clean white with `#007A8C` teal text; Selected: solid `#007A8C` with bright white text and glow; Booked: soft gray with distinct slash indicators).
+    - Integrated dynamic real-time seat summary bar displaying live selected seat numbers (e.g. `C1, B2`) and total price calculation.
+  - **Desktop Notifications Screen Redesign:**
+    - Eliminated all mobile traces (removed simulated phone battery/wifi status bar and iPhone home bar on desktop).
+    - Integrated shared desktop navigation bar (`#shared-nav-container`) with sticky blur.
+    - Designed expansive desktop dashboard layout (`max-width: 1080px`) featuring breadcrumbs, "Mark all as read" button, 3 stats overview cards ("Total Alerts", "Unread Messages", "Flight Sync Status"), filter tabs, and rich card feed.
+  - **Desktop Explore Screen Redesign:**
+    - Replaced bloated static SVG artwork with an interactive global travel discovery hub.
+    - Added teal gradient hero banner with quick search filter input.
+    - Added interactive community persona selectors ("All Travelers", "Leisure & Scenic (Age 50+)", "Executive Trips (Age 40+)", "Youth & Adventure").
+    - Added category filters (Beaches, Historic, Luxury, Skylines) and curated high-resolution destination cards with ratings, prices, and direct flight booking links.
+  - **Desktop Home Screen Redesign:**
+    - Replaced cramped horizontal scroll cards with a full-width luxury travel experience.
+    - Added modern Flight Booking Hero Banner with an interactive "Search Flights" widget.
+    - Arranged popular destinations and curated packages into a balanced 4-column desktop grid with smooth hover elevation, rating badges, price tags, and direct flight detail deep links.
+    - Added "Why Fly with Travel Genesis" trust section highlighting best price guarantee, instant e-tickets, flexible rescheduling, and 24/7 priority support.
+    - Corrected destination label typos (e.g. "TRONTO" -> "Toronto").
+
 ---
 
 ## Service Configuration & Ports
