@@ -82,6 +82,7 @@ body {
 }
 
 .icon-btn {
+    position: relative;
     background: #f3f4f6;
     border: none;
     border-radius: 50%;
@@ -96,6 +97,18 @@ body {
 
 .icon-btn:hover {
     background: #e5e7eb;
+}
+
+.notif-badge-dot {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ef4444;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.4);
 }
 
 .integrated-nav {

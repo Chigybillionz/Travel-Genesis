@@ -122,8 +122,13 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
     - Connected `pages/trips/trip-list` to `GET /api/bookings/my-trips` and `PATCH /api/bookings/:id/cancel` for live booking management.
     - Connected `pages/booking/search` to route search queries directly to matching destination flight schedules.
     - Synced `pages/booking/booking-details` and `pages/trips/e-ticket` to display route-specific destination, airline, and flight timings.
-- [ ] **Task 6.6: Notifications Integration**
-  - Connect `pages/user/notifications` to `/api/notifications`.
+- [x] **Task 6.6: Notifications Integration**
+  - Connected `frontend/pages/user/notifications/notification.html` and `notification.js` to `GET /api/notifications`, `PATCH /api/notifications/:id/read`, and `PATCH /api/notifications/read-all`.
+  - Implemented interactive filter tabs ("All" and "Unread") with dynamic count badges and graceful empty states.
+  - Added "Mark all read" header action with real-time UI updates and backend synchronization.
+  - Integrated click-to-read interaction on individual notification cards with relative timestamps (e.g., "Just now", "2h ago", "Yesterday") and direct "View Trip" links for bookings.
+  - Added live unread notification badge indicator to `#notification-btn` in `shared-nav.js` across the app.
+  - Configured automatic welcome notification dispatch upon user registration in `authService.js`.
 
 ---
 

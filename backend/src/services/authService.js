@@ -28,6 +28,19 @@ const register = async ({ name, email, password, location }) => {
 
   const token = generateToken(user._id);
 
+  // Trigger welcome notification for new users
+  try {
+    const Notification = require('../models/Notification');
+    await Notification.create({
+      userId: user._id,
+      title: 'Welcome to Travel Genesis! ✈️',
+      message: 'Explore hand-crafted travel packages, discover trending global destinations, and book flights with ease.',
+      type: 'promo',
+    });
+  } catch (notifErr) {
+    console.error('Failed to trigger welcome notification:', notifErr.message);
+  }
+
   return {
     user,
     token,
