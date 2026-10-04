@@ -1,4 +1,4 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
   // Back button
   const backBtn = document.getElementById("back-btn");
@@ -22,13 +22,18 @@
       return ((parts[0] ? parts[0][0] : "") + (parts.length > 1 ? parts[parts.length-1][0] : "")).toUpperCase() || "TG";
     }
 
-    const avatarEl    = document.getElementById("settings-avatar");
-    const nameEl      = document.getElementById("settings-name");
-    const emailEl     = document.getElementById("settings-email");
-    const nameValEl   = document.getElementById("settings-name-val");
-    const emailValEl  = document.getElementById("settings-email-val");
+    const cachedAvatar = localStorage.getItem("userAvatar") || "";
 
-    if (cachedName  && avatarEl)   avatarEl.textContent  = getInitials(cachedName);
+    function renderSettingsAvatar(avatarUrl, name) {
+      if (!avatarEl) return;
+      if (avatarUrl && avatarUrl.trim()) {
+        avatarEl.innerHTML = `<img src="${avatarUrl}" alt="${name || 'User'}" style="width:100%;height:100%;object-fit:cover;" />`;
+      } else {
+        avatarEl.textContent = getInitials(name);
+      }
+    }
+
+    renderSettingsAvatar(cachedAvatar, cachedName);
     if (cachedName  && nameEl)     nameEl.textContent     = cachedName;
     if (cachedEmail && emailEl)    emailEl.textContent    = cachedEmail;
     if (cachedName  && nameValEl)  nameValEl.textContent  = cachedName;
@@ -38,7 +43,7 @@
       API.users.getProfile().then(function (res) {
         const u = res && res.user;
         if (!u) return;
-        if (avatarEl)   avatarEl.textContent  = getInitials(u.name);
+        renderSettingsAvatar(u.avatarUrl || cachedAvatar, u.name || cachedName);
         if (nameEl)     nameEl.textContent     = u.name  || cachedName;
         if (emailEl)    emailEl.textContent    = u.email || cachedEmail;
         if (nameValEl)  nameValEl.textContent  = u.name  || cachedName;
@@ -48,6 +53,10 @@
   }
 
   loadUserInfo();
+
+  window.addEventListener("tg:user-updated", function () {
+    loadUserInfo();
+  });
 
   // Persist toggle states to localStorage
   function bindToggle(id, key) {

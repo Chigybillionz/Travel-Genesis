@@ -3,6 +3,7 @@
  * - Renders identity from cache first (no flicker), then syncs with /api/users/profile
  * - Computes live travel stats from /api/bookings/my-trips (amounts in Naira)
  * - Shows unread notification count from /api/notifications
+ * - Full support for live avatar upload, preview, resizing, database persistence & global synchronization
  */
 
 const formatNaira = (amount) => `₦${Number(amount || 0).toLocaleString("en-NG")}`;
@@ -12,7 +13,7 @@ function getInitials(name) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   const first = parts[0] ? parts[0][0] : "";
   const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (first + last).toUpperCase() || "TG";
+  return ((first + last).toUpperCase()) || "TG";
 }
 
 function escapeHtml(value) {
@@ -23,15 +24,58 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
+// Client-side image compression and resizing using HTML5 Canvas
+function compressAndResizeImage(file, maxWidth = 320, maxHeight = 320, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function renderIdentity(user) {
   const name = user.name || "Guest Traveler";
   const email = user.email || "Sign in to view your account";
+  const avatarUrl = user.avatarUrl || localStorage.getItem("userAvatar") || "";
 
   document.querySelectorAll(".profile-name").forEach((el) => (el.textContent = name));
   document.querySelectorAll(".profile-email").forEach((el) => (el.textContent = email));
 
   const avatar = document.getElementById("profile-avatar");
-  if (avatar) avatar.textContent = getInitials(user.name);
+  if (avatar) {
+    if (avatarUrl && avatarUrl.trim()) {
+      avatar.innerHTML = `<img src="${avatarUrl}" alt="${escapeHtml(name)}" class="profile-avatar-img" />`;
+    } else {
+      avatar.textContent = getInitials(user.name);
+    }
+  }
 
   const detailName = document.getElementById("detail-name");
   const detailEmail = document.getElementById("detail-email");
@@ -51,11 +95,13 @@ function renderIdentity(user) {
 async function loadUserProfile() {
   const cachedName = localStorage.getItem("userFullName") || localStorage.getItem("userName");
   const cachedEmail = localStorage.getItem("userEmail");
+  const cachedAvatar = localStorage.getItem("userAvatar");
   const cachedUser = window.API && API.getUser ? API.getUser() : null;
 
   renderIdentity({
     name: (cachedUser && cachedUser.name) || cachedName,
     email: (cachedUser && cachedUser.email) || cachedEmail,
+    avatarUrl: (cachedUser && cachedUser.avatarUrl) || cachedAvatar,
     createdAt: cachedUser && cachedUser.createdAt,
   });
 
@@ -196,13 +242,33 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailInput = document.getElementById("edit-email");
   const currentPassInput = document.getElementById("edit-current-pass");
   const newPassInput = document.getElementById("edit-new-pass");
+  const modalAvatarContainer = document.getElementById("modal-avatar-container");
   const modalAvatarPreview = document.getElementById("modal-avatar-preview");
+  const avatarFileInput = document.getElementById("avatar-file-input");
+  const avatarBtnRemove = document.getElementById("avatar-btn-remove");
+  const modalAvatarHint = document.getElementById("modal-avatar-hint");
   const saveBtn = document.getElementById("modal-save-btn");
   const saveBtnText = saveBtn && saveBtn.querySelector(".btn-save-text");
   const saveBtnSpinner = saveBtn && saveBtn.querySelector(".btn-save-spinner");
   const toast = document.getElementById("modal-toast");
   const nameError = document.getElementById("edit-name-error");
   const passError = document.getElementById("edit-pass-error");
+
+  let pendingAvatarUrl = "";
+
+  function renderModalAvatarPreview() {
+    if (!modalAvatarPreview) return;
+    if (pendingAvatarUrl && pendingAvatarUrl.trim()) {
+      modalAvatarPreview.innerHTML = `<img src="${pendingAvatarUrl}" alt="Avatar Preview" />`;
+      if (avatarBtnRemove) avatarBtnRemove.style.display = "inline-flex";
+      if (modalAvatarHint) modalAvatarHint.textContent = "Click on the photo or button to change it";
+    } else {
+      const name = nameInput ? nameInput.value.trim() : "";
+      modalAvatarPreview.textContent = getInitials(name);
+      if (avatarBtnRemove) avatarBtnRemove.style.display = "none";
+      if (modalAvatarHint) modalAvatarHint.textContent = "JPG, PNG or WebP (max 5MB)";
+    }
+  }
 
   function openModal() {
     if (!modal) return;
@@ -219,8 +285,14 @@ document.addEventListener("DOMContentLoaded", function () {
     if (newPassInput) newPassInput.value = "";
     if (nameError) nameError.textContent = "";
     if (passError) passError.textContent = "";
+    if (avatarFileInput) avatarFileInput.value = "";
     hideToast();
-    updateModalAvatar();
+
+    // Pull current avatar
+    const cachedUser = window.API && API.getUser ? API.getUser() : null;
+    pendingAvatarUrl = (cachedUser && cachedUser.avatarUrl) || localStorage.getItem("userAvatar") || "";
+    renderModalAvatarPreview();
+
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
     if (nameInput) nameInput.focus();
@@ -232,14 +304,60 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.style.overflow = "";
   }
 
-  function updateModalAvatar() {
-    if (!modalAvatarPreview || !nameInput) return;
-    const name = nameInput.value.trim();
-    const parts = name.split(/\s+/).filter(Boolean);
-    const first = parts[0] ? parts[0][0] : "";
-    const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
-    const initials = (first + last).toUpperCase() || "TG";
-    modalAvatarPreview.textContent = initials;
+  // Handle avatar file selection
+  if (avatarFileInput) {
+    avatarFileInput.addEventListener("change", async function () {
+      const file = this.files && this.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showToast("Please choose an image file (JPG, PNG, or WebP).", "error");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Image must be smaller than 5MB.", "error");
+        return;
+      }
+
+      try {
+        const compressed = await compressAndResizeImage(file, 320, 320, 0.85);
+        pendingAvatarUrl = compressed;
+        renderModalAvatarPreview();
+        showToast("Photo selected! Click Save Changes to apply.", "success");
+      } catch (err) {
+        console.error("Error reading image:", err);
+        showToast("Could not process image file.", "error");
+      }
+    });
+  }
+
+  // Avatar container click triggers file upload
+  if (modalAvatarContainer && avatarFileInput) {
+    modalAvatarContainer.addEventListener("click", function (e) {
+      if (e.target.closest("label")) return; // Avoid double triggering if badge clicked
+      avatarFileInput.click();
+    });
+  }
+
+  // Remove photo button
+  if (avatarBtnRemove) {
+    avatarBtnRemove.addEventListener("click", function (e) {
+      e.stopPropagation();
+      pendingAvatarUrl = "";
+      if (avatarFileInput) avatarFileInput.value = "";
+      renderModalAvatarPreview();
+      showToast("Photo removed. Initials will be used.", "info");
+    });
+  }
+
+  // Live avatar preview when typing name (if no photo uploaded)
+  if (nameInput) {
+    nameInput.addEventListener("input", function () {
+      if (!pendingAvatarUrl) {
+        renderModalAvatarPreview();
+      }
+    });
   }
 
   function showToast(msg, type) {
@@ -247,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toast.textContent = msg;
     toast.className = "modal-toast " + type;
     toast.hidden = false;
-    if (type === "success") {
+    if (type === "success" || type === "info") {
       setTimeout(hideToast, 3500);
     }
   }
@@ -284,15 +402,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Live avatar preview
-  if (nameInput) {
-    nameInput.addEventListener("input", updateModalAvatar);
-  }
-
-  // Password show/hide toggles
-  document.querySelectorAll(".pass-toggle").forEach(function (btn) {
+  // Toggle password visibility
+  document.querySelectorAll(".pass-toggle").forEach((btn) => {
     btn.addEventListener("click", function () {
-      const targetId = btn.dataset.target;
+      const targetId = btn.getAttribute("data-target");
       const input = document.getElementById(targetId);
       if (!input) return;
       const isPassword = input.type === "password";
@@ -338,7 +451,10 @@ document.addEventListener("DOMContentLoaded", function () {
       setSaving(true);
 
       try {
-        const payload = { name: newName };
+        const payload = { 
+          name: newName,
+          avatarUrl: pendingAvatarUrl 
+        };
         if (newPass && currentPass) {
           payload.currentPassword = currentPass;
           payload.newPassword = newPass;
@@ -346,13 +462,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Call backend update if authenticated
         if (window.API && API.users && typeof API.users.updateProfile === "function" && API.isAuthenticated()) {
-          await API.users.updateProfile(payload);
+          const res = await API.users.updateProfile(payload);
+          if (res && res.user) {
+            API.setUser(res.user);
+          }
         }
+
+        // Update local storage
         localStorage.setItem("userFullName", newName);
         localStorage.setItem("userName", newName);
+        if (pendingAvatarUrl) {
+          localStorage.setItem("userAvatar", pendingAvatarUrl);
+        } else {
+          localStorage.removeItem("userAvatar");
+        }
 
-        // Update UI immediately
-        renderIdentity({ name: newName, email: emailInput ? emailInput.value : "" });
+        // Update UI immediately on profile page
+        renderIdentity({ 
+          name: newName, 
+          email: emailInput ? emailInput.value : "",
+          avatarUrl: pendingAvatarUrl 
+        });
+
+        // Broadcast to navbar and across the app
+        window.dispatchEvent(new CustomEvent("tg:user-updated", { 
+          detail: { name: newName, avatarUrl: pendingAvatarUrl } 
+        }));
+
         showToast("Profile updated successfully!", "success");
 
         // Clear password fields
@@ -360,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (newPassInput) newPassInput.value = "";
 
         // Auto-close after 1.5s
-        setTimeout(closeModal, 1800);
+        setTimeout(closeModal, 1500);
       } catch (err) {
         const msg = (err && err.message) || "Failed to save. Please try again.";
         showToast(msg, "error");
@@ -370,4 +506,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-

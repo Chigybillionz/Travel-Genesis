@@ -38,7 +38,9 @@ const updateUserProfile = async (req, res, next) => {
 
     user.name = req.body.name || user.name;
     user.location = req.body.location || user.location;
-    user.avatarUrl = req.body.avatarUrl || user.avatarUrl;
+    if (req.body.avatarUrl !== undefined) {
+      user.avatarUrl = req.body.avatarUrl;
+    }
 
     if (req.body.email && req.body.email !== user.email) {
       const emailExists = await User.findOne({ email: req.body.email.toLowerCase() });

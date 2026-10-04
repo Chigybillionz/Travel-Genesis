@@ -151,19 +151,50 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
     - Added "Why Fly with Travel Genesis" trust section highlighting best price guarantee, instant e-tickets, flexible rescheduling, and 24/7 priority support.
     - Corrected destination label typos (e.g. "TRONTO" -> "Toronto").
 
-- [x] **Task 6.8: Naira (₦) Currency & Profile Redesign**
-  - **Currency switched to Nigerian Naira (NGN):**
-    - Backend `Flight` model default currency changed to `NGN`; `seed.js` re-seeded with Naira fares (e.g. Lagos → London ₦1,050,000).
-    - All frontend prices now show `₦` with thousands separators: home cards, explore cards, flight list, seat selection total, booking details, payment fallback.
-    - Seat selection converts any old dollar-sized price left in localStorage (under 10,000) so stale sessions don't show "₦920".
-  - **Profile page redesign:**
-    - Identity banner with initials avatar, verified tick, member-since date and Edit profile button.
-    - Live stats from `/api/bookings/my-trips`: total trips, upcoming, total spent (₦), destinations.
-    - Account details, recent trips (latest 3), quick actions with unread notification badge, and a separate Account panel for Log out / Delete account.
-    - Replaced ~20KB of inline SVG/base64 with Font Awesome icons; fully responsive.
+- [x] **Task 6.9: Profile Photo Upload & Global Navigation Bar Synchronization**
+  - Added interactive profile picture upload in the Edit Profile modal (`avatar-file-input` + camera overlay).
+  - Integrated client-side canvas image compression to resize photos under 5MB to crisp, fast 320x320 thumbnails.
+  - Added option to remove photo and revert to initials.
+  - Updated backend Express json body limit to `10mb` to support avatar payloads.
+  - Linked database profile update (`PUT /api/users/profile`) with `avatarUrl`.
+  - Added live `tg:user-updated` custom event and `storage` listener to dynamically update the top navigation bar avatar and name across Home, Explore, My Trips, Notifications, and Settings without refreshing.
+
+---
+
+## Phase 7: Cloud Deployment & Backend Hosting (Render & MongoDB Atlas)
+*Goal: Deploy the Node.js Express API to Render.com and connect to cloud MongoDB Atlas.*
+
+- [ ] **Task 7.1: MongoDB Atlas Cloud Database Setup**
+  - Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (M0 Sandbox).
+  - Create a database user and secure password.
+  - In **Network Access**, add IP whitelist `0.0.0.0/0` (Allow access from anywhere).
+  - Copy the connection string: `mongodb+srv://<user>:<password>@<cluster>.mongodb.net/travel_genesis?retryWrites=true&w=majority`.
+
+- [ ] **Task 7.2: Render Web Service Configuration**
+  - Connect GitHub repo on [Render.com](https://render.com) and create a **Web Service**.
+  - **Root Directory:** `backend`
+  - **Runtime:** `Node`
+  - **Build Command:** `npm install`
+  - **Start Command:** `npm start`
+  - Configure Environment Variables on Render:
+    - `NODE_ENV=production`
+    - `PORT=10000`
+    - `MONGO_URI=<your-mongodb-atlas-uri>`
+    - `JWT_SECRET=travel_genesis_super_secret_jwt_key_2026_prod`
+    - `JWT_EXPIRES_IN=7d`
+
+- [ ] **Task 7.3: Database Seeding on Render**
+  - Once the Render web service builds successfully, open the **Shell** tab in Render dashboard.
+  - Run `npm run seed` to seed destinations and flights into the MongoDB Atlas database.
+
+- [ ] **Task 7.4: Connect Vercel Frontend to Live Render API**
+  - Copy the live Render backend URL (e.g. `https://travel-genesis-backend.onrender.com/api`).
+  - Update `API_BASE_URL` in `frontend/shared/js/api.js` to point to the live Render endpoint for production.
 
 ---
 
 ## Service Configuration & Ports
-- **Backend API Server:** `http://localhost:5001` (running via Express & MongoDB)
-- **Frontend App Server:** `http://localhost:3000` (serving static pages & assets)
+- **Local Backend API Server:** `http://localhost:5001` (running via Express & MongoDB)
+- **Local Frontend App Server:** `http://localhost:3000` (serving static pages & assets)
+- **Live Frontend (Vercel):** Connected to GitHub repo
+- **Live Backend (Render):** To be deployed via `backend` root

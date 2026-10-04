@@ -31,8 +31,8 @@ app.use(helmet());
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
-app.use(express.json()); // Parse JSON payloads
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' })); // Parse JSON payloads with image support
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Health check route
 app.get('/api/health', (req, res) => {
