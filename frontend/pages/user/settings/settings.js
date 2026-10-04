@@ -1,46 +1,85 @@
-// Wait for DOM to be fully loaded
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("Settings script loaded!");
+﻿document.addEventListener("DOMContentLoaded", function () {
 
-  // Back button functionality
-  const backBtn = document.querySelector(".back-btn");
+  // Back button
+  const backBtn = document.getElementById("back-btn");
   if (backBtn) {
-    console.log("Back button found!");
-    backBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("Back button clicked! Navigating to profile page...");
-      // Navigate back to profile page
-      window.location.href = "../../user/profile/profile.html";
-    });
-  }
-
-  // Push notifications toggle functionality (optional)
-  const notificationToggle = document.querySelector(
-    '.switch input[type="checkbox"]'
-  );
-  if (notificationToggle) {
-    notificationToggle.addEventListener("change", function () {
-      if (this.checked) {
-        console.log("Push notifications enabled");
-        // You can add logic here to enable notifications
+    backBtn.addEventListener("click", function () {
+      if (document.referrer) {
+        history.back();
       } else {
-        console.log("Push notifications disabled");
+        window.location.href = "../profile/profile.html";
       }
     });
   }
 
-  // Language setting click (optional - for future expansion)
-  const languageSetting = document.querySelector(".setting-item:first-child");
-  if (languageSetting) {
-    languageSetting.addEventListener("click", function (e) {
-      // Only trigger if not clicking on other interactive elements
-      if (!e.target.closest(".switch")) {
-        console.log(
-          "Language setting clicked - can open language selector modal"
-        );
-        // You can add language selection modal here in the future
-      }
+  // Load user info into profile card
+  function loadUserInfo() {
+    const cachedName  = localStorage.getItem("userFullName") || localStorage.getItem("userName") || "";
+    const cachedEmail = localStorage.getItem("userEmail") || "";
+
+    function getInitials(name) {
+      const parts = (name || "").trim().split(/\s+/).filter(Boolean);
+      return ((parts[0] ? parts[0][0] : "") + (parts.length > 1 ? parts[parts.length-1][0] : "")).toUpperCase() || "TG";
+    }
+
+    const avatarEl    = document.getElementById("settings-avatar");
+    const nameEl      = document.getElementById("settings-name");
+    const emailEl     = document.getElementById("settings-email");
+    const nameValEl   = document.getElementById("settings-name-val");
+    const emailValEl  = document.getElementById("settings-email-val");
+
+    if (cachedName  && avatarEl)   avatarEl.textContent  = getInitials(cachedName);
+    if (cachedName  && nameEl)     nameEl.textContent     = cachedName;
+    if (cachedEmail && emailEl)    emailEl.textContent    = cachedEmail;
+    if (cachedName  && nameValEl)  nameValEl.textContent  = cachedName;
+    if (cachedEmail && emailValEl) emailValEl.textContent = cachedEmail;
+
+    if (window.API && API.isAuthenticated && API.isAuthenticated()) {
+      API.users.getProfile().then(function (res) {
+        const u = res && res.user;
+        if (!u) return;
+        if (avatarEl)   avatarEl.textContent  = getInitials(u.name);
+        if (nameEl)     nameEl.textContent     = u.name  || cachedName;
+        if (emailEl)    emailEl.textContent    = u.email || cachedEmail;
+        if (nameValEl)  nameValEl.textContent  = u.name  || cachedName;
+        if (emailValEl) emailValEl.textContent = u.email || cachedEmail;
+      }).catch(function(){});
+    }
+  }
+
+  loadUserInfo();
+
+  // Persist toggle states to localStorage
+  function bindToggle(id, key) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const saved = localStorage.getItem(key);
+    if (saved !== null) el.checked = saved === "true";
+    el.addEventListener("change", function () {
+      localStorage.setItem(key, el.checked);
+    });
+  }
+
+  bindToggle("toggle-push",         "pref_push_notif");
+  bindToggle("toggle-email-notif",  "pref_email_notif");
+  bindToggle("toggle-promo",        "pref_promo");
+  bindToggle("toggle-darkmode",     "pref_darkmode");
+  bindToggle("toggle-biometric",    "pref_biometric");
+  bindToggle("toggle-location",     "pref_location");
+  bindToggle("toggle-analytics",    "pref_analytics");
+
+  // Seat class select
+  const seatSelect = document.getElementById("seat-class-select");
+  const seatVal    = document.getElementById("settings-seat-class");
+  if (seatSelect) {
+    const saved = localStorage.getItem("pref_seat_class");
+    if (saved) {
+      seatSelect.value = saved;
+      if (seatVal) seatVal.textContent = saved;
+    }
+    seatSelect.addEventListener("change", function () {
+      localStorage.setItem("pref_seat_class", seatSelect.value);
+      if (seatVal) seatVal.textContent = seatSelect.value;
     });
   }
 });

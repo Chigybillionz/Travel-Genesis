@@ -185,4 +185,189 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
     });
   }
+
+  // ===================== EDIT PROFILE MODAL =====================
+  const modal = document.getElementById("edit-profile-modal");
+  const openBtn = document.getElementById("edit-profile-btn");
+  const closeBtn = document.getElementById("modal-close-btn");
+  const cancelBtn = document.getElementById("modal-cancel-btn");
+  const form = document.getElementById("edit-profile-form");
+  const nameInput = document.getElementById("edit-name");
+  const emailInput = document.getElementById("edit-email");
+  const currentPassInput = document.getElementById("edit-current-pass");
+  const newPassInput = document.getElementById("edit-new-pass");
+  const modalAvatarPreview = document.getElementById("modal-avatar-preview");
+  const saveBtn = document.getElementById("modal-save-btn");
+  const saveBtnText = saveBtn && saveBtn.querySelector(".btn-save-text");
+  const saveBtnSpinner = saveBtn && saveBtn.querySelector(".btn-save-spinner");
+  const toast = document.getElementById("modal-toast");
+  const nameError = document.getElementById("edit-name-error");
+  const passError = document.getElementById("edit-pass-error");
+
+  function openModal() {
+    if (!modal) return;
+    // Pre-fill current values
+    const currentName = document.getElementById("profile-name-display")
+      ? document.getElementById("profile-name-display").textContent.trim()
+      : "";
+    const currentEmail = document.getElementById("profile-email-display")
+      ? document.getElementById("profile-email-display").textContent.trim()
+      : "";
+    if (nameInput) nameInput.value = currentName === "Guest Traveler" ? "" : currentName;
+    if (emailInput) emailInput.value = currentEmail === "Sign in to view your account" ? "" : currentEmail;
+    if (currentPassInput) currentPassInput.value = "";
+    if (newPassInput) newPassInput.value = "";
+    if (nameError) nameError.textContent = "";
+    if (passError) passError.textContent = "";
+    hideToast();
+    updateModalAvatar();
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    if (nameInput) nameInput.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function updateModalAvatar() {
+    if (!modalAvatarPreview || !nameInput) return;
+    const name = nameInput.value.trim();
+    const parts = name.split(/\s+/).filter(Boolean);
+    const first = parts[0] ? parts[0][0] : "";
+    const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+    const initials = (first + last).toUpperCase() || "TG";
+    modalAvatarPreview.textContent = initials;
+  }
+
+  function showToast(msg, type) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.className = "modal-toast " + type;
+    toast.hidden = false;
+    if (type === "success") {
+      setTimeout(hideToast, 3500);
+    }
+  }
+
+  function hideToast() {
+    if (!toast) return;
+    toast.hidden = true;
+    toast.className = "modal-toast";
+  }
+
+  function setSaving(saving) {
+    if (!saveBtn) return;
+    saveBtn.disabled = saving;
+    if (saveBtnText) saveBtnText.hidden = saving;
+    if (saveBtnSpinner) saveBtnSpinner.hidden = !saving;
+  }
+
+  // Open / close
+  if (openBtn) openBtn.addEventListener("click", openModal);
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+
+  // Close on overlay click
+  if (modal) {
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Close on Escape
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal && modal.classList.contains("open")) {
+      closeModal();
+    }
+  });
+
+  // Live avatar preview
+  if (nameInput) {
+    nameInput.addEventListener("input", updateModalAvatar);
+  }
+
+  // Password show/hide toggles
+  document.querySelectorAll(".pass-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const targetId = btn.dataset.target;
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      const icon = btn.querySelector("i");
+      if (icon) {
+        icon.className = isPassword ? "fa-regular fa-eye-slash" : "fa-regular fa-eye";
+      }
+    });
+  });
+
+  // Form submit
+  if (form) {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      if (nameError) nameError.textContent = "";
+      if (passError) passError.textContent = "";
+      hideToast();
+
+      const newName = nameInput ? nameInput.value.trim() : "";
+      const currentPass = currentPassInput ? currentPassInput.value : "";
+      const newPass = newPassInput ? newPassInput.value : "";
+
+      // Validation
+      if (!newName) {
+        if (nameError) nameError.textContent = "Name is required.";
+        nameInput && nameInput.focus();
+        return;
+      }
+
+      if (newPass && !currentPass) {
+        if (passError) passError.textContent = "Please enter your current password to set a new one.";
+        currentPassInput && currentPassInput.focus();
+        return;
+      }
+
+      if (newPass && newPass.length < 8) {
+        if (passError) passError.textContent = "New password must be at least 8 characters.";
+        newPassInput && newPassInput.focus();
+        return;
+      }
+
+      setSaving(true);
+
+      try {
+        const payload = { name: newName };
+        if (newPass && currentPass) {
+          payload.currentPassword = currentPass;
+          payload.newPassword = newPass;
+        }
+
+        // Call backend update if authenticated
+        if (window.API && API.users && typeof API.users.updateProfile === "function" && API.isAuthenticated()) {
+          await API.users.updateProfile(payload);
+        }
+        localStorage.setItem("userFullName", newName);
+        localStorage.setItem("userName", newName);
+
+        // Update UI immediately
+        renderIdentity({ name: newName, email: emailInput ? emailInput.value : "" });
+        showToast("Profile updated successfully!", "success");
+
+        // Clear password fields
+        if (currentPassInput) currentPassInput.value = "";
+        if (newPassInput) newPassInput.value = "";
+
+        // Auto-close after 1.5s
+        setTimeout(closeModal, 1800);
+      } catch (err) {
+        const msg = (err && err.message) || "Failed to save. Please try again.";
+        showToast(msg, "error");
+      } finally {
+        setSaving(false);
+      }
+    });
+  }
 });
+

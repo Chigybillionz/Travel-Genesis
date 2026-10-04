@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
@@ -10,97 +9,75 @@
     <link rel="stylesheet" href="../../../shared/css/shared-nav.css">
     <link rel="stylesheet" href="profile.css" />
 </head>
-
 <body>
-
     <div id="shared-nav-container"></div>
-
     <main class="profile-page">
-
-        <!-- ================= HERO / IDENTITY ================= -->
+        <!-- HERO -->
         <section class="profile-hero">
             <div class="hero-cover">
                 <div class="cover-glow"></div>
                 <i class="fa-solid fa-plane cover-plane"></i>
             </div>
-
             <div class="hero-identity">
                 <div class="avatar-wrap">
                     <div class="profile-avatar" id="profile-avatar">TG</div>
                     <span class="avatar-status" title="Verified account"><i class="fa-solid fa-check"></i></span>
                 </div>
-
                 <div class="identity-text">
                     <div class="identity-name-row">
-                        <h1 class="profile-name">Guest Traveler</h1>
+                        <h1 class="profile-name" id="profile-name-display">Guest Traveler</h1>
                         <span class="tier-badge"><i class="fa-solid fa-crown"></i> Explorer</span>
                     </div>
-                    <p class="profile-email">Sign in to view your account</p>
+                    <p class="profile-email" id="profile-email-display">Sign in to view your account</p>
                     <div class="identity-meta">
                         <span><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</span>
                         <span><i class="fa-solid fa-calendar"></i> <span id="member-since">Member since 2026</span></span>
                         <span><i class="fa-solid fa-plane-departure"></i> Home airport: LOS</span>
                     </div>
                 </div>
-
-                <a href="../../user/settings/settings.html" class="edit-profile-btn" id="edit-profile-btn">
-                    <i class="fa-solid fa-pen"></i> <span>Edit profile</span>
-                </a>
+                <button type="button" class="edit-profile-btn" id="edit-profile-btn">
+                    <i class="fa-solid fa-pen"></i> <span>Edit Profile</span>
+                </button>
             </div>
         </section>
 
-        <!-- ================= STATS ================= -->
+        <!-- STATS -->
         <section class="stats-grid" aria-label="Travel statistics">
             <div class="stat-card">
                 <div class="stat-icon teal"><i class="fa-solid fa-suitcase-rolling"></i></div>
-                <div>
-                    <p class="stat-value" id="stat-trips">0</p>
-                    <p class="stat-label">Total trips</p>
-                </div>
+                <div><p class="stat-value" id="stat-trips">0</p><p class="stat-label">Total trips</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon amber"><i class="fa-solid fa-clock"></i></div>
-                <div>
-                    <p class="stat-value" id="stat-upcoming">0</p>
-                    <p class="stat-label">Upcoming</p>
-                </div>
+                <div><p class="stat-value" id="stat-upcoming">0</p><p class="stat-label">Upcoming</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon green"><i class="fa-solid fa-naira-sign"></i></div>
-                <div>
-                    <p class="stat-value" id="stat-spent">₦0</p>
-                    <p class="stat-label">Total spent</p>
-                </div>
+                <div><p class="stat-value" id="stat-spent">N0</p><p class="stat-label">Total spent</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon violet"><i class="fa-solid fa-earth-africa"></i></div>
-                <div>
-                    <p class="stat-value" id="stat-destinations">0</p>
-                    <p class="stat-label">Destinations</p>
-                </div>
+                <div><p class="stat-value" id="stat-destinations">0</p><p class="stat-label">Destinations</p></div>
             </div>
         </section>
 
-        <!-- ================= MAIN GRID ================= -->
+        <!-- GRID -->
         <div class="profile-grid">
-
-            <!-- LEFT COLUMN -->
+            <!-- LEFT -->
             <div class="col-left">
-
-                <!-- Account details -->
                 <section class="panel">
                     <div class="panel-header">
                         <h2>Account details</h2>
-                        <a href="../../user/settings/settings.html" class="panel-link">Manage</a>
+                        <a href="../../user/settings/settings.html" class="panel-link">Settings</a>
                     </div>
                     <ul class="detail-list">
                         <li>
                             <span class="detail-label"><i class="fa-regular fa-user"></i> Full name</span>
-                            <span class="detail-value" id="detail-name">—</span>
+                            <span class="detail-value" id="detail-name">-</span>
                         </li>
                         <li>
                             <span class="detail-label"><i class="fa-regular fa-envelope"></i> Email</span>
-                            <span class="detail-value" id="detail-email">—</span>
+                            <span class="detail-value" id="detail-email">-</span>
                         </li>
                         <li>
                             <span class="detail-label"><i class="fa-solid fa-plane-departure"></i> Departure city</span>
@@ -108,12 +85,10 @@
                         </li>
                         <li>
                             <span class="detail-label"><i class="fa-solid fa-coins"></i> Currency</span>
-                            <span class="detail-value">Nigerian Naira (₦)</span>
+                            <span class="detail-value">Nigerian Naira (N)</span>
                         </li>
                     </ul>
                 </section>
-
-                <!-- Recent trips -->
                 <section class="panel">
                     <div class="panel-header">
                         <h2>Recent trips</h2>
@@ -128,85 +103,50 @@
                     </div>
                 </section>
             </div>
-
-            <!-- RIGHT COLUMN -->
+            <!-- RIGHT -->
             <div class="col-right">
-
-                <!-- Quick actions -->
                 <section class="panel">
-                    <div class="panel-header">
-                        <h2>Quick actions</h2>
-                    </div>
+                    <div class="panel-header"><h2>Quick actions</h2></div>
                     <div class="profile-menu">
                         <a href="../../trips/trip-list/trip.html" class="menu-item" id="menu-trips">
                             <span class="menu-icon teal"><i class="fa-solid fa-suitcase"></i></span>
-                            <span class="menu-text">
-                                <strong>My trips</strong>
-                                <small>Upcoming &amp; past journeys</small>
-                            </span>
+                            <span class="menu-text"><strong>My trips</strong><small>Upcoming &amp; past journeys</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
-
                         <a href="../../trips/e-ticket/e-ticket.html" class="menu-item" id="menu-tickets">
                             <span class="menu-icon amber"><i class="fa-solid fa-ticket"></i></span>
-                            <span class="menu-text">
-                                <strong>My tickets</strong>
-                                <small>Boarding passes &amp; e-tickets</small>
-                            </span>
+                            <span class="menu-text"><strong>My tickets</strong><small>Boarding passes &amp; e-tickets</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
-
                         <a href="../../user/notifications/notification.html" class="menu-item" id="menu-notifications">
                             <span class="menu-icon violet"><i class="fa-regular fa-bell"></i></span>
-                            <span class="menu-text">
-                                <strong>Notifications</strong>
-                                <small>Flight alerts &amp; updates</small>
-                            </span>
+                            <span class="menu-text"><strong>Notifications</strong><small>Flight alerts &amp; updates</small></span>
                             <span class="menu-badge" id="notif-badge" hidden>0</span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
-
                         <a href="../../user/explore/explore.html" class="menu-item" id="menu-explore">
                             <span class="menu-icon green"><i class="fa-regular fa-compass"></i></span>
-                            <span class="menu-text">
-                                <strong>Explore</strong>
-                                <small>Discover new destinations</small>
-                            </span>
+                            <span class="menu-text"><strong>Explore</strong><small>Discover new destinations</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
-
                         <a href="../../user/settings/settings.html" class="menu-item" id="menu-settings">
                             <span class="menu-icon slate"><i class="fa-solid fa-gear"></i></span>
-                            <span class="menu-text">
-                                <strong>Settings</strong>
-                                <small>Security, privacy &amp; preferences</small>
-                            </span>
+                            <span class="menu-text"><strong>Settings</strong><small>Security, privacy &amp; preferences</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
                     </div>
                 </section>
-
-                <!-- Account / danger zone -->
                 <section class="panel">
-                    <div class="panel-header">
-                        <h2>Account</h2>
-                    </div>
+                    <div class="panel-header"><h2>Account</h2></div>
                     <div class="account-actions">
                         <a href="#" class="account-row" id="logoutBtn">
                             <span class="menu-icon slate"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
-                            <span class="menu-text">
-                                <strong>Log out</strong>
-                                <small>Sign out of this device</small>
-                            </span>
+                            <span class="menu-text"><strong>Log out</strong><small>Sign out of this device</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </a>
-
                         <button type="button" class="account-row danger" id="deleteAccountBtn">
                             <span class="menu-icon red"><i class="fa-regular fa-trash-can"></i></span>
-                            <span class="menu-text">
-                                <strong>Delete account</strong>
-                                <small>Permanently remove your data</small>
-                            </span>
+                            <span class="menu-text"><strong>Delete account</strong><small>Permanently remove your data</small></span>
                             <i class="fa-solid fa-chevron-right menu-arrow"></i>
                         </button>
                     </div>
@@ -215,7 +155,61 @@
         </div>
     </main>
 
-    <!-- BOTTOM NAVIGATION (mobile only) -->
+    <!-- EDIT PROFILE MODAL -->
+    <div class="modal-overlay" id="edit-profile-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title"><i class="fa-solid fa-user-pen"></i> Edit Profile</h2>
+                <button type="button" class="modal-close" id="modal-close-btn" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="edit-profile-form" novalidate>
+                <div class="modal-body">
+                    <div class="modal-avatar-wrap">
+                        <div class="modal-avatar" id="modal-avatar-preview">TG</div>
+                        <p class="modal-avatar-hint">Initials auto-generated from your name</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-name" class="form-label"><i class="fa-regular fa-user"></i> Full Name</label>
+                        <input type="text" id="edit-name" class="form-input" placeholder="Enter your full name" autocomplete="name" />
+                        <span class="form-error" id="edit-name-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email" class="form-label"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                        <input type="email" id="edit-email" class="form-input form-input--readonly" readonly placeholder="your@email.com" autocomplete="email" />
+                        <span class="form-hint">Email cannot be changed for security reasons</span>
+                    </div>
+                    <div class="form-divider"><span>Change Password (optional)</span></div>
+                    <div class="form-group">
+                        <label for="edit-current-pass" class="form-label"><i class="fa-solid fa-lock"></i> Current Password</label>
+                        <div class="pass-wrap">
+                            <input type="password" id="edit-current-pass" class="form-input" placeholder="Enter current password" autocomplete="current-password" />
+                            <button type="button" class="pass-toggle" data-target="edit-current-pass"><i class="fa-regular fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-new-pass" class="form-label"><i class="fa-solid fa-key"></i> New Password</label>
+                        <div class="pass-wrap">
+                            <input type="password" id="edit-new-pass" class="form-input" placeholder="Min. 8 characters" autocomplete="new-password" />
+                            <button type="button" class="pass-toggle" data-target="edit-new-pass"><i class="fa-regular fa-eye"></i></button>
+                        </div>
+                        <span class="form-error" id="edit-pass-error"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="modal-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn-save" id="modal-save-btn">
+                        <span class="btn-save-text"><i class="fa-solid fa-check"></i> Save Changes</span>
+                        <span class="btn-save-spinner" hidden><i class="fa-solid fa-spinner fa-spin"></i> Saving...</span>
+                    </button>
+                </div>
+                <div class="modal-toast" id="modal-toast" hidden></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV (mobile only) -->
     <nav class="bottom-nav">
         <a href="../../booking/home/home.html" class="nav-item">
             <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
@@ -238,7 +232,5 @@
     <script src="../../../shared/js/api.js"></script>
     <script src="profile.js"></script>
     <script src="../../../shared/js/shared-nav.js"></script>
-
 </body>
-
 </html>

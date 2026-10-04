@@ -1,176 +1,180 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Return to home functionality
-  const retrunhome = document.getElementById("return-button");
-  if (retrunhome) {
-    retrunhome.addEventListener("click", function () {
-      console.log("returning to home page...");
+  const returnHome = document.getElementById("return-button") || document.querySelector(".return-button");
+  if (returnHome && returnHome.tagName === "BUTTON") {
+    returnHome.addEventListener("click", function (e) {
+      e.preventDefault();
       window.location.href = "../../booking/home/home.html";
     });
   }
 
-  // Load all user data
+  // Load all ticket data
   loadUserData();
+  loadFlightData();
   loadSelectedSeats();
   loadFlightDate();
-  loadChosenFlight();
 });
 
-// Function to load chosen flight details (destination, times, airline)
-function loadChosenFlight() {
+// Function to load chosen flight details & sidebar summary
+function loadFlightData() {
+  let flight = null;
   const chosenFlightRaw = localStorage.getItem("chosenFlight");
-  if (!chosenFlightRaw) return;
+  if (chosenFlightRaw) {
+    try {
+      flight = JSON.parse(chosenFlightRaw);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
-  try {
-    const flight = JSON.parse(chosenFlightRaw);
-    console.log("✈️ Loading chosen flight on e-ticket:", flight);
+  if (!flight) {
+    const lastBookingRaw = localStorage.getItem("lastBooking");
+    if (lastBookingRaw) {
+      try {
+        const lastBooking = JSON.parse(lastBookingRaw);
+        flight = lastBooking.flight || lastBooking;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
 
-    const destCityEl = document.getElementById("ticket-dest-city");
-    const destCountryEl = document.getElementById("ticket-dest-country");
-    const depTimeEl = document.getElementById("ticket-dep-time");
-    const arrTimeEl = document.getElementById("ticket-arr-time");
-    const arrCountryEl = document.getElementById("ticket-arr-country");
-    const airlineEl = document.getElementById("ticket-airline-name");
+  // Ticket card elements
+  const originCityEl = document.getElementById("ticket-origin-city");
+  const originCountryEl = document.getElementById("ticket-origin-country");
+  const destCityEl = document.getElementById("ticket-dest-city");
+  const destCountryEl = document.getElementById("ticket-dest-country");
+  const durationEl = document.getElementById("ticket-duration");
+  const depTimeEl = document.getElementById("ticket-dep-time");
+  const depCountryEl = document.getElementById("ticket-dep-country");
+  const arrTimeEl = document.getElementById("ticket-arr-time");
+  const arrCountryEl = document.getElementById("ticket-arr-country");
+  const airlineEl = document.getElementById("ticket-airline-name");
+  const flightIdEl = document.getElementById("ticket-flight-id");
+  const flightClassEl = document.getElementById("ticket-class");
+  const gateEl = document.getElementById("ticket-gate");
 
-    if (destCityEl && flight.destinationCity) destCityEl.textContent = flight.destinationCity;
-    if (destCountryEl && flight.destinationCountry) destCountryEl.textContent = flight.destinationCountry;
-    if (depTimeEl && flight.depTime) depTimeEl.textContent = flight.depTime;
-    if (arrTimeEl && flight.arrTime) arrTimeEl.textContent = flight.arrTime;
-    if (arrCountryEl && flight.destinationCountry) arrCountryEl.textContent = flight.destinationCountry;
-    if (airlineEl && flight.airline) airlineEl.textContent = `${flight.airline} (${flight.flightNumber || ""})`;
-  } catch (e) {
-    console.error("Error loading chosen flight on e-ticket:", e);
+  // Sidebar elements
+  const sideRouteEl = document.getElementById("sidebar-route");
+  const sideAirlineEl = document.getElementById("sidebar-airline");
+  const sideDepEl = document.getElementById("sidebar-dep");
+  const sideArrEl = document.getElementById("sidebar-arr");
+  const sideClassEl = document.getElementById("sidebar-class");
+
+  if (flight) {
+    const origCity = flight.originCity || (flight.origin && flight.origin.city) || "Lagos";
+    const origCountry = flight.originCountry || "Nigeria";
+    const destCity = flight.destinationCity || (flight.destination && flight.destination.city) || "London";
+    const destCountry = flight.destinationCountry || "UK";
+    const depTime = flight.depTime || flight.departureTime || "7:00 AM";
+    const arrTime = flight.arrTime || flight.arrivalTime || "7:30 PM";
+    const airlineName = flight.airline || "British Airways";
+    const flightNum = flight.flightNumber || flight.id || "BA-2490";
+    const duration = flight.duration || "1h 30m";
+    const flightClass = flight.flightClass || flight.class || "Economy";
+    const gate = flight.gate || "23 C";
+
+    if (originCityEl) originCityEl.textContent = origCity;
+    if (originCountryEl) originCountryEl.textContent = origCountry;
+    if (destCityEl) destCityEl.textContent = destCity;
+    if (destCountryEl) destCountryEl.textContent = destCountry;
+    if (durationEl) durationEl.textContent = duration;
+    if (depTimeEl) depTimeEl.textContent = depTime;
+    if (depCountryEl) depCountryEl.textContent = origCountry;
+    if (arrTimeEl) arrTimeEl.textContent = arrTime;
+    if (arrCountryEl) arrCountryEl.textContent = destCountry;
+    if (airlineEl) airlineEl.textContent = flight.flightNumber ? `${airlineName} (${flight.flightNumber})` : airlineName;
+    if (flightIdEl) flightIdEl.textContent = flightNum;
+    if (flightClassEl) flightClassEl.textContent = flightClass;
+    if (gateEl) gateEl.textContent = gate;
+
+    // Sidebar
+    if (sideRouteEl) sideRouteEl.textContent = `${origCity} → ${destCity}`;
+    if (sideAirlineEl) sideAirlineEl.textContent = airlineName;
+    if (sideDepEl) sideDepEl.textContent = depTime;
+    if (sideArrEl) sideArrEl.textContent = arrTime;
+    if (sideClassEl) sideClassEl.textContent = flightClass;
   }
 }
 
 // Function to load user profile data from localStorage
 function loadUserData() {
-  const userFullName = localStorage.getItem("userFullName");
-  console.log("📋 Loading user data from localStorage:");
-  console.log("Full Name:", userFullName);
-
-  // Update passenger name
-  const passengerNameElement = document.getElementById("passengerName");
-  if (passengerNameElement) {
-    if (userFullName && userFullName.trim() !== "") {
-      passengerNameElement.textContent = userFullName;
-      console.log("✅ Updated passenger name to:", userFullName);
-    } else {
-      passengerNameElement.textContent = "Naomi Davies"; // Default name
-      console.log("⚠️ Using default name");
-    }
+  const userFullName = localStorage.getItem("userFullName") || localStorage.getItem("userName") || "Naomi Davies";
+  const passEl = document.getElementById("ticket-passenger") || document.getElementById("passengerName");
+  if (passEl) {
+    passEl.textContent = userFullName;
   }
 }
 
 // Function to load selected seats from localStorage
 function loadSelectedSeats() {
   const savedSeats = localStorage.getItem("bookingSeats");
-  console.log("🎫 Loading seats from localStorage:");
-  console.log("Saved Seats (raw):", savedSeats);
+  let seatDisplay = "A4 & B6";
 
-  // Update seat display
-  const passengerSeatElement = document.getElementById("passengerSeat");
-  if (passengerSeatElement) {
-    if (savedSeats) {
-      try {
-        // Parse the JSON string
-        const seatsArray = JSON.parse(savedSeats);
-        console.log("Parsed Seats Array:", seatsArray);
-
-        if (Array.isArray(seatsArray) && seatsArray.length > 0) {
-          // Join seats with " & " separator
-          const seatsText = seatsArray.join(" & ");
-          passengerSeatElement.textContent = seatsText;
-          console.log("✅ Updated seats to:", seatsText);
-        } else {
-          passengerSeatElement.textContent = "A4 & B6"; // Default seats
-          console.log("⚠️ Empty seats array, using default");
-        }
-      } catch (error) {
-        console.error("❌ Error parsing seats:", error);
-        passengerSeatElement.textContent = "A4 & B6"; // Default seats
+  if (savedSeats) {
+    try {
+      const seatsArray = JSON.parse(savedSeats);
+      if (Array.isArray(seatsArray) && seatsArray.length > 0) {
+        seatDisplay = seatsArray.join(" & ");
       }
-    } else {
-      passengerSeatElement.textContent = "A4 & B6"; // Default seats
-      console.log("⚠️ No seats found in localStorage, using default");
+    } catch (e) {
+      if (typeof savedSeats === "string" && savedSeats.trim()) {
+        seatDisplay = savedSeats;
+      }
     }
-  } else {
-    console.error("❌ Seat element not found!");
+  }
+
+  const seatEl = document.getElementById("ticket-seats") || document.getElementById("passengerSeat");
+  if (seatEl) {
+    seatEl.textContent = seatDisplay;
   }
 }
 
 // Function to load flight date from localStorage
 function loadFlightDate() {
   const savedDate = localStorage.getItem("bookingDate");
-  console.log("📅 Loading flight date from localStorage:");
-  console.log("Saved Date (raw):", savedDate);
-
-  // Find all detail-value elements
-  const detailRows = document.querySelectorAll(".detail-row");
-
-  // The date is in the first detail-row, second detail-item (right side)
-  if (detailRows && detailRows.length > 0) {
-    const firstRow = detailRows[0];
-    const dateElement = firstRow.querySelectorAll(".detail-value")[1]; // Second value (right side)
-
-    if (
-      dateElement &&
-      savedDate &&
-      savedDate.trim() !== "" &&
-      savedDate !== "No date selected"
-    ) {
-      // Format the date nicely (e.g., "3 December 2025" -> "03-12-2025")
-      const formattedDate = formatDate(savedDate);
-      dateElement.textContent = formattedDate;
-      console.log("✅ Updated flight date to:", formattedDate);
+  const dateEl = document.getElementById("ticket-date") || document.querySelector(".detail-value");
+  if (dateEl) {
+    if (savedDate && savedDate.trim() && savedDate !== "No date selected") {
+      dateEl.textContent = formatDate(savedDate);
     } else {
-      dateElement.textContent = "03-12-2025"; // Default date
-      console.log("⚠️ Using default date");
+      dateEl.textContent = "17-10-2026";
     }
-  } else {
-    console.error("❌ Date element not found!");
   }
 }
 
-// Helper function to format date from "3 December 2025" to "03-12-2025"
+// Helper function to format date
 function formatDate(dateString) {
-  if (!dateString) return "03-12-2025";
+  if (!dateString) return "17-10-2026";
+  if (dateString.match(/^\d{2}-\d{2}-\d{4}$/)) return dateString;
 
-  // If already in DD-MM-YYYY format, return as is
-  if (dateString.match(/^\d{2}-\d{2}-\d{4}$/)) {
-    return dateString;
-  }
-
-  // Parse "3 December 2025" format
   const months = {
-    january: "01",
-    february: "02",
-    march: "03",
-    april: "04",
-    may: "05",
-    june: "06",
-    july: "07",
-    august: "08",
-    september: "09",
-    october: "10",
-    november: "11",
-    december: "12",
+    january: "01", february: "02", march: "03", april: "04",
+    may: "05", june: "06", july: "07", august: "08",
+    september: "09", october: "10", november: "11", december: "12",
+    jan: "01", feb: "02", mar: "03", apr: "04", jun: "06",
+    jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12"
   };
 
   try {
-    const parts = dateString.split(" ");
-    if (parts.length === 3) {
-      const day = parts[0].padStart(2, "0");
-      const month = months[parts[1].toLowerCase()];
-      const year = parts[2];
-
-      if (month) {
-        return `${day}-${month}-${year}`;
+    const clean = dateString.replace(/,/g, "").trim();
+    const parts = clean.split(" ");
+    if (parts.length >= 3) {
+      let day = parts[0];
+      let month = parts[1];
+      let year = parts[2];
+      if (isNaN(day) && !isNaN(parts[1])) {
+        // e.g. "Wed 03 Dec 2025"
+        day = parts[1];
+        month = parts[2];
+        year = parts[3];
       }
+      day = String(day).padStart(2, "0");
+      const mNum = months[month.toLowerCase()] || "10";
+      return `${day}-${mNum}-${year}`;
     }
-  } catch (error) {
-    console.error("Error formatting date:", error);
+  } catch (e) {
+    console.error("Error formatting date:", e);
   }
-
-  // If parsing fails, return the original or default
-  return dateString || "03-12-2025";
+  return dateString;
 }

@@ -1,49 +1,302 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
-    <title>Settings Screen</title>
-    <link rel="stylesheet" href="settings.css">
-    <!-- Icons -->
+    <title>Settings - Travel Genesis</title>
+    <meta name="description" content="Manage your Travel Genesis account settings, notifications, security and preferences." />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../../shared/css/shared-nav.css" />
+    <link rel="stylesheet" href="settings.css" />
 </head>
-
 <body>
-    <div class="container">
-        <div>
-            <div class="header">
-                <span class="back-btn"><i class="fa-solid fa-arrow-left"></i></span>
-                Settings
-            </div>
+    <div id="shared-nav-container"></div>
 
-            <div class="settings-section">
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <i class="fa-solid fa-globe"></i>
-                        <span class="setting-label">Application language</span>
-                    </div>
-                    <span class="right-text">English</span>
-                </div>
-
-                <!-- Notifications Toggle -->
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <i class="fa-regular fa-bell"></i>
-                        <span class="setting-label">Push notifications</span>
-                    </div>
-
-                    <label class="switch">
-                        <input type="checkbox" checked />
-                        <span class="slider"></span>
-                    </label>
-                </div>
+    <main class="settings-page">
+        <!-- PAGE HEADER -->
+        <div class="settings-header">
+            <button class="back-btn" id="back-btn" aria-label="Go back">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="settings-header-text">
+                <h1 class="settings-title">Settings</h1>
+                <p class="settings-subtitle">Manage your account &amp; preferences</p>
             </div>
         </div>
 
+        <!-- PROFILE QUICK VIEW -->
+        <div class="profile-card" id="settings-profile-card">
+            <div class="profile-card-avatar" id="settings-avatar">TG</div>
+            <div class="profile-card-info">
+                <p class="profile-card-name" id="settings-name">Loading...</p>
+                <p class="profile-card-email" id="settings-email">-</p>
+            </div>
+            <a href="../profile/profile.html" class="profile-card-edit">
+                <i class="fa-solid fa-pen"></i> Edit
+            </a>
+        </div>
 
-    </div>
-    <SCRipt src="settings.js"></SCRipt>
+        <!-- SECTION: Account -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-regular fa-user"></i> Account</h2>
+            <div class="settings-group">
+                <div class="setting-row" id="row-fullname">
+                    <span class="setting-icon teal"><i class="fa-solid fa-user"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Full Name</span>
+                        <span class="setting-value" id="settings-name-val">-</span>
+                    </span>
+                    <a href="../profile/profile.html" class="setting-action">Change <i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+                <div class="setting-row" id="row-email">
+                    <span class="setting-icon teal"><i class="fa-regular fa-envelope"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Email Address</span>
+                        <span class="setting-value" id="settings-email-val">-</span>
+                    </span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon amber"><i class="fa-solid fa-plane-departure"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Home Airport</span>
+                        <span class="setting-value">Lagos (LOS)</span>
+                    </span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon green"><i class="fa-solid fa-naira-sign"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Currency</span>
+                        <span class="setting-value">Nigerian Naira (N)</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Notifications -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-regular fa-bell"></i> Notifications</h2>
+            <div class="settings-group">
+                <div class="setting-row">
+                    <span class="setting-icon violet"><i class="fa-regular fa-bell"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Push Notifications</span>
+                        <span class="setting-value">Flight alerts &amp; updates</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Push notifications">
+                        <input type="checkbox" id="toggle-push" checked />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon violet"><i class="fa-regular fa-envelope"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Email Notifications</span>
+                        <span class="setting-value">Booking confirmations &amp; offers</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Email notifications">
+                        <input type="checkbox" id="toggle-email-notif" checked />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon violet"><i class="fa-solid fa-tag"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Promotional Offers</span>
+                        <span class="setting-value">Deals, discounts &amp; special fares</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Promotional offers">
+                        <input type="checkbox" id="toggle-promo" />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Preferences -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-solid fa-sliders"></i> Preferences</h2>
+            <div class="settings-group">
+                <div class="setting-row">
+                    <span class="setting-icon slate"><i class="fa-solid fa-globe"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Language</span>
+                        <span class="setting-value">English</span>
+                    </span>
+                    <span class="setting-badge">English</span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon slate"><i class="fa-solid fa-moon"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Dark Mode</span>
+                        <span class="setting-value">App appearance</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Dark mode">
+                        <input type="checkbox" id="toggle-darkmode" />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon slate"><i class="fa-solid fa-chair-office"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Default Seat Class</span>
+                        <span class="setting-value" id="settings-seat-class">Economy</span>
+                    </span>
+                    <select class="setting-select" id="seat-class-select" aria-label="Seat class">
+                        <option value="Economy">Economy</option>
+                        <option value="Business">Business</option>
+                        <option value="First Class">First Class</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Security -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Security</h2>
+            <div class="settings-group">
+                <a href="../profile/profile.html" class="setting-row setting-row--link">
+                    <span class="setting-icon amber"><i class="fa-solid fa-lock"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Change Password</span>
+                        <span class="setting-value">Update your account password</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+                <div class="setting-row">
+                    <span class="setting-icon amber"><i class="fa-solid fa-fingerprint"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Biometric Login</span>
+                        <span class="setting-value">Face ID / Fingerprint</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Biometric login">
+                        <input type="checkbox" id="toggle-biometric" />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <a href="../notifications/notification.html" class="setting-row setting-row--link">
+                    <span class="setting-icon amber"><i class="fa-solid fa-shield-check"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Login Activity</span>
+                        <span class="setting-value">View recent sign-ins</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- SECTION: Privacy -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-solid fa-eye-slash"></i> Privacy</h2>
+            <div class="settings-group">
+                <div class="setting-row">
+                    <span class="setting-icon green"><i class="fa-solid fa-location-dot"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Location Access</span>
+                        <span class="setting-value">For nearby airport suggestions</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Location access">
+                        <input type="checkbox" id="toggle-location" checked />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-icon green"><i class="fa-solid fa-chart-simple"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Analytics</span>
+                        <span class="setting-value">Help improve Travel Genesis</span>
+                    </span>
+                    <label class="toggle-switch" aria-label="Analytics">
+                        <input type="checkbox" id="toggle-analytics" checked />
+                        <span class="toggle-thumb"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Support -->
+        <section class="settings-section">
+            <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> Support</h2>
+            <div class="settings-group">
+                <a href="#" class="setting-row setting-row--link">
+                    <span class="setting-icon teal"><i class="fa-regular fa-circle-question"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Help &amp; FAQ</span>
+                        <span class="setting-value">Get answers to common questions</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+                <a href="#" class="setting-row setting-row--link">
+                    <span class="setting-icon teal"><i class="fa-regular fa-envelope"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Contact Support</span>
+                        <span class="setting-value">support@travelgenesis.ng</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+                <a href="#" class="setting-row setting-row--link">
+                    <span class="setting-icon teal"><i class="fa-solid fa-file-shield"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Privacy Policy</span>
+                        <span class="setting-value">View our data practices</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+                <div class="setting-row">
+                    <span class="setting-icon slate"><i class="fa-solid fa-code-branch"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">App Version</span>
+                        <span class="setting-value">Travel Genesis v1.0.0</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Danger Zone -->
+        <section class="settings-section settings-section--danger">
+            <h2 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h2>
+            <div class="settings-group">
+                <a href="../logout/logout.html" class="setting-row setting-row--link setting-row--warn">
+                    <span class="setting-icon orange"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Log Out</span>
+                        <span class="setting-value">Sign out of this device</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+                <a href="../delete-account/delete.html" class="setting-row setting-row--link setting-row--danger">
+                    <span class="setting-icon red"><i class="fa-regular fa-trash-can"></i></span>
+                    <span class="setting-info">
+                        <span class="setting-label">Delete Account</span>
+                        <span class="setting-value">Permanently remove all your data</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom nav (mobile) -->
+    <nav class="bottom-nav">
+        <a href="../../booking/home/home.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+            <span>Home</span>
+        </a>
+        <a href="../../trips/trip-list/trip.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-suitcase"></i></span>
+            <span>My Trip</span>
+        </a>
+        <a href="../explore/explore.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-compass"></i></span>
+            <span>Explore</span>
+        </a>
+        <a href="../profile/profile.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-user"></i></span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="../../../shared/js/api.js"></script>
+    <script src="settings.js"></script>
+    <script src="../../../shared/js/shared-nav.js"></script>
 </body>
-
 </html>

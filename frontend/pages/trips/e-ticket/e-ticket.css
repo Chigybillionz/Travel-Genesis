@@ -1,201 +1,375 @@
- * {
-     margin: 0;
-     padding: 0;
-     box-sizing: border-box;
- }
+﻿@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
 
- body {
-     font-family: -apple-system, sans-serif;
-     background-color: #e5e5e5;
-     min-height: 100vh;
-     display: flex;
-     flex-direction: column;
-     padding: 20px;
- }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
- .container {
-     max-width: 420px;
-     margin: 0 auto;
-     width: 100%;
- }
+body {
+    font-family: "Outfit", -apple-system, sans-serif;
+    background: #F4F7FA;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 60px;
+}
 
- .header {
-     text-align: center;
-     margin-bottom: 30px;
- }
+/* ──────────────────── PAGE WRAPPER ──────────────────── */
+.page-wrap {
+    width: 100%;
+    max-width: 900px;
+}
 
- .header h1 {
-     font-size: 24px;
-     font-weight: 600;
-     color: #333;
- }
+/* ──────────────────── HEADER ──────────────────── */
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+}
 
- .ticket {
-     background: white;
-     border-radius: 12px;
-     overflow: hidden;
-     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-     margin-bottom: 20px;
- }
+.back-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #334155;
+    transition: background 0.2s, border-color 0.2s;
+    text-decoration: none;
+    flex-shrink: 0;
+}
 
- .ticket-header {
-     background: linear-gradient(135deg, #87CECD 0%, #6DB8B7 100%);
-     padding: 20px;
-     position: relative;
- }
+.back-btn:hover { background: #E0F2F1; border-color: #007A8C; color: #007A8C; }
 
- .status-badge {
-     color: white;
-     font-size: 11px;
+.page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0F172A;
+}
 
-     font-weight: 600;
-     display: inline-block;
-     margin-left: 115px;
-     text-align: center;
-     margin-bottom: 20px;
-     margin-top: 10px;
+/* ──────────────────── DESKTOP LAYOUT WRAPPER ──────────────────── */
+.ticket-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+}
 
- }
+/* ──────────────────── TICKET CARD ──────────────────── */
+.ticket {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 122, 140, 0.10);
+    border: 1px solid #E2E8F0;
+}
 
- .flight-info {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     color: #2D5555;
-     margin-bottom: 8px;
- }
+/* Ticket header — coloured band */
+.ticket-header {
+    background: linear-gradient(120deg, #003C46 0%, #007A8C 55%, #14B8A6 100%);
+    padding: 24px 28px 20px;
+    position: relative;
+    overflow: hidden;
+}
 
- .location {
-     flex: 1;
- }
+.ticket-header::before {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    right: -80px;
+    top: -140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+}
 
- .location h2 {
-     font-size: 22px;
-     font-weight: 700;
-     margin-bottom: 2px;
- }
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+}
 
- .location p {
-     font-size: 13px;
-     opacity: 0.85;
- }
+.flight-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
 
- .plane-icon {
-     margin: 0 20px;
-     position: relative;
- }
+.location { flex: 1; }
 
+.location h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
 
- .duration {
-     position: absolute;
-     top: -18px;
-     left: 50%;
-     transform: translateX(-50%);
-     font-size: 10px;
-     color: white;
-     white-space: nowrap;
-     font-weight: 500;
- }
+.location p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+}
 
- .location.right {
-     text-align: right;
- }
+.location.right { text-align: right; }
 
- .time-info {
-     display: flex;
-     justify-content: space-between;
-     margin-top: 12px;
- }
+.plane-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
 
- .time {
-     font-size: 16px;
-     font-weight: 700;
-     color: #1A4544;
-     margin-bottom: 2px;
- }
+.plane-divider .duration-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+}
 
- .time-location {
-     font-size: 12px;
-     opacity: 0.8;
- }
+.plane-divider .plane-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.9);
+}
 
- .airline-section {
-     padding: 24px 20px;
-     text-align: center;
-     border-bottom: 1px dashed #ddd;
- }
+.plane-divider .plane-line i {
+    font-size: 22px;
+}
 
- .airline-label {
-     font-size: 13px;
-     color: #666;
-     margin-bottom: 12px;
-     font-weight: 500;
- }
+.plane-divider .line {
+    width: 60px;
+    height: 1.5px;
+    background: rgba(255,255,255,0.4);
+}
 
- .airline-logo {
-     max-width: 140px;
-     height: auto;
- }
+/* Times row */
+.time-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
 
- .ticket-details {
-     padding: 24px 20px;
- }
+.time-block .time {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+}
 
- .detail-row {
-     display: flex;
-     justify-content: space-between;
-     margin-bottom: 20px;
- }
+.time-block .label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+}
 
- .detail-item {
-     flex: 1;
- }
+.time-block.right { text-align: right; }
 
- .detail-label {
-     font-size: 12px;
-     color: #888;
-     margin-bottom: 6px;
- }
+/* ──────────────────── TICKET BODY ──────────────────── */
+.ticket-body {
+    padding: 24px 28px;
+}
 
- .detail-value {
-     font-size: 15px;
-     color: #333;
-     font-weight: 600;
- }
+/* Airline strip */
+.airline-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #E2E8F0;
+}
 
- .qr-section {
-     text-align: center;
-     padding: 20px;
-     border-top: 1px dashed #ddd;
- }
+.airline-strip .airline-label {
+    font-size: 11px;
+    color: #94A3B8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+}
 
- .qr-code {
-     width: 140px;
-     height: 110px;
-     margin: 0 auto 12px;
-     background: white;
-     display: flex;
-     align-items: center;
-     justify-content: center;
- }
+.airline-strip .airline-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #007A8C;
+    flex: 1;
+}
 
+/* Dashed divider */
+.dashed-divider {
+    border: none;
+    border-top: 2px dashed #E2E8F0;
+    margin: 4px 0 20px;
+}
 
+/* Details grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 24px;
+}
 
- .return-button {
-     background: linear-gradient(135deg, #0D7377 0%, #0A5F63 100%);
-     color: white;
-     border: none;
-     padding: 16px;
-     border-radius: 25px;
-     font-size: 16px;
-     font-weight: 600;
-     width: 100%;
-     cursor: pointer;
-     box-shadow: 0 4px 12px rgba(13, 115, 119, 0.3);
-     transition: all 0.3s ease;
- }
+.detail-item .dl { font-size: 11px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.detail-item .dv { font-size: 16px; font-weight: 700; color: #0F172A; }
+.detail-item .dv.highlight { color: #007A8C; }
 
- .return-button:hover {
-     transform: translateY(-2px);
-     box-shadow: 0 6px 16px rgba(13, 115, 119, 0.4);
- }
+/* QR section */
+.qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 2px dashed #E2E8F0;
+    margin-top: 20px;
+}
+
+.qr-section .qr-hint {
+    font-size: 12px;
+    color: #94A3B8;
+    text-align: center;
+}
+
+.qr-code {
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+    border: 1.5px solid #E2E8F0;
+    padding: 8px;
+}
+
+/* ──────────────────── SIDEBAR / ACTIONS PANEL ──────────────────── */
+.sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sidebar-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    border: 1px solid #E2E8F0;
+}
+
+.sidebar-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-card-title i { color: #007A8C; }
+
+.flight-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+}
+
+.flight-stat:last-child { border-bottom: none; }
+.flight-stat .fs-label { color: #64748B; }
+.flight-stat .fs-value { font-weight: 600; color: #0F172A; }
+.flight-stat .fs-value.green { color: #15803D; }
+
+/* Buttons */
+.return-button,
+.download-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    border: none;
+    text-decoration: none;
+}
+
+.return-button {
+    background: linear-gradient(135deg, #007A8C 0%, #00A3BA 100%);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 122, 140, 0.28);
+}
+
+.return-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 122, 140, 0.38);
+}
+
+.download-button {
+    background: #F8FAFC;
+    color: #334155;
+    border: 1.5px solid #E2E8F0;
+}
+
+.download-button:hover {
+    background: #E0F2F1;
+    border-color: #007A8C;
+    color: #007A8C;
+}
+
+/* ──────────────────── MOBILE: single column ──────────────────── */
+@media (max-width: 700px) {
+    body {
+        padding: 16px 12px 80px;
+    }
+
+    .page-header h1 { font-size: 22px; }
+
+    .ticket-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-panel {
+        flex-direction: column;
+    }
+
+    .location h2 { font-size: 24px; }
+
+    .time-block .time { font-size: 18px; }
+
+    .details-grid { grid-template-columns: 1fr 1fr; }
+
+    .ticket-header { padding: 18px 20px 14px; }
+    .ticket-body   { padding: 18px 20px; }
+
+    .plane-divider .line { width: 36px; }
+}
+
+/* ──────────────────── Legacy class aliases (e-ticket.js may use these) ──────────────────── */
+.container { width: 100%; max-width: 900px; }
+.header    { margin-bottom: 0; }
