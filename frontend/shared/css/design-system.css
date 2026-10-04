@@ -106,6 +106,25 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Prevent Mobile Zoom on Input Focus ─────────────────────────────────────
+   iOS and Android zoom in when an input has font-size < 16px.
+   This rule globally ensures no zoom happens across the entire app.
+   ────────────────────────────────────────────────────────────────────────── */
+input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+textarea,
+select {
+  font-size: 16px !important;
+  touch-action: manipulation;
+}
+
 /* Mobile App Chassis Frame (Beautiful on Desktop, Native on Mobile) */
 .tg-app-container,
 .container,
