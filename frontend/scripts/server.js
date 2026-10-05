@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const root = path.resolve(__dirname, '..');
 
 const MIME_TYPES = {
@@ -60,7 +60,7 @@ const server = http.createServer((req, res) => {
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`\n⚠️  Port ${PORT} is already in use by another process.`);
-    console.log(`💡 If a dev server is already running in another window, you can use that one, or close it, or run with: $env:PORT=3001; npm run dev\n`);
+    console.log(`💡 If a dev server is already running in another window, you can use that one, or close it, or run with: $env:PORT=3002; npm run dev\n`);
     process.exit(1);
   } else {
     throw err;
