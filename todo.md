@@ -183,7 +183,7 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
     - `JWT_SECRET=travel_genesis_super_secret_jwt_key_2026_prod`
     - `JWT_EXPIRES_IN=7d`
 
-- [ ] **Task 7.3: Database Seeding on Render**
+- [x] **Task 7.3: Database Seeding on Render**
   - Once the Render web service builds successfully, open the **Shell** tab in Render dashboard.
   - Run `npm run seed` to seed destinations and flights into the MongoDB Atlas database.
 
