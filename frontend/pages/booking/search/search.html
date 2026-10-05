@@ -6,9 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <title>Search Results</title>
     <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../../shared/css/shared-nav.css">
 </head>
 
 <body>
+    <!-- Shared Top Navigation Header -->
+    <div id="shared-nav-container"></div>
+
     <div class="phone-container">
         <div class="content">
             <div class="header">
@@ -93,11 +98,32 @@
         </div>
 
         <!-- Bottom Indicator -->
-        <div class="indicator"></div>
+        
     </div>
     <script src="../../../shared/js/api.js"></script>
     <script src="search.js"></script>
 
+
+    <!-- BOTTOM NAV (mobile only) -->
+    <nav class="bottom-nav">
+        <a href="../../booking/home/home.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+            <span>Home</span>
+        </a>
+        <a href="../../trips/trip-list/trip.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-suitcase"></i></span>
+            <span>My Trip</span>
+        </a>
+        <a href="../../user/explore/explore.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-compass"></i></span>
+            <span>Explore</span>
+        </a>
+        <a href="../../user/profile/profile.html" class="nav-item">
+            <span class="nav-icon"><i class="fa-solid fa-user"></i></span>
+            <span>Profile</span>
+        </a>
+    </nav>
+    <script src="../../../shared/js/shared-nav.js"></script>
 </body>
 
 </html>
