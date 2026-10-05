@@ -187,7 +187,7 @@ We will use a standard **Layered Architecture** (Routes -> Controllers -> Servic
   - Once the Render web service builds successfully, open the **Shell** tab in Render dashboard.
   - Run `npm run seed` to seed destinations and flights into the MongoDB Atlas database.
 
-- [ ] **Task 7.4: Connect Vercel Frontend to Live Render API**
+- [x] **Task 7.4: Connect Vercel Frontend to Live Render API**
   - Copy the live Render backend URL (e.g. `https://travel-genesis-backend.onrender.com/api`).
   - Update `API_BASE_URL` in `frontend/shared/js/api.js` to point to the live Render endpoint for production.
 
