@@ -18,23 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const emptyTitle = document.querySelector("#empty-title");
   const emptyDesc = document.querySelector("#empty-desc");
   const emptyActionBtn = document.querySelector("#empty-action-btn");
-  const statusTime = document.querySelector("#status-time");
 
   // State
   let notifications = [];
   let currentFilter = "all"; // "all" | "unread"
-
-  // 1. Clock in status bar
-  updateClock();
-  setInterval(updateClock, 30000);
-
-  function updateClock() {
-    if (!statusTime) return;
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    statusTime.textContent = `${hours}:${minutes}`;
-  }
 
   // 2. Back Navigation
   if (backButton) {
