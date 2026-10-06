@@ -129,6 +129,12 @@ body {
 
 .destination-name {
     margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f8f8f8;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
 }
 
 .card-footer {

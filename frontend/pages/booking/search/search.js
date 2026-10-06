@@ -16,63 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const destinationCard = document.querySelector(".destination-card");
 
   // Destination dataset for instant filtering
-  const DESTINATIONS = [
-    {
-      city: "Sydney",
-      country: "Australia",
-      rating: "4.9",
-      reviews: "340",
-      image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&h=300&fit=crop",
-      flightCount: "3 flights daily"
-    },
-    {
-      city: "Toronto",
-      country: "Canada",
-      rating: "4.8",
-      reviews: "290",
-      image: "../../../assets/images/destinations/Toronto, Canada.png",
-      flightCount: "3 flights daily"
-    },
-    {
-      city: "London",
-      country: "UK",
-      rating: "4.9",
-      reviews: "520",
-      image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop",
-      flightCount: "3 direct flights"
-    },
-    {
-      city: "New York",
-      country: "USA",
-      rating: "4.85",
-      reviews: "410",
-      image: "../../../assets/images/destinations/New York City, USA.png",
-      flightCount: "3 flights daily"
-    },
-    {
-      city: "Dubai",
-      country: "UAE",
-      rating: "4.95",
-      reviews: "680",
-      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=300&fit=crop",
-      flightCount: "3 flights daily"
-    },
-    {
-      city: "Paris",
-      country: "France",
-      rating: "4.9",
-      reviews: "480",
-      image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&h=300&fit=crop",
-      flightCount: "3 direct flights"
-    },
-    {
-      city: "Tokyo",
-      country: "Japan",
-      rating: "4.92",
-      reviews: "540",
-      image: "../../../assets/images/destinations/Tokyo, Japan.png",
-      flightCount: "3 flights daily"
-    }
+    const DESTINATIONS = [
+    { city: "London", country: "UK", rating: "4.5", image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&h=400&fit=crop" },
+    { city: "Sydney", country: "Australia", rating: "4.82", image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600&h=400&fit=crop" },
+    { city: "Cape Town", country: "South Africa", rating: "4.82", image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=600&h=400&fit=crop" },
+    { city: "Los Angeles", country: "USA", rating: "4.87", image: "https://images.unsplash.com/photo-1518115277884-3998b637d7a8?w=600&h=400&fit=crop" },
+    { city: "Paris", country: "France", rating: "4.88", image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&h=400&fit=crop" },
+    { city: "Dubai", country: "UAE", rating: "4.9", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&h=400&fit=crop" },
+    { city: "Rome", country: "Italy", rating: "4.86", image: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&h=400&fit=crop" },
+    { city: "Barcelona", country: "Spain", rating: "4.85", image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop" },
+    { city: "Tokyo", country: "Japan", rating: "4.95", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&h=400&fit=crop" },
+    { city: "Santorini", country: "Greece", rating: "4.92", image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&h=400&fit=crop" }
   ];
 
   // Default card click -> flight details
@@ -108,6 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (destinationCard) {
           destinationCard.style.display = "block";
           const img = destinationCard.querySelector(".card-image");
+          const nameEl = document.getElementById("search-dest-name");
+          const ratingEl = document.getElementById("search-dest-rating");
+          if (nameEl) nameEl.textContent = first.city.toUpperCase() + ", " + first.country.toUpperCase();
+          if (ratingEl) ratingEl.innerHTML = '<i class="fa-solid fa-star" style="color: #FCB131;"></i> ' + first.rating;
           if (img) img.src = first.image;
 
           destinationCard.onclick = () => {
