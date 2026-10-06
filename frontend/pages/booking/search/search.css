@@ -20,7 +20,7 @@ body {
     border-radius: 0;
     overflow-x: hidden;
     position: relative;
-    padding-bottom: 80px; /* space for bottom nav */
+    
 }
 
 .content {
