@@ -611,3 +611,11 @@ body {
   font-size: 22px;
   line-height: 1;
 }
+body {
+  padding-top: 0 !important;
+}
+@media (max-height: 500px) {
+  .bottom-nav {
+    display: none !important;
+  }
+}
