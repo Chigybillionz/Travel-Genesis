@@ -1,3 +1,24 @@
+function showError(msg) {
+  const existing = document.getElementById('custom-error-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'custom-error-toast';
+  toast.style.cssText = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#f44336;color:white;padding:16px 24px;border-radius:8px;font-family:sans-serif;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:9999;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity 0.3s;';
+  toast.innerHTML = `<span>${msg.replace(/\n/g, '<br>')}</span><button style="background:none;border:none;color:white;font-weight:bold;cursor:pointer;padding:0;font-size:20px;margin-left:8px;">&times;</button>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.style.opacity = '1');
+  toast.querySelector('button').onclick = () => {
+    toast.style.opacity = '0';
+    setTimeout(() => { if (document.body.contains(toast)) toast.remove(); }, 300);
+  };
+  setTimeout(() => {
+    if (document.body.contains(toast)) {
+      toast.style.opacity = '0';
+      setTimeout(() => { if (document.body.contains(toast)) toast.remove(); }, 300);
+    }
+  }, 4000);
+}
+
 // Payment Processing Flow
 document.addEventListener("DOMContentLoaded", () => {
   const payBtn = document.getElementById("pay-btn");
@@ -29,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     payBtn.disabled = true;
 
     if (!window.API || !API.isAuthenticated()) {
-      alert("Please login to complete your payment");
+      showError("Please login to complete your payment");
       payBtnText.style.display = "block";
       payBtnLoading.classList.remove("show");
       payBtnLoader.classList.remove("show");
@@ -65,64 +86,66 @@ document.addEventListener("DOMContentLoaded", () => {
           amount: Math.round(totalPrice * 100),
           ref: reference,
           onClose: function() {
-            alert('Payment window closed.');
+            showError("Payment window closed before completing the transaction.");
             payBtnText.style.display = "block";
             payBtnLoading.classList.remove("show");
             payBtnLoader.classList.remove("show");
             payBtnProcessing.classList.remove("show");
             payBtn.disabled = false;
           },
-          callback: async function(response) {
-            try {
-              const verifyData = await API.request(`/payments/verify/${response.reference}`, {
-                method: 'GET'
-              });
-
-              if (verifyData && verifyData.status) {
-                // Now create the booking
-                const bookingRes = await API.bookings.create({
-                  flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
-                  seatNumber: bookingSeats.join(", "),
-                  totalPrice: totalPrice,
-                  flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
-                  passengerName: user ? user.name : "Traveler",
-                  passengerEmail: user ? user.email : "user@travelgenesis.com",
+          callback: function(response) {
+            (async function() {
+              try {
+                const verifyData = await API.request(`/payments/verify/${response.reference}`, {
+                  method: 'GET'
                 });
 
-                if (bookingRes && bookingRes.data) {
-                  localStorage.setItem("lastBooking", JSON.stringify(bookingRes.data));
+                if (verifyData && verifyData.status) {
+                  // Now create the booking
+                  const bookingRes = await API.bookings.create({
+                    flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
+                    seatNumber: bookingSeats.join(", "),
+                    totalPrice: totalPrice,
+                    flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
+                    passengerName: user ? user.name : "Traveler",
+                    passengerEmail: user ? user.email : "user@travelgenesis.com",
+                  });
+
+                  if (bookingRes && bookingRes.data) {
+                    localStorage.setItem("lastBooking", JSON.stringify(bookingRes.data));
+                  }
+
+                  payBtnLoading.classList.remove("show");
+                  payBtnLoader.classList.remove("show");
+                  payBtnProcessing.classList.remove("show");
+                  payBtnCheckmark.classList.add("show");
+
+                  setTimeout(() => {
+                    successScreen.classList.add("active");
+                  }, 800);
+                } else {
+                  showError("Payment verification failed. Please try again.");
+                  payBtnText.style.display = "block";
+                  payBtnLoading.classList.remove("show");
+                  payBtnLoader.classList.remove("show");
+                  payBtnProcessing.classList.remove("show");
+                  payBtn.disabled = false;
                 }
-
-                payBtnLoading.classList.remove("show");
-                payBtnLoader.classList.remove("show");
-                payBtnProcessing.classList.remove("show");
-                payBtnCheckmark.classList.add("show");
-
-                setTimeout(() => {
-                  successScreen.classList.add("active");
-                }, 800);
-              } else {
-                alert("Payment verification failed.");
+              } catch (err) {
+                showError("Error verifying payment: " + err.message);
                 payBtnText.style.display = "block";
                 payBtnLoading.classList.remove("show");
                 payBtnLoader.classList.remove("show");
                 payBtnProcessing.classList.remove("show");
                 payBtn.disabled = false;
               }
-            } catch (err) {
-              alert("Error verifying payment: " + err.message);
-              payBtnText.style.display = "block";
-              payBtnLoading.classList.remove("show");
-              payBtnLoader.classList.remove("show");
-              payBtnProcessing.classList.remove("show");
-              payBtn.disabled = false;
-            }
+            })();
           }
         });
         handler.openIframe();
       }
     } catch (err) {
-      alert("Payment initialization failed: " + err.message);
+      showError("Payment initialization failed: " + err.message);
       payBtnText.style.display = "block";
       payBtnLoading.classList.remove("show");
       payBtnLoader.classList.remove("show");
