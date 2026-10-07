@@ -641,6 +641,7 @@ const FLIGHT_CATALOG = {
 // State
 let currentDestinationKey = "Sydney";
 let selectedFlightData = null;
+let currentFlightClass = window.FlightClass ? FlightClass.getSelected() : "Economy";
 
 // Error Toast Utility
 function showError(msg) {
@@ -768,16 +769,27 @@ function renderFlightCards(destData) {
     return;
   }
 
+  // Keep the previously selected flight highlighted when re-rendering (e.g. class switch)
+  const previouslySelectedId = selectedFlightData ? selectedFlightData.id : null;
+  const keepIndex = flights.findIndex((f) => f.id === previouslySelectedId);
+  const defaultIndex = keepIndex >= 0 ? keepIndex : 0;
+
+  const isBusiness = currentFlightClass === "Business";
+  const otherClass = isBusiness ? "Economy" : "Business";
+
   flights.forEach((flight, index) => {
     const card = document.createElement("div");
-    // Select first flight by default
-    const isSelected = index === 0;
-    card.className = `flight-card ${isSelected ? "selected" : ""}`;
+    const isSelected = index === defaultIndex;
+    card.className = `flight-card ${isSelected ? "selected" : ""} ${isBusiness ? "is-business" : ""}`;
     card.dataset.flightId = flight.id;
+
+    const classPrice = FlightClass.priceFor(flight.price, currentFlightClass);
+    const otherPrice = FlightClass.priceFor(flight.price, otherClass);
 
     card.innerHTML = `
       <div class="flight-top-bar">
         <span class="flight-airline-pill">${flight.airline} &bull; ${flight.flightNumber}</span>
+        <span class="flight-class-pill ${isBusiness ? "business" : "economy"}">${currentFlightClass}</span>
         <span class="flight-stops-pill">${flight.stops}</span>
       </div>
 
@@ -805,8 +817,9 @@ function renderFlightCards(destData) {
         </div>
 
         <div class="flight-price-tag">
-          <span class="price-val">₦${Number(flight.price).toLocaleString()}</span>
-          <span class="price-sub">/ seat</span>
+          <span class="price-val">${FlightClass.formatNaira(classPrice)}</span>
+          <span class="price-sub">${currentFlightClass} / seat</span>
+          <span class="price-alt">${otherClass}: ${FlightClass.formatNaira(otherPrice)}</span>
         </div>
 
         <div class="flight-time" style="text-align: right;">
@@ -825,8 +838,27 @@ function renderFlightCards(destData) {
     listEl.appendChild(card);
   });
 
-  // Default select first flight
-  selectedFlightData = flights[0];
+  // Default select (previously chosen flight, else first)
+  selectedFlightData = flights[defaultIndex];
+}
+
+// Switch cabin class and refresh prices
+function setFlightClass(cls) {
+  currentFlightClass = FlightClass.setSelected(cls);
+
+  document.querySelectorAll(".class-option").forEach((btn) => {
+    const active = btn.dataset.class === currentFlightClass;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-selected", active ? "true" : "false");
+  });
+
+  const activeClassText = document.getElementById("active-class-text");
+  if (activeClassText) {
+    const mult = FlightClass.info(currentFlightClass).multiplier;
+    activeClassText.textContent = mult === 1 ? currentFlightClass : `${currentFlightClass} (${mult}× Economy fare)`;
+  }
+
+  renderFlightCards(FLIGHT_CATALOG[currentDestinationKey]);
 }
 
 // Continue Button click handler
@@ -836,13 +868,22 @@ function continueFlight() {
     return;
   }
 
-  // Persist full flight object and derived values to localStorage
-  localStorage.setItem("chosenFlight", JSON.stringify(selectedFlightData));
-  localStorage.setItem("bookingLocation", `${selectedFlightData.destinationCountry}, ${selectedFlightData.destinationCity}`);
-  localStorage.setItem("bookingAirline", selectedFlightData.airline);
-  localStorage.setItem("selectedFlightPrice", selectedFlightData.price);
+  // Persist full flight object (with cabin class + class-adjusted fare) to localStorage
+  const classPrice = FlightClass.priceFor(selectedFlightData.price, currentFlightClass);
+  const chosen = {
+    ...selectedFlightData,
+    basePrice: selectedFlightData.price, // Economy fare
+    price: classPrice, // fare for chosen class
+    flightClass: currentFlightClass,
+  };
 
-  console.log("Chosen flight:", selectedFlightData);
+  localStorage.setItem("chosenFlight", JSON.stringify(chosen));
+  localStorage.setItem("bookingLocation", `${chosen.destinationCountry}, ${chosen.destinationCity}`);
+  localStorage.setItem("bookingAirline", chosen.airline);
+  localStorage.setItem("selectedFlightPrice", classPrice);
+  localStorage.setItem("selectedFlightClass", currentFlightClass);
+
+  console.log("Chosen flight:", chosen);
   window.location.href = "../../booking/date-picker/datepicker.html";
 }
 
@@ -861,8 +902,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialDest = toParam || storedCity || "Sydney";
   const resolvedKey = resolveDestinationKey(initialDest);
 
+  // Cabin class from URL (?class=Business) or storage
+  const classParam = urlParams.get("class");
+  if (classParam) currentFlightClass = FlightClass.setSelected(classParam);
+
+  document.querySelectorAll(".class-option").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.class !== currentFlightClass) setFlightClass(btn.dataset.class);
+    });
+  });
+
   renderDestinationPills();
   setDestination(resolvedKey);
+  setFlightClass(currentFlightClass);
 
   // Smooth entrance
   document.body.style.opacity = "0";

@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
           flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
           seatNumber: bookingSeats.join(", "),
           totalPrice: totalPrice,
+          flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
           passengerName: user ? user.name : "Traveler",
           passengerEmail: user ? user.email : "user@travelgenesis.com",
         })

@@ -39,8 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let SEAT_PRICE = Number(localStorage.getItem("selectedFlightPrice")) || Number(chosenFlight.price) || 1050000;
   if (SEAT_PRICE < 10000) SEAT_PRICE = SEAT_PRICE * 1500;
 
+  const flightClass = chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy";
+
   if (routeInfoDisplay && chosenFlight.originCity && chosenFlight.destinationCity) {
-    routeInfoDisplay.textContent = `${chosenFlight.originCity} (${chosenFlight.originCode || "LOS"}) ➔ ${chosenFlight.destinationCity} (${chosenFlight.destinationCode || "DEST"}) • ${chosenFlight.airline || "Flight"}`;
+    routeInfoDisplay.textContent = `${chosenFlight.originCity} (${chosenFlight.originCode || "LOS"}) ➔ ${chosenFlight.destinationCity} (${chosenFlight.destinationCode || "DEST"}) • ${chosenFlight.airline || "Flight"} • ${flightClass} ₦${SEAT_PRICE.toLocaleString()}/seat`;
   }
 
   // Pre-selected seats from DOM or storage

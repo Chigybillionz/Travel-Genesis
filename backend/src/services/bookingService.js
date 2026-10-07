@@ -3,7 +3,7 @@ const Booking = require('../models/Booking');
 const Flight = require('../models/Flight');
 const Notification = require('../models/Notification');
 
-const createBooking = async ({ userId, flightId, passengerName, passengerEmail, seatNumber, totalPrice }) => {
+const createBooking = async ({ userId, flightId, passengerName, passengerEmail, seatNumber, totalPrice, flightClass }) => {
   let flight = null;
   if (flightId && mongoose.Types.ObjectId.isValid(flightId)) {
     flight = await Flight.findById(flightId);
@@ -37,6 +37,7 @@ const createBooking = async ({ userId, flightId, passengerName, passengerEmail, 
     passengerName,
     passengerEmail,
     seatNumber: seatNumber || '14B',
+    flightClass: ['Economy', 'Premium Economy', 'Business', 'First Class'].includes(flightClass) ? flightClass : 'Economy',
     totalPrice: totalPrice || flight.price,
     status: 'Confirmed',
     paymentStatus: 'Paid',

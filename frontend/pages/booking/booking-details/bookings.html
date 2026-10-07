@@ -37,10 +37,23 @@
                 </div>
 
                 <div class="detail-item">
+                    <div class="detail-label">Cabin Class</div>
+                    <div class="detail-value">
+                        <span class="class-badge economy" id="booking-class">Economy</span>
+                    </div>
+                    <button class="edit-btn" id="edit-class">Edit</button>
+                </div>
+
+                <div class="detail-item">
                     <div class="detail-label">Seat(s)</div>
                     <div class="detail-value" id="booking-seats">Loading...</div>
                     <button class="edit-btn" id="edit-seat">Edit</button>
                 </div>
+            </div>
+
+            <div class="price-breakdown" id="price-breakdown">
+                <span id="price-breakdown-text">—</span>
+                <span class="price-compare" id="price-compare"></span>
             </div>
 
             <div class="total-section">
@@ -54,6 +67,7 @@
         </div>
     </div>
 
+    <script src="../../../shared/js/flight-class.js"></script>
     <script src="bookings.js">
 
     </script>

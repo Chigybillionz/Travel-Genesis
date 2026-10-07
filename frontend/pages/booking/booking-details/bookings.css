@@ -123,6 +123,41 @@
       color: #ff5252;
   }
 
+  /* ===== Cabin class badge + price breakdown ===== */
+  .class-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+  }
+
+  .class-badge.economy {
+      background: #e6f6f8;
+      color: #007A8C;
+  }
+
+  .class-badge.business {
+      background: linear-gradient(135deg, #f7d77a 0%, #c99a2e 100%);
+      color: #3b2a05;
+      box-shadow: 0 2px 8px rgba(201, 154, 46, 0.3);
+  }
+
+  .price-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 20px 20px -20px;
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+  }
+
+  .price-breakdown .price-compare {
+      font-size: 12px;
+      color: #8a8a8a;
+  }
+
   .total-section {
       display: flex;
       justify-content: space-between;
@@ -146,21 +181,21 @@
   .continue-btn {
       width: 100%;
       padding: 18px;
-      background: var(--color-primary);
-      color: var(--tg-text-main);
+      background: var(--color-primary, #007A8C);
+      color: #ffffff;
       border: none;
       border-radius: 12px;
       font-size: 17px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(26, 163, 184, 0.2);
+      box-shadow: 0 6px 18px rgba(0, 122, 140, 0.3);
   }
 
   .continue-btn:hover {
-      background: var(--color-primary-hover);
+      background: var(--color-primary-hover, #006371);
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(26, 163, 184, 0.4);
+      box-shadow: 0 8px 25px rgba(0, 122, 140, 0.4);
   }
 
   .continue-btn:active {

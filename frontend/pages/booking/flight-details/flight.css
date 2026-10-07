@@ -309,6 +309,8 @@
      display: flex;
      justify-content: space-between;
      align-items: center;
+     flex-wrap: wrap;
+     gap: 6px;
      margin-bottom: 12px;
      padding-bottom: 8px;
      border-bottom: 1px dashed rgba(44, 83, 86, 0.25);
@@ -470,6 +472,98 @@
      font-size: 9px;
      color: #64748b;
      font-weight: 600;
+ }
+
+ .flight-price-tag .price-alt {
+     font-size: 9px;
+     color: #94a3b8;
+     font-weight: 500;
+     margin-top: 2px;
+     white-space: nowrap;
+ }
+
+ /* ===== Cabin Class Toggle ===== */
+ .class-switcher-section {
+     margin: 4px 0 16px;
+ }
+
+ .class-toggle {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 10px;
+     margin-top: 8px;
+ }
+
+ .class-option {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 2px;
+     padding: 10px 14px;
+     border: 1.5px solid #d7e6e8;
+     border-radius: 14px;
+     background: #ffffff;
+     cursor: pointer;
+     font-family: inherit;
+     text-align: left;
+     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+ }
+
+ .class-option:hover {
+     transform: translateY(-1px);
+     box-shadow: 0 4px 12px rgba(0, 122, 140, 0.12);
+ }
+
+ .class-option-name {
+     font-size: 14px;
+     font-weight: 600;
+     color: #0f2f33;
+ }
+
+ .class-option-note {
+     font-size: 10px;
+     font-weight: 500;
+     color: #64748b;
+ }
+
+ .class-option.active[data-class="Economy"] {
+     border-color: #007A8C;
+     background: linear-gradient(135deg, #e6f6f8 0%, #ffffff 100%);
+     box-shadow: 0 4px 14px rgba(0, 122, 140, 0.18);
+ }
+
+ .class-option.active[data-class="Business"] {
+     border-color: #c99a2e;
+     background: linear-gradient(135deg, #fff6e0 0%, #ffffff 100%);
+     box-shadow: 0 4px 14px rgba(201, 154, 46, 0.25);
+ }
+
+ .flight-class-pill {
+     margin-left: auto;
+     font-size: 10px;
+     font-weight: 700;
+     padding: 3px 10px;
+     border-radius: 999px;
+     letter-spacing: 0.3px;
+     text-transform: uppercase;
+ }
+
+ .flight-class-pill.economy {
+     background: #e6f6f8;
+     color: #007A8C;
+ }
+
+ .flight-class-pill.business {
+     background: linear-gradient(135deg, #f7d77a 0%, #c99a2e 100%);
+     color: #3b2a05;
+ }
+
+ .flight-card.is-business .flight-price-tag .price-val {
+     color: #a87a14;
+ }
+
+ .flight-card.is-business.selected {
+     box-shadow: 0 0 0 2px #e0b94f, 0 8px 22px rgba(201, 154, 46, 0.3);
  }
 
  .empty-flights {

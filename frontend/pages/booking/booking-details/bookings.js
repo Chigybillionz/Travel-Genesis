@@ -135,3 +135,55 @@ if (savedPrice) {
 } else {
   totalPriceEl.textContent = "₦0";
 }
+
+// Cabin class + price breakdown (Economy vs Business)
+document.addEventListener("DOMContentLoaded", () => {
+  let flight = {};
+  try {
+    flight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
+  } catch (e) {
+    flight = {};
+  }
+
+  const FC = window.FlightClass;
+  const flightClass = FC
+    ? FC.normalize(flight.flightClass || localStorage.getItem("selectedFlightClass"))
+    : flight.flightClass || "Economy";
+  const isBusiness = flightClass === "Business";
+
+  const classEl = document.getElementById("booking-class");
+  if (classEl) {
+    classEl.textContent = isBusiness ? "🥂 Business" : "💺 Economy";
+    classEl.classList.toggle("business", isBusiness);
+    classEl.classList.toggle("economy", !isBusiness);
+  }
+
+  const editClass = document.getElementById("edit-class");
+  if (editClass) {
+    editClass.addEventListener("click", () => {
+      window.location.href = "../../booking/flight-details/flight.html";
+    });
+  }
+
+  const seats = JSON.parse(localStorage.getItem("bookingSeats") || "[]");
+  const seatCount = seats.length || 0;
+  const seatPrice = Number(localStorage.getItem("selectedFlightPrice")) || Number(flight.price) || 0;
+
+  const breakdownEl = document.getElementById("price-breakdown-text");
+  const compareEl = document.getElementById("price-compare");
+
+  if (breakdownEl && seatCount > 0 && seatPrice > 0) {
+    breakdownEl.textContent = `${seatCount} seat${seatCount > 1 ? "s" : ""} × ₦${seatPrice.toLocaleString()} (${flightClass})`;
+  }
+
+  // Compare with the other class so the user sees the difference
+  if (compareEl && FC && seatCount > 0) {
+    const base = Number(flight.basePrice) || seatPrice / FC.info(flightClass).multiplier;
+    const otherClass = isBusiness ? "Economy" : "Business";
+    const otherTotal = FC.priceFor(base, otherClass) * seatCount;
+    const diff = Math.abs(otherTotal - seatPrice * seatCount);
+    compareEl.textContent = isBusiness
+      ? `₦${diff.toLocaleString()} more than Economy (₦${otherTotal.toLocaleString()})`
+      : `Save ₦${diff.toLocaleString()} vs Business (₦${otherTotal.toLocaleString()})`;
+  }
+});

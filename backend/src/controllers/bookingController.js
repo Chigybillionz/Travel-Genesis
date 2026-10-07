@@ -5,7 +5,7 @@ const bookingService = require('../services/bookingService');
 // @access  Private
 const createBooking = async (req, res, next) => {
   try {
-    const { flightId, seatNumber, passengerName, passengerEmail, totalPrice } = req.body;
+    const { flightId, seatNumber, passengerName, passengerEmail, totalPrice, flightClass } = req.body;
 
     if (!flightId) {
       return res.status(400).json({
@@ -21,6 +21,7 @@ const createBooking = async (req, res, next) => {
       passengerName: passengerName || req.user.name,
       passengerEmail: passengerEmail || req.user.email,
       totalPrice,
+      flightClass,
     });
 
     res.status(201).json({

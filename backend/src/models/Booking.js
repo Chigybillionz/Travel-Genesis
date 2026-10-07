@@ -33,6 +33,11 @@ const bookingSchema = new mongoose.Schema(
       default: '14B',
       trim: true,
     },
+    flightClass: {
+      type: String,
+      enum: ['Economy', 'Premium Economy', 'Business', 'First Class'],
+      default: 'Economy',
+    },
     status: {
       type: String,
       enum: ['Pending', 'Confirmed', 'Cancelled'],

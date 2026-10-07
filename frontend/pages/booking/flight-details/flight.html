@@ -59,6 +59,24 @@
             </div>
         </div>
 
+        <!-- Cabin Class Toggle (Economy / Business) -->
+        <div class="class-switcher-section">
+            <div class="dest-switcher-header">
+                <span class="dest-switcher-title">Cabin Class:</span>
+                <span class="dest-switcher-subtitle" id="active-class-text">Economy</span>
+            </div>
+            <div class="class-toggle" id="class-toggle" role="tablist" aria-label="Cabin class">
+                <button type="button" class="class-option" id="class-option-economy" data-class="Economy" role="tab">
+                    <span class="class-option-name">💺 Economy</span>
+                    <span class="class-option-note">Standard fare</span>
+                </button>
+                <button type="button" class="class-option" id="class-option-business" data-class="Business" role="tab">
+                    <span class="class-option-name">🥂 Business</span>
+                    <span class="class-option-note">2.5× fare · Lounge &amp; lie-flat</span>
+                </button>
+            </div>
+        </div>
+
         <!-- Flights List (Dynamically Rendered for the Selected Destination) -->
         <div class="flights-list" id="flights-list">
             <!-- Flight cards rendered dynamically by flight.js -->
@@ -72,6 +90,7 @@
 
     <!-- Scripts -->
     <script src="../../../shared/js/api.js"></script>
+    <script src="../../../shared/js/flight-class.js"></script>
     <script src="flight.js"></script>
 </body>
 

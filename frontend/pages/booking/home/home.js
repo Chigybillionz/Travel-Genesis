@@ -89,6 +89,15 @@ function toggleDropdown(carouselWrapper, carousel, seeAllLink) {
 document.addEventListener("DOMContentLoaded", function () {
   const heroSearchBtn = document.getElementById("hero-search-flights-btn");
   const quickDestSelect = document.getElementById("quick-dest-select");
+  const quickClassSelect = document.getElementById("quick-class-select");
+
+  // Pre-fill the class dropdown with the last chosen class (or Settings preference)
+  if (quickClassSelect) {
+    const savedClass = localStorage.getItem("selectedFlightClass") || localStorage.getItem("pref_seat_class");
+    if (savedClass && [...quickClassSelect.options].some((o) => o.value === savedClass)) {
+      quickClassSelect.value = savedClass;
+    }
+  }
 
   if (heroSearchBtn && quickDestSelect) {
     heroSearchBtn.addEventListener("click", function (e) {
@@ -96,11 +105,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const selectedOption = quickDestSelect.options[quickDestSelect.selectedIndex];
       const destination = selectedOption.value;
       const country = selectedOption.getAttribute("data-country") || "";
+      const flightClass = quickClassSelect ? quickClassSelect.value : "Economy";
 
       localStorage.setItem("selectedDestinationCity", destination);
       localStorage.setItem("selectedDestinationCountry", country);
+      localStorage.setItem("selectedFlightClass", flightClass);
 
-      const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}`;
+      const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}&class=${encodeURIComponent(flightClass)}`;
       window.location.href = targetUrl;
     });
   }
