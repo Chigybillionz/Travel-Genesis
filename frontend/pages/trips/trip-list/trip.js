@@ -207,6 +207,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     }, 4000);
   }
 
+  function updateCounters() {
+    const isCancelled = localStorage.getItem("tripStatus") === "Cancelled" || (activeBooking && activeBooking.status === "Cancelled");
+    const upcomingBadge = document.getElementById("upcoming-badge");
+    const cancelledBadge = document.getElementById("cancelled-badge");
+    
+    if (upcomingBadge) {
+      upcomingBadge.textContent = isCancelled ? "0" : "1";
+    }
+    if (cancelledBadge) {
+      cancelledBadge.textContent = isCancelled ? "1" : "0";
+    }
+  }
+
+  // Initial update of counters
+  updateCounters();
+
   // 4. Cancel Booking Action
   const cancelBtn = document.getElementById("cancelBtn");
   if (cancelBtn) {
@@ -236,6 +252,16 @@ document.addEventListener("DOMContentLoaded", async function () {
           statusBadgeEl.style.color = "#991b1b";
         }
         localStorage.setItem("tripStatus", "Cancelled");
+        
+        // Dynamically update the badges
+        updateCounters();
+        
+        // Hide the card if we are currently on the upcoming tab
+        const upcomingTab = document.querySelector('.tab-btn[data-filter="upcoming"]');
+        if (upcomingTab && upcomingTab.classList.contains("active")) {
+          // Re-trigger the click event on the active tab to re-evaluate the filter logic
+          upcomingTab.click();
+        }
       });
     });
   }
