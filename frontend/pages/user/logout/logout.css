@@ -50,7 +50,7 @@ body {
 }
 
 .btn-cancel {
-    background: var(--color-primary-dark);
+    background: #007A8C;
     color: white;
 }
 

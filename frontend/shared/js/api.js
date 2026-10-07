@@ -3,7 +3,7 @@
  * Connects frontend views to the Express backend API.
  */
 
-const API_BASE_URL = window.TRAVEL_API_URL || 'https://travelgenisis.onrender.com/api';
+const API_BASE_URL = window.TRAVEL_API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api' : 'https://travelgenisis.onrender.com/api');
 
 const TOKEN_KEY = 'tg_auth_token';
 const USER_KEY = 'tg_user';
