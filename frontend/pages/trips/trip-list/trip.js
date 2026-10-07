@@ -145,33 +145,98 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  function showCustomConfirm(msg, onConfirm) {
+    const existing = document.getElementById('custom-confirm-modal');
+    if (existing) existing.remove();
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'custom-confirm-modal';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;transition:opacity 0.3s;';
+    
+    const modal = document.createElement('div');
+    modal.style.cssText = 'background:white;padding:32px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:400px;width:90%;text-align:center;transform:translateY(20px);transition:transform 0.3s;font-family:sans-serif;';
+    
+    modal.innerHTML = `
+      <h3 style="margin:0 0 16px 0;color:#0F172A;font-size:20px;">Cancel Booking</h3>
+      <p style="margin:0 0 24px 0;color:#64748B;font-size:15px;line-height:1.5;">${msg}</p>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button id="cancel-no-btn" style="padding:12px 24px;border:none;background:#F1F5F9;color:#64748B;font-weight:600;border-radius:8px;cursor:pointer;flex:1;font-size:14px;transition:background 0.2s;">No, Keep it</button>
+        <button id="cancel-yes-btn" style="padding:12px 24px;border:none;background:#EF4444;color:white;font-weight:600;border-radius:8px;cursor:pointer;flex:1;font-size:14px;transition:background 0.2s;">Yes, Cancel</button>
+      </div>
+    `;
+    
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+      modal.style.transform = 'translateY(0)';
+    });
+    
+    document.getElementById('cancel-no-btn').onclick = () => {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 300);
+    };
+    
+    document.getElementById('cancel-yes-btn').onclick = () => {
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 300);
+      onConfirm();
+    };
+  }
+
+  function showCustomAlert(msg, isError = false) {
+    const existing = document.getElementById('custom-alert-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'custom-alert-toast';
+    const bg = isError ? '#EF4444' : '#10B981';
+    toast.style.cssText = `position:fixed;top:30px;left:50%;transform:translateX(-50%);background:${bg};color:white;padding:16px 24px;border-radius:8px;font-family:sans-serif;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:9999;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity 0.3s;`;
+    toast.innerHTML = `<span>${msg}</span><button style="background:none;border:none;color:white;font-weight:bold;cursor:pointer;padding:0;font-size:20px;margin-left:8px;">&times;</button>`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.style.opacity = '1');
+    toast.querySelector('button').onclick = () => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    };
+    setTimeout(() => {
+      if (document.body.contains(toast)) {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }
+    }, 4000);
+  }
+
   // 4. Cancel Booking Action
   const cancelBtn = document.getElementById("cancelBtn");
   if (cancelBtn) {
-    cancelBtn.addEventListener("click", async function (e) {
+    cancelBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      const confirmCancel = confirm("Are you sure you want to cancel this booking?");
-      if (!confirmCancel) return;
-
-      if (activeBooking && activeBooking._id && window.API && API.isAuthenticated()) {
-        try {
-          await API.bookings.cancel(activeBooking._id, "Passenger cancellation request");
-          alert("Booking cancelled successfully.");
-        } catch (err) {
-          console.warn("Cancel API error:", err.message);
+      
+      showCustomConfirm("Are you sure you want to cancel this booking? This action cannot be undone.", async () => {
+        if (activeBooking && activeBooking._id && window.API && API.isAuthenticated()) {
+          try {
+            await API.bookings.cancel(activeBooking._id, "Passenger cancellation request");
+            showCustomAlert("Booking cancelled successfully.");
+          } catch (err) {
+            console.warn("Cancel API error:", err.message);
+            showCustomAlert("Error cancelling booking.", true);
+          }
+        } else {
+            showCustomAlert("Booking cancelled successfully.");
         }
-      }
 
-      // Update UI state to cancelled
-      const statusTextEl = document.getElementById("tripStatusText");
-      const statusBadgeEl = document.getElementById("tripStatusBadge");
-      if (statusTextEl) statusTextEl.textContent = "Cancelled";
-      if (statusBadgeEl) {
-        statusBadgeEl.className = "flight-status-badge cancelled";
-        statusBadgeEl.style.background = "#fee2e2";
-        statusBadgeEl.style.color = "#991b1b";
-      }
-      localStorage.setItem("tripStatus", "Cancelled");
+        // Update UI state to cancelled
+        const statusTextEl = document.getElementById("tripStatusText");
+        const statusBadgeEl = document.getElementById("tripStatusBadge");
+        if (statusTextEl) statusTextEl.textContent = "Cancelled";
+        if (statusBadgeEl) {
+          statusBadgeEl.className = "flight-status-badge cancelled";
+          statusBadgeEl.style.background = "#fee2e2";
+          statusBadgeEl.style.color = "#991b1b";
+        }
+        localStorage.setItem("tripStatus", "Cancelled");
+      });
     });
   }
 
