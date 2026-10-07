@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Start payment processing with button animation
-  function startPaymentProcess() {
+  async function startPaymentProcess() {
     const payBtnText = payBtn.querySelector(".pay-btn-text");
     const payBtnLoading = payBtn.querySelector(".pay-btn-loading");
     const payBtnLoader = payBtn.querySelector(".pay-btn-loader");
@@ -28,46 +28,107 @@ document.addEventListener("DOMContentLoaded", () => {
     payBtnProcessing.classList.add("show");
     payBtn.disabled = true;
 
-    // Call backend API to record confirmed booking
-    if (window.API && API.isAuthenticated()) {
-      const chosenFlight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
-      const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14B"]');
-      const totalPrice = Number(localStorage.getItem("totalPrice")) || chosenFlight.price || 1050000; // NGN
-      const user = API.getUser();
-
-      API.bookings
-        .create({
-          flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
-          seatNumber: bookingSeats.join(", "),
-          totalPrice: totalPrice,
-          flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
-          passengerName: user ? user.name : "Traveler",
-          passengerEmail: user ? user.email : "user@travelgenesis.com",
-        })
-        .then((res) => {
-          console.log("✅ Booking confirmed in backend API:", res);
-          if (res && res.data) {
-            localStorage.setItem("lastBooking", JSON.stringify(res.data));
-          }
-        })
-        .catch((err) => {
-          console.warn("Booking API notice:", err.message);
-        });
-    }
-
-    // Simulate processing time - 3 seconds
-    setTimeout(() => {
-      // Hide loader and processing text, show checkmark
+    if (!window.API || !API.isAuthenticated()) {
+      alert("Please login to complete your payment");
+      payBtnText.style.display = "block";
       payBtnLoading.classList.remove("show");
       payBtnLoader.classList.remove("show");
       payBtnProcessing.classList.remove("show");
-      payBtnCheckmark.classList.add("show");
+      payBtn.disabled = false;
+      return;
+    }
 
-      // After checkmark animation, show success screen
-      setTimeout(() => {
-        successScreen.classList.add("active");
-      }, 800);
-    }, 2400);
+    const chosenFlight = JSON.parse(localStorage.getItem("chosenFlight") || "{}");
+    const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14B"]');
+    const totalPrice = Number(localStorage.getItem("totalPrice")) || chosenFlight.price || 1050000;
+    const user = API.getUser();
+
+    try {
+      const initData = await API.request('/payments/initialize', {
+        method: 'POST',
+        body: JSON.stringify({
+          amount: totalPrice,
+          email: user ? user.email : "user@travelgenesis.com",
+          flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
+          seatNumber: bookingSeats.join(", "),
+          flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
+          passengerName: user ? user.name : "Traveler"
+        })
+      });
+
+      if (initData && initData.status && initData.data) {
+        const { publicKey, reference } = initData.data;
+
+        const handler = PaystackPop.setup({
+          key: publicKey,
+          email: user ? user.email : "user@travelgenesis.com",
+          amount: Math.round(totalPrice * 100),
+          ref: reference,
+          onClose: function() {
+            alert('Payment window closed.');
+            payBtnText.style.display = "block";
+            payBtnLoading.classList.remove("show");
+            payBtnLoader.classList.remove("show");
+            payBtnProcessing.classList.remove("show");
+            payBtn.disabled = false;
+          },
+          callback: async function(response) {
+            try {
+              const verifyData = await API.request(`/payments/verify/${response.reference}`, {
+                method: 'GET'
+              });
+
+              if (verifyData && verifyData.status) {
+                // Now create the booking
+                const bookingRes = await API.bookings.create({
+                  flightId: chosenFlight.flightNumber || chosenFlight.destinationCity || "TG-101",
+                  seatNumber: bookingSeats.join(", "),
+                  totalPrice: totalPrice,
+                  flightClass: chosenFlight.flightClass || localStorage.getItem("selectedFlightClass") || "Economy",
+                  passengerName: user ? user.name : "Traveler",
+                  passengerEmail: user ? user.email : "user@travelgenesis.com",
+                });
+
+                if (bookingRes && bookingRes.data) {
+                  localStorage.setItem("lastBooking", JSON.stringify(bookingRes.data));
+                }
+
+                payBtnLoading.classList.remove("show");
+                payBtnLoader.classList.remove("show");
+                payBtnProcessing.classList.remove("show");
+                payBtnCheckmark.classList.add("show");
+
+                setTimeout(() => {
+                  successScreen.classList.add("active");
+                }, 800);
+              } else {
+                alert("Payment verification failed.");
+                payBtnText.style.display = "block";
+                payBtnLoading.classList.remove("show");
+                payBtnLoader.classList.remove("show");
+                payBtnProcessing.classList.remove("show");
+                payBtn.disabled = false;
+              }
+            } catch (err) {
+              alert("Error verifying payment: " + err.message);
+              payBtnText.style.display = "block";
+              payBtnLoading.classList.remove("show");
+              payBtnLoader.classList.remove("show");
+              payBtnProcessing.classList.remove("show");
+              payBtn.disabled = false;
+            }
+          }
+        });
+        handler.openIframe();
+      }
+    } catch (err) {
+      alert("Payment initialization failed: " + err.message);
+      payBtnText.style.display = "block";
+      payBtnLoading.classList.remove("show");
+      payBtnLoader.classList.remove("show");
+      payBtnProcessing.classList.remove("show");
+      payBtn.disabled = false;
+    }
   }
 
   if (viewTicketsBtn) {

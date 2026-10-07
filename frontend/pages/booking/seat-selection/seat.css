@@ -136,6 +136,40 @@ body {
 }
 
 /* =====================================================
+   CABIN TOGGLE
+===================================================== */
+.cabin-toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.cabin-toggle {
+    display: inline-flex;
+    background: #e2e8f0;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.toggle-btn {
+    padding: 8px 24px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background: #ffffff;
+    color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* =====================================================
    AIRPLANE CABIN
 ===================================================== */
 .airplane {

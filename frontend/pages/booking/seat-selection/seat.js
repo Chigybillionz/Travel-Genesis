@@ -114,49 +114,47 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Seat Pagination Logic
+  // Seat Toggle Logic
   const seatRows = document.querySelectorAll(".seat-row");
-  const prevSeatsBtn = document.getElementById("prev-seats-btn");
-  const nextSeatsBtn = document.getElementById("next-seats-btn");
+  const toggleFront = document.getElementById("toggle-front");
+  const toggleBack = document.getElementById("toggle-back");
 
-  let currentSeatPage = 0;
-  const rowsPerPage = 5;
-  const totalPages = Math.ceil(seatRows.length / rowsPerPage);
+  let currentSection = 'front'; // 'front' or 'back'
 
-  function updateSeatPagination() {
+  function updateSeatDisplay() {
     seatRows.forEach((row, index) => {
-      if (index >= currentSeatPage * rowsPerPage && index < (currentSeatPage + 1) * rowsPerPage) {
-        row.style.display = "grid";
+      // Assuming 10 rows total: 0-4 are front, 5-9 are back
+      if (currentSection === 'front') {
+        row.style.display = index < 5 ? "grid" : "none";
       } else {
-        row.style.display = "none";
+        row.style.display = index >= 5 ? "grid" : "none";
       }
     });
 
-    if (prevSeatsBtn) {
-      prevSeatsBtn.style.display = currentSeatPage === 0 ? "none" : "inline-flex";
+    if (toggleFront && toggleBack) {
+      if (currentSection === 'front') {
+        toggleFront.classList.add('active');
+        toggleBack.classList.remove('active');
+      } else {
+        toggleFront.classList.remove('active');
+        toggleBack.classList.add('active');
+      }
     }
-    if (nextSeatsBtn) {
-      nextSeatsBtn.style.display = currentSeatPage >= totalPages - 1 ? "none" : "inline-flex";
-    }
   }
 
-  if (nextSeatsBtn) {
-    nextSeatsBtn.addEventListener("click", () => {
-      if (currentSeatPage < totalPages - 1) {
-        currentSeatPage++;
-        updateSeatPagination();
-      }
+  if (toggleFront) {
+    toggleFront.addEventListener("click", () => {
+      currentSection = 'front';
+      updateSeatDisplay();
     });
   }
 
-  if (prevSeatsBtn) {
-    prevSeatsBtn.addEventListener("click", () => {
-      if (currentSeatPage > 0) {
-        currentSeatPage--;
-        updateSeatPagination();
-      }
+  if (toggleBack) {
+    toggleBack.addEventListener("click", () => {
+      currentSection = 'back';
+      updateSeatDisplay();
     });
   }
 
-  updateSeatPagination();
+  updateSeatDisplay();
 });

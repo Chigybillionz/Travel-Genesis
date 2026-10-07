@@ -15,6 +15,7 @@ const flightRoutes = require('./routes/flightRoutes');
 const destinationRoutes = require('./routes/destinationRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // Load environment variables (from backend root .env)
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -50,6 +51,7 @@ app.use('/api/flights', flightRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);
