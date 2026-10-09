@@ -8,7 +8,7 @@ function getNavInitials(name) {
   return ((first + last).toUpperCase()) || "TG";
 }
 
-// Function to create the shared navigation HTML
+// Function to create the shared navigation HTML with clean semantic routes
 function createSharedNavigation() {
   return `
         <!-- Unified Integrated Header -->
@@ -33,10 +33,10 @@ function createSharedNavigation() {
 
           <div class="header-center">
             <nav class="integrated-nav">
-              <a href="../../booking/home/home.html" data-page="home">Home</a>
-              <a href="../../trips/trip-list/trip.html" data-page="trip">My Trip</a>
-              <a href="../../user/explore/explore.html" data-page="explore">Explore</a>
-              <a href="../../user/profile/profile.html" data-page="profile">Profile</a>
+              <a href="/home" data-page="home">Home</a>
+              <a href="/trips" data-page="trip">My Trip</a>
+              <a href="/explore" data-page="explore">Explore</a>
+              <a href="/profile" data-page="profile">Profile</a>
             </nav>
           </div>
 
@@ -95,54 +95,75 @@ function updateSharedNavUser() {
   }
 }
 
-// Initialize navigation on page load
-function initializeSharedNavigation() {
-  const navContainer = document.getElementById("shared-nav-container");
+// Clean Route Helper
+const APP_ROUTES = {
+  "home": "/home",
+  "trip": "/trips",
+  "trips": "/trips",
+  "explore": "/explore",
+  "profile": "/profile",
+  "search": "/search",
+  "flight": "/flight-details",
+  "flight-details": "/flight-details",
+  "seat": "/seat-selection",
+  "seat-selection": "/seat-selection",
+  "booking-details": "/booking-details",
+  "bookings": "/booking-details",
+  "date-picker": "/date-picker",
+  "datepicker": "/date-picker",
+  "e-ticket": "/e-ticket",
+  "checkout": "/payment",
+  "payment": "/payment",
+  "notifications": "/notifications",
+  "notification": "/notifications",
+  "settings": "/settings",
+  "logout": "/logout",
+  "delete": "/delete-account",
+  "delete-account": "/delete-account",
+  "login": "/login",
+  "signup": "/signup",
+  "splash": "/splash",
+  "onboarding": "/onboarding",
+  "onboarding-2": "/onboarding-2"
+};
 
-  if (navContainer) {
-    navContainer.innerHTML = createSharedNavigation();
-
-    // Update user info & avatar
-    updateSharedNavUser();
-
-    // Set active state based on current page
-    setActiveNavLink();
-
-    // Add click handlers
-    addNavigationHandlers();
-
-    // User info click opens profile
-    const userInfoBtn = document.getElementById("nav-user-info");
-    if (userInfoBtn) {
-      userInfoBtn.addEventListener("click", () => {
-        const curPath = window.location.pathname.toLowerCase();
-        if (curPath.includes("profile.html")) return;
-        navigateToAppPage("user/profile/profile.html");
-      });
-    }
-
-    // Check auth and unread notifications if API is available
-    if (window.API && API.isAuthenticated && API.isAuthenticated()) {
-      API.notifications.getAll().then((res) => {
-        if (res && res.unreadCount > 0) {
-          const dot = document.getElementById("nav-notif-dot");
-          if (dot) dot.style.display = "block";
-        }
-      }).catch(() => {});
-    }
+function navigateToAppPage(targetSubpath) {
+  if (!targetSubpath) return;
+  if (targetSubpath.startsWith("/")) {
+    window.location.href = targetSubpath;
+    return;
   }
+  const clean = targetSubpath
+    .replace(/^(\.\.\/)+/, '')
+    .replace(/^pages\//, '')
+    .replace(/\.html$/, '');
+  const base = clean.split('/').pop().toLowerCase();
+  if (APP_ROUTES[base]) {
+    window.location.href = APP_ROUTES[base];
+    return;
+  }
+  if (APP_ROUTES[clean.toLowerCase()]) {
+    window.location.href = APP_ROUTES[clean.toLowerCase()];
+    return;
+  }
+  window.location.href = "/" + clean;
 }
 
 // Set the active navigation link based on current page
 function setActiveNavLink() {
   const currentPath = window.location.pathname.toLowerCase();
-  
+
   // 1. Update Desktop Header Nav
   const navLinks = document.querySelectorAll(".integrated-nav a");
   navLinks.forEach((link) => {
     link.classList.remove("active");
     const page = link.getAttribute("data-page");
-    if (page && currentPath.includes(page)) {
+    if (
+      (page === "home" && (currentPath === "/home" || currentPath === "/" || currentPath.includes("home"))) ||
+      (page === "trip" && (currentPath === "/trips" || currentPath.includes("trip") || currentPath.includes("e-ticket"))) ||
+      (page === "explore" && (currentPath === "/explore" || currentPath.includes("explore"))) ||
+      (page === "profile" && (currentPath === "/profile" || currentPath.includes("profile") || currentPath.includes("settings")))
+    ) {
       link.classList.add("active");
     }
   });
@@ -152,28 +173,30 @@ function setActiveNavLink() {
   bottomNavLinks.forEach((link) => {
     link.classList.remove("active");
     const text = (link.textContent || "").trim().toLowerCase();
-    
-    if (currentPath.includes("home") && text.includes("home")) {
+    const href = (link.getAttribute("href") || "").toLowerCase();
+
+    if (
+      (text.includes("home") || href.includes("home")) &&
+      (currentPath === "/home" || currentPath === "/" || currentPath.includes("home"))
+    ) {
       link.classList.add("active");
-    } else if (currentPath.includes("trip") && text.includes("trip")) {
+    } else if (
+      (text.includes("trip") || href.includes("trip")) &&
+      (currentPath === "/trips" || currentPath.includes("trip") || currentPath.includes("e-ticket"))
+    ) {
       link.classList.add("active");
-    } else if (currentPath.includes("explore") && text.includes("explore")) {
+    } else if (
+      (text.includes("explore") || href.includes("explore")) &&
+      (currentPath === "/explore" || currentPath.includes("explore"))
+    ) {
       link.classList.add("active");
-    } else if (currentPath.includes("profile") && text.includes("profile")) {
+    } else if (
+      (text.includes("profile") || href.includes("profile")) &&
+      (currentPath === "/profile" || currentPath.includes("profile") || currentPath.includes("settings"))
+    ) {
       link.classList.add("active");
     }
   });
-}
-
-function navigateToAppPage(targetSubpath) {
-  const curPath = window.location.pathname.toLowerCase();
-  const pagesIndex = curPath.indexOf("/pages/");
-  if (pagesIndex !== -1) {
-    const basePath = window.location.pathname.substring(0, pagesIndex + 7);
-    window.location.href = basePath + targetSubpath;
-  } else {
-    window.location.href = "pages/" + targetSubpath;
-  }
 }
 
 // Add click handlers for navigation
@@ -196,14 +219,52 @@ function addNavigationHandlers() {
 
   if (notificationBtn) {
     notificationBtn.addEventListener("click", () => {
-      navigateToAppPage("user/notifications/notification.html");
+      window.location.href = "/notifications";
     });
   }
 
   if (searchBtn) {
     searchBtn.addEventListener("click", () => {
-      navigateToAppPage("booking/search/search.html");
+      window.location.href = "/search";
     });
+  }
+}
+
+// Initialize navigation on page load
+function initializeSharedNavigation() {
+  const navContainer = document.getElementById("shared-nav-container");
+
+  if (navContainer) {
+    navContainer.innerHTML = createSharedNavigation();
+
+    // Update user info & avatar
+    updateSharedNavUser();
+
+    // Set active state based on current page
+    setActiveNavLink();
+
+    // Add click handlers
+    addNavigationHandlers();
+
+    // User info click opens profile
+    const userInfoBtn = document.getElementById("nav-user-info");
+    if (userInfoBtn) {
+      userInfoBtn.addEventListener("click", () => {
+        const curPath = window.location.pathname.toLowerCase();
+        if (curPath === "/profile" || curPath.includes("profile")) return;
+        window.location.href = "/profile";
+      });
+    }
+
+    // Check auth and unread notifications if API is available
+    if (window.API && API.isAuthenticated && API.isAuthenticated()) {
+      API.notifications.getAll().then((res) => {
+        if (res && res.unreadCount > 0) {
+          const dot = document.getElementById("nav-notif-dot");
+          if (dot) dot.style.display = "block";
+        }
+      }).catch(() => {});
+    }
   }
 }
 

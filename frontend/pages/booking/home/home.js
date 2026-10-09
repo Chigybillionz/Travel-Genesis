@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.setItem("selectedDestinationCountry", country);
       localStorage.setItem("selectedFlightClass", flightClass);
 
-      const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}&class=${encodeURIComponent(flightClass)}`;
+      const targetUrl = `/flight-details?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}&class=${encodeURIComponent(flightClass)}`;
       window.location.href = targetUrl;
     });
   }
@@ -165,8 +165,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     notificationBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("notification button clicked! Navigating to search page...");
-      window.location.href = "../../user/notifications/notification.html";
+      console.log("notification button clicked! Navigating to notifications page...");
+      window.location.href = "/notifications";
     });
   }
 });
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("selectedDestinationCity", destination);
         localStorage.setItem("selectedDestinationCountry", country);
 
-        const targetUrl = `../../booking/flight-details/flight.html?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}`;
+        const targetUrl = `/flight-details?to=${encodeURIComponent(destination)}&country=${encodeURIComponent(country)}`;
         window.location.href = targetUrl;
       });
     });
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     myTripNavItem.addEventListener("click", function (e) {
       e.preventDefault();
       console.log("My Trip clicked! Navigating to trip page...");
-      window.location.href = "../../trips/trip-list/trip.html";
+      window.location.href = "/trips";
     });
   }
 });
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
           e.preventDefault();
           e.stopPropagation();
           console.log("Explore clicked! Navigating to explore page...");
-          window.location.href = "../../user/explore/explore.html";
+          window.location.href = "/explore";
         });
       }
     });
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
           e.preventDefault();
           e.stopPropagation();
           console.log("Profile clicked! Navigating to profile page...");
-          window.location.href = "../../user/profile/profile.html";
+          window.location.href = "/profile";
         });
       }
     });
@@ -274,13 +274,13 @@ document.addEventListener("DOMContentLoaded", function () {
           window.scrollTo({ top: 0, behavior: "smooth" });
           break;
         case "my trip":
-          window.location.href = "../../trips/trip-list/trip.html";
+          window.location.href = "/trips";
           break;
         case "explore":
-          window.location.href = "../../user/explore/explore.html";
+          window.location.href = "/explore";
           break;
         case "profile":
-          window.location.href = "../../user/profile/profile.html";
+          window.location.href = "/profile";
           break;
         default:
           console.log("Navigation link not configured:", linkText);

@@ -15,17 +15,78 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.webp': 'image/webp'
+  '.webp': 'image/webp',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf'
 };
 
-const server = http.createServer((req, res) => {
-  let reqPath = decodeURI(req.url.split('?')[0]);
-  if (reqPath === '/' || reqPath === '') {
-    reqPath = '/index.html';
+// Clean route map: Route -> Underlying HTML relative path
+const ROUTE_MAP = {
+  '/': '/index.html',
+  '/splash': '/pages/onboarding/splash/splash.html',
+  '/onboarding': '/pages/onboarding/step-1/onboarding.html',
+  '/onboarding-1': '/pages/onboarding/step-1/onboarding.html',
+  '/onboarding-2': '/pages/onboarding/step-2/onboarding2.html',
+  '/onboarding2': '/pages/onboarding/step-2/onboarding2.html',
+  '/home': '/pages/booking/home/home.html',
+  '/search': '/pages/booking/search/search.html',
+  '/flight': '/pages/booking/flight-details/flight.html',
+  '/flight-details': '/pages/booking/flight-details/flight.html',
+  '/seat': '/pages/booking/seat-selection/seat.html',
+  '/seat-selection': '/pages/booking/seat-selection/seat.html',
+  '/bookings': '/pages/booking/booking-details/bookings.html',
+  '/booking-details': '/pages/booking/booking-details/bookings.html',
+  '/datepicker': '/pages/booking/date-picker/datepicker.html',
+  '/date-picker': '/pages/booking/date-picker/datepicker.html',
+  '/trips': '/pages/trips/trip-list/trip.html',
+  '/trip': '/pages/trips/trip-list/trip.html',
+  '/e-ticket': '/pages/trips/e-ticket/e-ticket.html',
+  '/cancel-booking': '/pages/trips/cancel-booking/cancelbooking.html',
+  '/cancel-confirmation': '/pages/trips/cancel-confirmation/cancelconfirmation.html',
+  '/payment': '/pages/payment/checkout/payment.html',
+  '/checkout': '/pages/payment/checkout/payment.html',
+  '/explore': '/pages/user/explore/explore.html',
+  '/profile': '/pages/user/profile/profile.html',
+  '/notifications': '/pages/user/notifications/notification.html',
+  '/notification': '/pages/user/notifications/notification.html',
+  '/settings': '/pages/user/settings/settings.html',
+  '/logout': '/pages/user/logout/logout.html',
+  '/delete-account': '/pages/user/delete-account/delete.html',
+  '/login': '/pages/auth/login/login.html',
+  '/signup': '/pages/auth/signup/signup.html',
+  '/confirmation': '/pages/auth/confirmation/confirmation.html'
+};
+
+// Reverse map: Old .html URLs -> Clean Route for auto-redirects
+const REDIRECT_MAP = {};
+for (const [route, htmlPath] of Object.entries(ROUTE_MAP)) {
+  if (route !== '/' && htmlPath !== '/index.html') {
+    REDIRECT_MAP[htmlPath.toLowerCase()] = route;
   }
+}
+// Add explicit aliases
+REDIRECT_MAP['/index.html'] = '/';
 
-  const filePath = path.join(root, reqPath);
+// Build recursive asset index for pages & shared to guarantee zero 404s for relative assets
+const assetIndex = new Map();
+function indexDirectory(dir) {
+  if (!fs.existsSync(dir)) return;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      indexDirectory(fullPath);
+    } else {
+      assetIndex.set(entry.name.toLowerCase(), fullPath);
+    }
+  }
+}
+indexDirectory(path.join(root, 'pages'));
+indexDirectory(path.join(root, 'shared'));
+indexDirectory(path.join(root, 'assets'));
 
+function serveFile(filePath, res) {
   // Security check to prevent directory traversal
   if (!filePath.startsWith(root)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
@@ -38,8 +99,8 @@ const server = http.createServer((req, res) => {
       return res.end(`
         <div style="font-family:sans-serif;padding:40px;text-align:center;">
           <h2>404 - Not Found</h2>
-          <p>Cannot find: <code>${reqPath}</code></p>
-          <a href="/">Go to Home</a>
+          <p>Cannot find file: <code>${path.relative(root, filePath)}</code></p>
+          <a href="/home">Go to Home</a>
         </div>
       `);
     }
@@ -55,6 +116,57 @@ const server = http.createServer((req, res) => {
     const stream = fs.createReadStream(filePath);
     stream.pipe(res);
   });
+}
+
+const server = http.createServer((req, res) => {
+  const [rawUrlPath, queryString] = req.url.split('?');
+  const reqPath = decodeURI(rawUrlPath).replace(/\/+$/, '') || '/';
+  const reqPathLower = reqPath.toLowerCase();
+
+  // 1. Redirect legacy .html URLs to modern clean routes
+  if (REDIRECT_MAP[reqPathLower]) {
+    const cleanRoute = REDIRECT_MAP[reqPathLower];
+    const redirectUrl = queryString ? `${cleanRoute}?${queryString}` : cleanRoute;
+    res.writeHead(302, { 'Location': redirectUrl });
+    return res.end();
+  }
+
+  // 2. Check Clean Route mapping
+  if (ROUTE_MAP[reqPathLower]) {
+    const targetHtml = path.join(root, ROUTE_MAP[reqPathLower]);
+    return serveFile(targetHtml, res);
+  }
+
+  // 3. Check direct file existence
+  const directPath = path.join(root, reqPath);
+  if (fs.existsSync(directPath) && fs.statSync(directPath).isFile()) {
+    return serveFile(directPath, res);
+  }
+
+  // 4. Check if appending .html works
+  const htmlPath = directPath + '.html';
+  if (fs.existsSync(htmlPath) && fs.statSync(htmlPath).isFile()) {
+    return serveFile(htmlPath, res);
+  }
+
+  // 5. Smart asset resolution fallback (e.g., /home.css -> /pages/booking/home/home.css)
+  const baseName = path.basename(reqPath).toLowerCase();
+  if (assetIndex.has(baseName)) {
+    const resolvedPath = assetIndex.get(baseName);
+    if (fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
+      return serveFile(resolvedPath, res);
+    }
+  }
+
+  // 6. Not found
+  res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
+  res.end(`
+    <div style="font-family:sans-serif;padding:40px;text-align:center;">
+      <h2>404 - Not Found</h2>
+      <p>Cannot find: <code>${reqPath}</code></p>
+      <a href="/home" style="color:#007A8C;text-decoration:none;font-weight:600;">Go to TravelGenesis Home</a>
+    </div>
+  `);
 });
 
 server.on('error', (err) => {
@@ -69,8 +181,14 @@ server.on('error', (err) => {
 
 server.listen(PORT, () => {
   console.log('====================================================');
-  console.log(`🚀 TravelGenesis Local Server running!`);
+  console.log(`🚀 TravelGenesis Clean-Route Server running!`);
   console.log(`🔗 Local URL: http://localhost:${PORT}`);
+  console.log(`   /           -> Gateway Screen`);
+  console.log(`   /splash     -> Splash Screen`);
+  console.log(`   /home       -> Flight Booking Home`);
+  console.log(`   /trips      -> My Trips`);
+  console.log(`   /explore    -> Explore Destinations`);
+  console.log(`   /profile    -> User Profile`);
   console.log(`Press Ctrl+C to stop.`);
   console.log('====================================================');
 });

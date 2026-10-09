@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Redirect to confirmation page
-            window.location.href = "../../auth/confirmation/confirmation.html";
+            window.location.href = "/confirmation";
           } catch (err) {
             console.error("Registration error:", err);
             showError(err.message || "Failed to create account. Please try again.");

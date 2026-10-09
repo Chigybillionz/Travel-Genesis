@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "../../user/logout/logout.html";
+      window.location.href = "/logout";
     });
   }
 
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (deleteBtn) {
     deleteBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "../../user/delete-account/delete.html";
+      window.location.href = "/delete-account";
     });
   }
 

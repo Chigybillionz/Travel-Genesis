@@ -3,6 +3,42 @@ const path = require('path');
 
 const rootDir = path.resolve(__dirname, '..');
 
+const ROUTE_MAP = {
+  '/': '/index.html',
+  '/splash': '/pages/onboarding/splash/splash.html',
+  '/onboarding': '/pages/onboarding/step-1/onboarding.html',
+  '/onboarding-1': '/pages/onboarding/step-1/onboarding.html',
+  '/onboarding-2': '/pages/onboarding/step-2/onboarding2.html',
+  '/onboarding2': '/pages/onboarding/step-2/onboarding2.html',
+  '/home': '/pages/booking/home/home.html',
+  '/search': '/pages/booking/search/search.html',
+  '/flight': '/pages/booking/flight-details/flight.html',
+  '/flight-details': '/pages/booking/flight-details/flight.html',
+  '/seat': '/pages/booking/seat-selection/seat.html',
+  '/seat-selection': '/pages/booking/seat-selection/seat.html',
+  '/bookings': '/pages/booking/booking-details/bookings.html',
+  '/booking-details': '/pages/booking/booking-details/bookings.html',
+  '/datepicker': '/pages/booking/date-picker/datepicker.html',
+  '/date-picker': '/pages/booking/date-picker/datepicker.html',
+  '/trips': '/pages/trips/trip-list/trip.html',
+  '/trip': '/pages/trips/trip-list/trip.html',
+  '/e-ticket': '/pages/trips/e-ticket/e-ticket.html',
+  '/cancel-booking': '/pages/trips/cancel-booking/cancelbooking.html',
+  '/cancel-confirmation': '/pages/trips/cancel-confirmation/cancelconfirmation.html',
+  '/payment': '/pages/payment/checkout/payment.html',
+  '/checkout': '/pages/payment/checkout/payment.html',
+  '/explore': '/pages/user/explore/explore.html',
+  '/profile': '/pages/user/profile/profile.html',
+  '/notifications': '/pages/user/notifications/notification.html',
+  '/notification': '/pages/user/notifications/notification.html',
+  '/settings': '/pages/user/settings/settings.html',
+  '/logout': '/pages/user/logout/logout.html',
+  '/delete-account': '/pages/user/delete-account/delete.html',
+  '/login': '/pages/auth/login/login.html',
+  '/signup': '/pages/auth/signup/signup.html',
+  '/confirmation': '/pages/auth/confirmation/confirmation.html'
+};
+
 function getFiles(dir, files = []) {
   if (!fs.existsSync(dir)) return files;
   for (const f of fs.readdirSync(dir)) {
@@ -44,12 +80,14 @@ for (const h of htmlFiles) {
   let match;
   while ((match = regex.exec(content)) !== null) {
     const ref = match[1].trim();
-    if (ref.startsWith('http') || ref.startsWith('//') || ref.startsWith('mailto:') || ref.startsWith('tel:') || ref.startsWith('javascript:') || ref.startsWith('data:')) continue;
+    if (ref.startsWith('http') || ref.startsWith('//') || ref.startsWith('mailto:') || ref.startsWith('tel:') || ref.startsWith('javascript:') || ref.startsWith('data:') || ref === '#') continue;
     const cleanRef = ref.split('?')[0].split('#')[0];
     if (!cleanRef) continue;
     
     let resolved;
-    if (cleanRef.startsWith('/')) {
+    if (ROUTE_MAP[cleanRef]) {
+      resolved = path.join(rootDir, ROUTE_MAP[cleanRef]);
+    } else if (cleanRef.startsWith('/')) {
       resolved = path.join(rootDir, cleanRef.replace(/^\//, ''));
     } else {
       resolved = path.resolve(dir, cleanRef);
@@ -70,15 +108,16 @@ for (const j of jsFiles) {
   let match;
   while ((match = regex.exec(content)) !== null) {
     const ref = match[1].trim();
-    if (ref.startsWith('http') || ref.startsWith('//') || ref.startsWith('javascript:')) continue;
+    if (ref.startsWith('http') || ref.startsWith('//') || ref.startsWith('javascript:') || ref === '#') continue;
     const cleanRef = ref.split('?')[0].split('#')[0];
     if (!cleanRef) continue;
     
     let resolved;
-    if (cleanRef.startsWith('/')) {
+    if (ROUTE_MAP[cleanRef]) {
+      resolved = path.join(rootDir, ROUTE_MAP[cleanRef]);
+    } else if (cleanRef.startsWith('/')) {
       resolved = path.join(rootDir, cleanRef.replace(/^\//, ''));
     } else if (j.includes('shared-nav.js')) {
-      // shared-nav.js executes from pages at pages/<cat>/<page>/
       resolved = path.resolve(path.join(rootDir, 'pages/booking/home'), cleanRef);
     } else {
       resolved = path.resolve(dir, cleanRef);

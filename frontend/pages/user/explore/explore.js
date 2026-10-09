@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <p class="card-desc">${item.description}</p>
           <div class="card-tags">${tagsHtml}</div>
-          <a href="../../booking/flight-details/flight.html?to=${encodeURIComponent(item.city)}&country=${encodeURIComponent(item.country)}" class="book-flight-btn">
+          <a href="/flight-details?to=${encodeURIComponent(item.city)}&country=${encodeURIComponent(item.country)}" class="book-flight-btn">
             <span>Book Flight</span>
             <i class="fa-solid fa-arrow-right"></i>
           </a>

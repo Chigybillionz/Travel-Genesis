@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Redirect to home page upon successful authentication
-            window.location.href = "../../booking/home/home.html";
+            window.location.href = "/home";
           } catch (err) {
             console.error("Login error:", err);
             showError(err.message || "Invalid email or password. Please try again.");

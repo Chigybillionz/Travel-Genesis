@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (viewBtn) {
     viewBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "../../trips/e-ticket/e-ticket.html";
+      window.location.href = "/e-ticket";
     });
   }
 
@@ -314,21 +314,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (label.includes("home")) {
       item.addEventListener("click", function (e) {
         e.preventDefault();
-        window.location.href = "../../booking/home/home.html";
+        window.location.href = "/home";
       });
     }
 
     if (label.includes("explore")) {
       item.addEventListener("click", function (e) {
         e.preventDefault();
-        window.location.href = "../../user/explore/explore.html";
+        window.location.href = "/explore";
       });
     }
 
     if (label.includes("profile")) {
       item.addEventListener("click", function (e) {
         e.preventDefault();
-        window.location.href = "../../user/profile/profile.html";
+        window.location.href = "/profile";
       });
     }
   });

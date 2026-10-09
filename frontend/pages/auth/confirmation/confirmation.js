@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 10);
 
       setTimeout(() => {
-        window.location.href = "../../booking/home/home.html";
+        window.location.href = "/home";
       }, 300);
     });
   }

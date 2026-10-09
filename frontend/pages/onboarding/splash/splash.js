@@ -7,6 +7,6 @@ setTimeout(() => {
     container.style.transform = 'scale(0.98)';
   }
   setTimeout(() => {
-    window.location.href = "../../onboarding/step-1/onboarding.html";
+    window.location.href = "/onboarding";
   }, 400);
 }, 2200);
