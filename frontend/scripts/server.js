@@ -21,7 +21,7 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf'
 };
 
-// Clean route map: Route -> Underlying HTML relative path
+// Canonical clean routes mapping: Route -> Underlying HTML file relative to root
 const ROUTE_MAP = {
   '/': '/index.html',
   '/splash': '/pages/onboarding/splash/splash.html',
@@ -58,17 +58,35 @@ const ROUTE_MAP = {
   '/confirmation': '/pages/auth/confirmation/confirmation.html'
 };
 
-// Reverse map: Old .html URLs -> Clean Route for auto-redirects
-const REDIRECT_MAP = {};
-for (const [route, htmlPath] of Object.entries(ROUTE_MAP)) {
-  if (route !== '/' && htmlPath !== '/index.html') {
-    REDIRECT_MAP[htmlPath.toLowerCase()] = route;
-  }
-}
-// Add explicit aliases
-REDIRECT_MAP['/index.html'] = '/';
+// Map any HTML file name to its canonical clean route for automatic redirection
+const HTML_FILE_TO_ROUTE = {
+  'index.html': '/',
+  'splash.html': '/splash',
+  'onboarding.html': '/onboarding',
+  'onboarding2.html': '/onboarding-2',
+  'home.html': '/home',
+  'search.html': '/search',
+  'flight.html': '/flight-details',
+  'seat.html': '/seat-selection',
+  'bookings.html': '/booking-details',
+  'datepicker.html': '/date-picker',
+  'trip.html': '/trips',
+  'e-ticket.html': '/e-ticket',
+  'cancelbooking.html': '/cancel-booking',
+  'cancelconfirmation.html': '/cancel-confirmation',
+  'payment.html': '/payment',
+  'explore.html': '/explore',
+  'profile.html': '/profile',
+  'notification.html': '/notifications',
+  'settings.html': '/settings',
+  'logout.html': '/logout',
+  'delete.html': '/delete-account',
+  'login.html': '/login',
+  'signup.html': '/signup',
+  'confirmation.html': '/confirmation'
+};
 
-// Build recursive asset index for pages & shared to guarantee zero 404s for relative assets
+// Build recursive asset index for pages, shared & assets to guarantee zero 404s for relative assets
 const assetIndex = new Map();
 function indexDirectory(dir) {
   if (!fs.existsSync(dir)) return;
@@ -123,34 +141,45 @@ const server = http.createServer((req, res) => {
   const reqPath = decodeURI(rawUrlPath).replace(/\/+$/, '') || '/';
   const reqPathLower = reqPath.toLowerCase();
 
-  // 1. Redirect legacy .html URLs to modern clean routes
-  if (REDIRECT_MAP[reqPathLower]) {
-    const cleanRoute = REDIRECT_MAP[reqPathLower];
-    const redirectUrl = queryString ? `${cleanRoute}?${queryString}` : cleanRoute;
-    res.writeHead(302, { 'Location': redirectUrl });
-    return res.end();
-  }
-
-  // 2. Check Clean Route mapping
+  // 1. Check Canonical Clean Route mapping first (serves clean route immediately)
   if (ROUTE_MAP[reqPathLower]) {
     const targetHtml = path.join(root, ROUTE_MAP[reqPathLower]);
     return serveFile(targetHtml, res);
   }
 
-  // 3. Check direct file existence
+  // 2. Redirect ANY path ending in an HTML file (e.g. /login/login.html, /user/profile/profile.html, /booking/home/home.html)
+  const baseName = path.basename(reqPathLower);
+  if (baseName.endsWith('.html') && HTML_FILE_TO_ROUTE[baseName]) {
+    const cleanRoute = HTML_FILE_TO_ROUTE[baseName];
+    const redirectUrl = queryString ? `${cleanRoute}?${queryString}` : cleanRoute;
+    res.writeHead(302, { 'Location': redirectUrl });
+    return res.end();
+  }
+
+  // 3. Redirect nested subpaths without .html (e.g. /booking/home -> /home, /user/profile -> /profile, /auth/login -> /login)
+  const segments = reqPathLower.split('/').filter(Boolean);
+  if (segments.length > 1) {
+    const lastSegment = '/' + segments[segments.length - 1];
+    if (ROUTE_MAP[lastSegment]) {
+      const redirectUrl = queryString ? `${lastSegment}?${queryString}` : lastSegment;
+      res.writeHead(302, { 'Location': redirectUrl });
+      return res.end();
+    }
+  }
+
+  // 4. Check direct file existence (for static assets like /shared/css/..., /assets/...)
   const directPath = path.join(root, reqPath);
   if (fs.existsSync(directPath) && fs.statSync(directPath).isFile()) {
     return serveFile(directPath, res);
   }
 
-  // 4. Check if appending .html works
+  // 5. Check if appending .html works
   const htmlPath = directPath + '.html';
   if (fs.existsSync(htmlPath) && fs.statSync(htmlPath).isFile()) {
     return serveFile(htmlPath, res);
   }
 
-  // 5. Smart asset resolution fallback (e.g., /home.css -> /pages/booking/home/home.css)
-  const baseName = path.basename(reqPath).toLowerCase();
+  // 6. Smart asset resolution fallback (e.g., /home.css -> /pages/booking/home/home.css)
   if (assetIndex.has(baseName)) {
     const resolvedPath = assetIndex.get(baseName);
     if (fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
@@ -158,7 +187,7 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  // 6. Not found
+  // 7. Not found
   res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
   res.end(`
     <div style="font-family:sans-serif;padding:40px;text-align:center;">
@@ -189,6 +218,8 @@ server.listen(PORT, () => {
   console.log(`   /trips      -> My Trips`);
   console.log(`   /explore    -> Explore Destinations`);
   console.log(`   /profile    -> User Profile`);
+  console.log(`   /login      -> Login`);
+  console.log(`   /signup     -> Sign Up`);
   console.log(`Press Ctrl+C to stop.`);
   console.log('====================================================');
 });
