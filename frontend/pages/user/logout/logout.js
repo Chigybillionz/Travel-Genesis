@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const cancelbtn = document.getElementById("btn-cancelbtn-cancel");
   if (cancelbtn) {
     cancelbtn.addEventListener("click", function () {
-      console.log("returning to home page...");
+      console.log("returning to profile page...");
 
-      window.location.href = "../../user/profile/profile.html";
+      window.location.href = "/profile";
     });
   }
 });
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         localStorage.clear();
       }
-      window.location.href = "../../auth/login/login.html";
+      window.location.href = "/login";
     });
   }
 });

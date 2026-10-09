@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (returnHome && returnHome.tagName === "BUTTON") {
     returnHome.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "../../booking/home/home.html";
+      window.location.href = "/home";
     });
   }
 

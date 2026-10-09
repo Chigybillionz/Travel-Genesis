@@ -156,14 +156,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (viewTicketsBtn) {
     viewTicketsBtn.addEventListener("click", () => {
-      window.location.href = "../../trips/e-ticket/e-ticket.html";
+      window.location.href = "/e-ticket";
     });
   }
 
   // Handle Back to Home button
   if (backHomeBtn) {
     backHomeBtn.addEventListener("click", () => {
-      window.location.href = "../../booking/home/home.html";
+      window.location.href = "/home";
     });
   }
 });
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (backButton) {
     backButton.addEventListener("click", function () {
       console.log("Back button clicked! Navigating to bookings page...");
-      window.location.href = "../../booking/booking-details/bookings.html";
+      window.location.href = "/booking-details";
     });
   }
 });

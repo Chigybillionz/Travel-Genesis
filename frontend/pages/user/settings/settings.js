@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (document.referrer) {
         history.back();
       } else {
-        window.location.href = "../profile/profile.html";
+        window.location.href = "/profile";
       }
     });
   }

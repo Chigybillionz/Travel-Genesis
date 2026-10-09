@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             <i class="fa-solid fa-plane-slash" style="font-size:36px;color:#94A3B8;margin-bottom:12px;"></i>
             <h3 style="color:#0F172A;font-size:18px;margin-bottom:6px;">No ${filter} trips found</h3>
             <p style="font-size:14px;max-width:320px;margin:0 auto 16px;">You don't have any ${filter} journeys in this category.</p>
-            <a href="../../booking/home/home.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#007A8C;color:#fff;border-radius:9999px;text-decoration:none;font-weight:700;font-size:14px;">Explore Flights</a>
+            <a href="/home" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#007A8C;color:#fff;border-radius:9999px;text-decoration:none;font-weight:700;font-size:14px;">Explore Flights</a>
           `;
           listColumn.appendChild(emptyState);
         }

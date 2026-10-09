@@ -1,9 +1,9 @@
 //button for no
 document.getElementById("btn-cancel").addEventListener("click", function () {
-  window.location.href = "../../trips/trip-list/trip.html";
+  window.location.href = "/trips";
 });
 
 // button for yes cancel booking
 document.getElementById("btn-yes").addEventListener("click", function () {
-  window.location.href = "../../trips/cancel-confirmation/cancelconfirmation.html";
+  window.location.href = "/cancel-confirmation";
 });

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const backButton = document.querySelector("#back-btn");
   if (backButton) {
     backButton.addEventListener("click", function () {
-      window.location.href = "../../booking/home/home.html";
+      window.location.href = "/home";
     });
   }
 
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (destinationCard) {
     destinationCard.style.cursor = "pointer";
     destinationCard.addEventListener("click", () => {
-      window.location.href = `../../booking/flight-details/flight.html?to=London&country=UK`;
+      window.location.href = `/flight-details?to=London&country=UK`;
     });
   }
 
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (img) img.src = first.image;
 
           destinationCard.onclick = () => {
-            window.location.href = `../../booking/flight-details/flight.html?to=${encodeURIComponent(first.city)}&country=${encodeURIComponent(first.country)}`;
+            window.location.href = `/flight-details?to=${encodeURIComponent(first.city)}&country=${encodeURIComponent(first.country)}`;
           };
         }
       } else {
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const query = searchInput.value.trim();
         if (query) {
-          window.location.href = `../../booking/flight-details/flight.html?to=${encodeURIComponent(query)}`;
+          window.location.href = `/flight-details?to=${encodeURIComponent(query)}`;
         }
       }
     });

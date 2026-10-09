@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Back button
   if (backBtn) {
     backBtn.addEventListener("click", () => {
-      window.location.href = "../../booking/date-picker/datepicker.html";
+      window.location.href = "/date-picker";
     });
   }
 
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("bookingSeats", JSON.stringify(selectedSeats));
       localStorage.setItem("totalPrice", totalPrice);
 
-      window.location.href = "../../booking/booking-details/bookings.html";
+      window.location.href = "/booking-details";
     });
   }
 

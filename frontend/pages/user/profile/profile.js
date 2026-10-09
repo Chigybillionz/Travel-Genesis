@@ -165,7 +165,7 @@ function renderRecentTrips(bookings) {
       const status = (b.status || "Confirmed").toLowerCase();
 
       return `
-        <a href="../../trips/trip-list/trip.html" class="trip-row">
+        <a href="/trips" class="trip-row">
           <span class="menu-icon teal"><i class="fa-solid fa-plane"></i></span>
           <span class="trip-route">
             <strong>${escapeHtml(origin)} → ${escapeHtml(destCode || destCity)} · ${escapeHtml(destCity)}</strong>

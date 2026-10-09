@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (bookingbackbtn) {
     bookingbackbtn.addEventListener("click", () => {
-      window.location.href = "../../booking/seat-selection/seat.html";
+      window.location.href = "/seat-selection";
     });
   }
 });
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Back button - navigate to previous page
   if (continuebtn) {
     continuebtn.addEventListener("click", () => {
-      window.location.href = "../../payment/checkout/payment.html";
+      window.location.href = "/payment";
     });
   }
 });
@@ -44,9 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const editdate = document.getElementById("edit-date");
   if (editdate) {
     editdate.addEventListener("click", function () {
-      console.log("returning to splash page...");
+      console.log("returning to date picker...");
 
-      window.location.href = "../../booking/date-picker/datepicker.html";
+      window.location.href = "/date-picker";
     });
   }
 });
@@ -57,9 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const editloaction = document.getElementById("edit-loacation");
   if (editloaction) {
     editloaction.addEventListener("click", function () {
-      console.log("returning to splash page...");
+      console.log("returning to flight details...");
 
-      window.location.href = "../../booking/flight-details/flight.html";
+      window.location.href = "/flight-details";
     });
   }
 });
@@ -70,9 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const editseat = document.getElementById("edit-seat");
   if (editseat) {
     editseat.addEventListener("click", function () {
-      console.log("returning to splash page...");
+      console.log("returning to seat selection...");
 
-      window.location.href = "../../booking/seat-selection/seat.html";
+      window.location.href = "/seat-selection";
     });
   }
 });
@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const editClass = document.getElementById("edit-class");
   if (editClass) {
     editClass.addEventListener("click", () => {
-      window.location.href = "../../booking/flight-details/flight.html";
+      window.location.href = "/flight-details";
     });
   }
 

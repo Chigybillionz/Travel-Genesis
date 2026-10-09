@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelbtn.addEventListener("click", function () {
       console.log("returning to profile...");
 
-      window.location.href = "../../user/profile/profile.html";
+      window.location.href = "/profile";
     });
   }
 });
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutbtn.addEventListener("click", function () {
       console.log("returning to splash page...");
 
-      window.location.href = "../../onboarding/splash/splash.html";
+      window.location.href = "/splash";
     });
   }
 });

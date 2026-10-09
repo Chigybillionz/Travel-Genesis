@@ -312,18 +312,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const linkText = link.textContent.trim().toLowerCase();
 
       if (
-        (currentPage.includes("home.html") && linkText === "home") ||
-        (currentPage.includes("trip.html") && linkText === "my trip") ||
-        (currentPage.includes("explore.html") && linkText === "explore") ||
-        (currentPage.includes("profile.html") && linkText === "profile")
+        ((currentPage === "/home" || currentPage === "/" || currentPage.includes("home")) && linkText === "home") ||
+        ((currentPage === "/trips" || currentPage.includes("trip")) && linkText === "my trip") ||
+        ((currentPage === "/explore" || currentPage.includes("explore")) && linkText === "explore") ||
+        ((currentPage === "/profile" || currentPage.includes("profile")) && linkText === "profile")
       ) {
         link.classList.add("active");
       }
     });
 
     bottomNavLinks.forEach((link) => {
-      const href = link.getAttribute("href");
-      if (href && currentPage.includes(href.split("/").pop())) {
+      const href = (link.getAttribute("href") || "").toLowerCase();
+      if (
+        ((currentPage === "/home" || currentPage === "/" || currentPage.includes("home")) && href.includes("home")) ||
+        ((currentPage === "/trips" || currentPage.includes("trip")) && href.includes("trip")) ||
+        ((currentPage === "/explore" || currentPage.includes("explore")) && href.includes("explore")) ||
+        ((currentPage === "/profile" || currentPage.includes("profile")) && href.includes("profile"))
+      ) {
         link.classList.add("active");
       }
     });

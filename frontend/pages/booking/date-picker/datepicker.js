@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (backBtn) {
     backBtn.addEventListener("click", () => {
-      window.location.href = "../../booking/flight-details/flight.html";
+      window.location.href = "/flight-details";
     });
   }
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       localStorage.setItem("bookingDate", selectedFullDateStr);
-      window.location.href = "../../booking/seat-selection/seat.html";
+      window.location.href = "/seat-selection";
     });
   }
 

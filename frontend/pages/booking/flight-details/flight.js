@@ -884,12 +884,12 @@ function continueFlight() {
   localStorage.setItem("selectedFlightClass", currentFlightClass);
 
   console.log("Chosen flight:", chosen);
-  window.location.href = "../../booking/date-picker/datepicker.html";
+  window.location.href = "/date-picker";
 }
 
 // Back to Home
 function goBack() {
-  window.location.href = "../../booking/home/home.html";
+  window.location.href = "/home";
 }
 
 // Initialization on DOMContentLoaded

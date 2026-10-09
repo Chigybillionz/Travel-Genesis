@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (document.referrer && document.referrer.includes(window.location.host)) {
         window.history.back();
       } else {
-        window.location.href = "../../booking/home/home.html";
+        window.location.href = "/home";
       }
     });
   }
@@ -168,9 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         emptyTitle.textContent = "There's nothing here";
         emptyDesc.textContent = "You're all caught up with your latest travel updates.";
+        emptyActionBtn.textContent = "";
         emptyActionBtn.innerHTML = '<i class="fa-solid fa-plane-departure"></i> <span>Explore Flights</span>';
         emptyActionBtn.onclick = null;
-        emptyActionBtn.href = "../../booking/home/home.html";
+        emptyActionBtn.href = "/home";
       }
       return;
     }
@@ -193,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Action link if booking
       const actionHtml =
         item.type === "booking"
-          ? `<a href="../../trips/trip-list/trip.html" class="notif-action-link" title="Open My Trips"><i class="fa-solid fa-suitcase"></i> View Trip</a>`
+          ? `<a href="/trips" class="notif-action-link" title="Open My Trips"><i class="fa-solid fa-suitcase"></i> View Trip</a>`
           : "";
 
       card.innerHTML = `
@@ -307,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     emptyTitle.textContent = "Sign In Required";
     emptyDesc.textContent = "Sign in to your Travel Genesis account to view flight updates, trip confirmations, and notices.";
     emptyActionBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> <span>Sign In</span>';
-    emptyActionBtn.href = "../../auth/login/login.html";
+    emptyActionBtn.href = "/login";
     if (markAllBtn) markAllBtn.disabled = true;
   }
 
