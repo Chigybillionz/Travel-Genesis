@@ -91,4 +91,30 @@ document.addEventListener("DOMContentLoaded", function () {
       if (seatVal) seatVal.textContent = seatSelect.value;
     });
   }
+
+  // Danger Zone Actions with Top Confirmation Island
+  const logoutBtn = document.getElementById("settings-logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (typeof window.triggerTopLogout === "function") {
+        window.triggerTopLogout();
+      } else {
+        window.location.href = "/logout";
+      }
+    });
+  }
+
+  const deleteBtn = document.getElementById("settings-delete-btn");
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (typeof window.triggerTopDeleteAccount === "function") {
+        window.triggerTopDeleteAccount();
+      } else {
+        window.location.href = "/delete-account";
+      }
+    });
+  }
 });
+

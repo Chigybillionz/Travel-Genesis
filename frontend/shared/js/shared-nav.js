@@ -281,3 +281,244 @@ window.addEventListener("tg:user-updated", () => {
 
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", initializeSharedNavigation);
+
+// ==========================================================================
+// DYNAMIC TOP CONFIRMATION ISLAND MODAL
+// Drops down smoothly from the top of the viewport for confirmation actions
+// ==========================================================================
+
+function ensureTopConfirmIslandDOM() {
+  let backdrop = document.getElementById("top-confirm-backdrop");
+  let island = document.getElementById("top-confirm-island");
+
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "top-confirm-backdrop";
+    backdrop.className = "top-confirm-backdrop";
+    document.body.appendChild(backdrop);
+  }
+
+  if (!island) {
+    island = document.createElement("div");
+    island.id = "top-confirm-island";
+    island.className = "top-confirm-island";
+    island.setAttribute("role", "dialog");
+    island.setAttribute("aria-modal", "true");
+    document.body.appendChild(island);
+  }
+
+  return { backdrop, island };
+}
+
+function showTopConfirmIsland(options = {}) {
+  const {
+    iconType = "danger", // 'danger' | 'warning' | 'primary'
+    iconSvg = "",
+    title = "Are you sure?",
+    description = "Please confirm this action.",
+    cancelText = "Cancel",
+    confirmText = "Confirm",
+    confirmBtnClass = "",
+    onConfirm = null,
+    onCancel = null
+  } = options;
+
+  const { backdrop, island } = ensureTopConfirmIslandDOM();
+
+  let iconHtml = iconSvg;
+  if (!iconHtml) {
+    if (iconType === "danger") {
+      // Sleek door/exit logout SVG
+      iconHtml = `
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+      `;
+    } else if (iconType === "warning") {
+      // Alert SVG
+      iconHtml = `
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      `;
+    } else {
+      // Primary / info SVG
+      iconHtml = `
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      `;
+    }
+  }
+
+  island.innerHTML = `
+    <div class="island-drag-notch"></div>
+    <div class="island-main">
+      <div class="island-icon-box ${iconType}">
+        ${iconHtml}
+      </div>
+      <div class="island-text">
+        <h3 class="island-title">${title}</h3>
+        <p class="island-desc">${description}</p>
+      </div>
+    </div>
+    <div class="island-actions">
+      <button type="button" class="island-btn island-btn-cancel" id="top-confirm-cancel-btn">
+        ${cancelText}
+      </button>
+      <button type="button" class="island-btn island-btn-confirm ${confirmBtnClass}" id="top-confirm-action-btn">
+        <span>${confirmText}</span>
+      </button>
+    </div>
+  `;
+
+  function closeModal() {
+    backdrop.classList.remove("show");
+    island.classList.remove("show");
+    document.removeEventListener("keydown", handleKeydown);
+  }
+
+  function handleKeydown(e) {
+    if (e.key === "Escape") {
+      closeModal();
+      if (typeof onCancel === "function") onCancel();
+    }
+  }
+
+  // Animate in via requestAnimationFrame
+  requestAnimationFrame(() => {
+    backdrop.classList.add("show");
+    island.classList.add("show");
+  });
+
+  const cancelBtn = document.getElementById("top-confirm-cancel-btn");
+  const confirmBtn = document.getElementById("top-confirm-action-btn");
+
+  if (cancelBtn) {
+    cancelBtn.onclick = (e) => {
+      e.preventDefault();
+      closeModal();
+      if (typeof onCancel === "function") onCancel();
+    };
+  }
+
+  backdrop.onclick = (e) => {
+    if (e.target === backdrop) {
+      closeModal();
+      if (typeof onCancel === "function") onCancel();
+    }
+  };
+
+  if (confirmBtn) {
+    confirmBtn.onclick = async (e) => {
+      e.preventDefault();
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = "0.8";
+      confirmBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+          <path d="M12 2a10 10 0 0 1 10 10"></path>
+        </svg>
+        <span>Processing...</span>
+      `;
+      if (typeof onConfirm === "function") {
+        try {
+          await onConfirm();
+        } catch (err) {
+          console.error("Top confirm error:", err);
+          closeModal();
+        }
+      } else {
+        closeModal();
+      }
+    };
+  }
+
+  document.addEventListener("keydown", handleKeydown);
+}
+
+function triggerTopLogout() {
+  showTopConfirmIsland({
+    iconType: "danger",
+    title: "Sign out of Travel Genesis?",
+    description: "You'll be returned to the sign-in screen. Your active bookings and trips will remain safely synced to your account.",
+    cancelText: "Stay Logged In",
+    confirmText: "Log Out",
+    onConfirm: async () => {
+      try {
+        if (window.API && typeof API.logout === "function") {
+          API.logout();
+        } else {
+          localStorage.clear();
+        }
+      } catch (err) {
+        localStorage.clear();
+      }
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 250);
+    }
+  });
+}
+
+function triggerTopDeleteAccount() {
+  showTopConfirmIsland({
+    iconType: "danger",
+    iconSvg: `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+    `,
+    title: "Delete Account Permanently?",
+    description: "All your personal profile data, travel history, and e-tickets will be removed permanently. This action cannot be reversed.",
+    cancelText: "Keep Account",
+    confirmText: "Delete Account",
+    onConfirm: async () => {
+      try {
+        if (window.API && typeof API.logout === "function") {
+          API.logout();
+        } else {
+          localStorage.clear();
+        }
+      } catch (err) {
+        localStorage.clear();
+      }
+      setTimeout(() => {
+        window.location.href = "/splash";
+      }, 300);
+    }
+  });
+}
+
+// Global click interception for Logout & Delete buttons across any screen
+document.addEventListener("click", function (e) {
+  const logoutTarget = e.target.closest('#logoutBtn, a[href="/logout"], a[href$="logout.html"], .trigger-logout');
+  if (logoutTarget) {
+    e.preventDefault();
+    e.stopPropagation();
+    triggerTopLogout();
+    return;
+  }
+
+  const deleteTarget = e.target.closest('#deleteAccountBtn, a[href="/delete-account"], a[href$="delete.html"], .trigger-delete-account');
+  if (deleteTarget) {
+    e.preventDefault();
+    e.stopPropagation();
+    triggerTopDeleteAccount();
+    return;
+  }
+});
+
+// Expose utilities on window
+window.showTopConfirmIsland = showTopConfirmIsland;
+window.triggerTopLogout = triggerTopLogout;
+window.triggerTopDeleteAccount = triggerTopDeleteAccount;

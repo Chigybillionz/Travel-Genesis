@@ -206,21 +206,29 @@ document.addEventListener("DOMContentLoaded", function () {
   loadTravelStats();
   loadUnreadCount();
 
-  // Logout
+  // Logout with Dynamic Top Confirmation Island
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "/logout";
+      if (typeof window.triggerTopLogout === "function") {
+        window.triggerTopLogout();
+      } else {
+        window.location.href = "/logout";
+      }
     });
   }
 
-  // Delete account
+  // Delete account with Dynamic Top Confirmation Island
   const deleteBtn = document.getElementById("deleteAccountBtn");
   if (deleteBtn) {
     deleteBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = "/delete-account";
+      if (typeof window.triggerTopDeleteAccount === "function") {
+        window.triggerTopDeleteAccount();
+      } else {
+        window.location.href = "/delete-account";
+      }
     });
   }
 
