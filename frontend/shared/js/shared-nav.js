@@ -122,10 +122,13 @@ const APP_ROUTES = {
   "delete-account": "/delete-account",
   "login": "/login",
   "signup": "/signup",
+  "forgot-password": "/forgot-password",
+  "forgot": "/forgot-password",
   "splash": "/splash",
   "onboarding": "/onboarding",
   "onboarding-2": "/onboarding-2"
 };
+
 
 function navigateToAppPage(targetSubpath) {
   if (!targetSubpath) return;

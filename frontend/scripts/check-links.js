@@ -36,8 +36,10 @@ const ROUTE_MAP = {
   '/delete-account': '/pages/user/delete-account/delete.html',
   '/login': '/pages/auth/login/login.html',
   '/signup': '/pages/auth/signup/signup.html',
-  '/confirmation': '/pages/auth/confirmation/confirmation.html'
+  '/confirmation': '/pages/auth/confirmation/confirmation.html',
+  '/forgot-password': '/pages/auth/forgot-password/forgot-password.html'
 };
+
 
 function getFiles(dir, files = []) {
   if (!fs.existsSync(dir)) return files;

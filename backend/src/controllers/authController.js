@@ -69,8 +69,37 @@ const getMe = async (req, res) => {
   });
 };
 
+// @desc    Request password reset OTP code
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const result = await authService.forgotPassword({ email });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Verify OTP and reset password
+// @route   POST /api/auth/reset-password
+// @access  Public
+const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const result = await authService.resetPassword({ email, otp, newPassword });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  forgotPassword,
+  resetPassword,
 };
+

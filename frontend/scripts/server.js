@@ -55,7 +55,8 @@ const ROUTE_MAP = {
   '/delete-account': '/pages/user/delete-account/delete.html',
   '/login': '/pages/auth/login/login.html',
   '/signup': '/pages/auth/signup/signup.html',
-  '/confirmation': '/pages/auth/confirmation/confirmation.html'
+  '/confirmation': '/pages/auth/confirmation/confirmation.html',
+  '/forgot-password': '/pages/auth/forgot-password/forgot-password.html'
 };
 
 // Map any HTML file name to its canonical clean route for automatic redirection
@@ -83,8 +84,10 @@ const HTML_FILE_TO_ROUTE = {
   'delete.html': '/delete-account',
   'login.html': '/login',
   'signup.html': '/signup',
-  'confirmation.html': '/confirmation'
+  'confirmation.html': '/confirmation',
+  'forgot-password.html': '/forgot-password'
 };
+
 
 // Build recursive asset index for pages, shared & assets to guarantee zero 404s for relative assets
 const assetIndex = new Map();

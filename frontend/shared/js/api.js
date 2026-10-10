@@ -150,7 +150,22 @@ const API = {
         method: 'GET',
       });
     },
+
+    async forgotPassword({ email }) {
+      return await API.request('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+    },
+
+    async resetPassword({ email, otp, newPassword }) {
+      return await API.request('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ email, otp, newPassword }),
+      });
+    },
   },
+
 
   // ==========================================
   // User Profile Endpoints (Phase 2)

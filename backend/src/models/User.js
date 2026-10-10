@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'Lagos, Nigeria',
     },
+    resetPasswordOtp: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
