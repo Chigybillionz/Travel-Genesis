@@ -322,6 +322,7 @@ function showTopConfirmIsland(options = {}) {
     cancelText = "Cancel",
     confirmText = "Confirm",
     confirmBtnClass = "",
+    requiredKeyword = "", // Optional keyword requirement (e.g., 'DELETE')
     onConfirm = null,
     onCancel = null
   } = options;
@@ -371,11 +372,19 @@ function showTopConfirmIsland(options = {}) {
         <p class="island-desc">${description}</p>
       </div>
     </div>
+    ${requiredKeyword ? `
+      <div class="island-confirm-input-wrap">
+        <label class="island-input-instruction" for="islandKeywordInput">
+          To confirm, type <strong class="island-input-keyword">"${requiredKeyword}"</strong> below:
+        </label>
+        <input type="text" id="islandKeywordInput" class="island-text-input" placeholder='Type "${requiredKeyword}"' autocomplete="off" spellcheck="false" />
+      </div>
+    ` : ''}
     <div class="island-actions">
       <button type="button" class="island-btn island-btn-cancel" id="top-confirm-cancel-btn">
         ${cancelText}
       </button>
-      <button type="button" class="island-btn island-btn-confirm ${confirmBtnClass}" id="top-confirm-action-btn">
+      <button type="button" class="island-btn island-btn-confirm ${confirmBtnClass}" id="top-confirm-action-btn" ${requiredKeyword ? 'disabled' : ''}>
         <span>${confirmText}</span>
       </button>
     </div>
@@ -402,6 +411,26 @@ function showTopConfirmIsland(options = {}) {
 
   const cancelBtn = document.getElementById("top-confirm-cancel-btn");
   const confirmBtn = document.getElementById("top-confirm-action-btn");
+  const keywordInput = document.getElementById("islandKeywordInput");
+
+  // Keyword validation handling (e.g. typing "DELETE")
+  if (requiredKeyword && keywordInput && confirmBtn) {
+    confirmBtn.disabled = true;
+    keywordInput.addEventListener("input", () => {
+      const isMatch = keywordInput.value.trim() === requiredKeyword;
+      confirmBtn.disabled = !isMatch;
+      if (isMatch) {
+        keywordInput.classList.add("matched");
+      } else {
+        keywordInput.classList.remove("matched");
+      }
+    });
+
+    // Auto-focus input when the island appears
+    setTimeout(() => {
+      keywordInput.focus();
+    }, 180);
+  }
 
   if (cancelBtn) {
     cancelBtn.onclick = (e) => {
@@ -485,6 +514,7 @@ function triggerTopDeleteAccount() {
     description: "All your personal profile data, travel history, and e-tickets will be removed permanently. This action cannot be reversed.",
     cancelText: "Keep Account",
     confirmText: "Delete Account",
+    requiredKeyword: "DELETE",
     onConfirm: async () => {
       try {
         if (window.API && typeof API.logout === "function") {
@@ -501,6 +531,7 @@ function triggerTopDeleteAccount() {
     }
   });
 }
+
 
 // Global click interception for Logout & Delete buttons across any screen
 document.addEventListener("click", function (e) {

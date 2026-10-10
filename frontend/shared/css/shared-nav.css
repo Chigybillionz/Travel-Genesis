@@ -423,6 +423,14 @@ body {
     transform: translateY(1px);
 }
 
+.island-btn-confirm:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
+    pointer-events: none;
+}
+
 .island-btn-confirm.primary {
     background: linear-gradient(135deg, #007A8C 0%, #005F6E 100%);
     box-shadow: 0 4px 14px rgba(0, 122, 140, 0.35);
@@ -431,6 +439,62 @@ body {
 .island-btn-confirm.primary:hover {
     box-shadow: 0 6px 18px rgba(0, 122, 140, 0.45);
 }
+
+/* Keyword confirmation input (e.g. Type "DELETE") */
+.island-confirm-input-wrap {
+    margin: 0 0 16px 0;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 12px 14px;
+}
+
+.island-input-instruction {
+    display: block;
+    font-size: 12.5px;
+    color: #64748b;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.island-input-keyword {
+    display: inline-block;
+    font-weight: 800;
+    font-family: 'Outfit', monospace;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 2px 7px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.island-text-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Outfit', -apple-system, sans-serif;
+    font-weight: 600;
+    color: #0f172a;
+    background: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+    box-sizing: border-box;
+}
+
+.island-text-input:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.island-text-input.matched {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    color: #047857;
+}
+
 
 @keyframes spin {
     from { transform: rotate(0deg); }

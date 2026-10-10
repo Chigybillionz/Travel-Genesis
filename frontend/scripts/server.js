@@ -147,8 +147,20 @@ const server = http.createServer((req, res) => {
   // 1. Check Canonical Clean Route mapping first (serves clean route immediately)
   if (ROUTE_MAP[reqPathLower]) {
     const targetHtml = path.join(root, ROUTE_MAP[reqPathLower]);
-    return serveFile(targetHtml, res);
+    if (fs.existsSync(targetHtml)) {
+      return serveFile(targetHtml, res);
+    }
   }
+
+  // 1b. Dynamic Clean Route Discovery (matches any clean route like /forgot-password to pages/**/forgot-password.html)
+  const routeHtmlName = reqPathLower.replace(/^\/+/, '') + '.html';
+  if (assetIndex.has(routeHtmlName)) {
+    const resolvedHtml = assetIndex.get(routeHtmlName);
+    if (fs.existsSync(resolvedHtml)) {
+      return serveFile(resolvedHtml, res);
+    }
+  }
+
 
   // 2. Redirect ANY path ending in an HTML file (e.g. /login/login.html, /user/profile/profile.html, /booking/home/home.html)
   const baseName = path.basename(reqPathLower);
