@@ -113,11 +113,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const resendBtn = document.getElementById("resendOtpBtn");
 
-  const devBanner = document.getElementById("devOtpBanner");
-  const devCodeEl = document.getElementById("devOtpCode");
-  const devAutofillBtn = document.getElementById("devAutofillBtn");
-
   const otpBoxes = Array.from(document.querySelectorAll(".otp-box"));
+
 
   // Check if email was pre-filled via query params (e.g. from login page)
   const urlParams = new URLSearchParams(window.location.search);
@@ -191,14 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
         currentEmail = email;
         if (sentEmailDisplay) sentEmailDisplay.textContent = email;
 
-        // Show dev OTP hint if available
-        if (res && res.otp) {
-          if (devBanner && devCodeEl) {
-            devCodeEl.textContent = res.otp;
-            devBanner.style.display = "flex";
-          }
-        }
-
         // Transition to Step 2
         step1.style.display = "none";
         step2.style.display = "block";
@@ -213,7 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (otpBoxes[0]) otpBoxes[0].focus();
 
         startResendCountdown();
-        showToast("Verification code sent! Please check your inbox.", "success");
+        showToast("Verification code sent to your email inbox! Please check your email.", "success");
+
       } catch (err) {
         console.error("Forgot password request error:", err);
         showToast(err.message || "Could not find an account with this email.");
@@ -291,22 +281,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Dev Autofill Button
-  if (devAutofillBtn) {
-    devAutofillBtn.addEventListener("click", () => {
-      const code = devCodeEl ? devCodeEl.textContent.trim() : "";
-      if (!code) return;
-      code.split("").forEach((char, i) => {
-        if (otpBoxes[i]) {
-          otpBoxes[i].value = char;
-          otpBoxes[i].classList.add("filled");
-        }
-      });
-      if (newPassInput) newPassInput.focus();
-    });
-  }
-
   // Resend OTP Action
+
   if (resendBtn) {
     resendBtn.addEventListener("click", async () => {
       if (!currentEmail || resendBtn.disabled) return;

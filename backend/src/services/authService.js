@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const emailService = require('./emailService');
 
 const generateToken = (id) => {
   return jwt.sign(
@@ -92,15 +93,25 @@ const forgotPassword = async ({ email }) => {
   user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
 
-  console.log(`[AUTH] ✈️ Password Reset Code for ${user.email}: ${otp}`);
+  // Send verification email to the user's registered inbox
+  try {
+    await emailService.sendPasswordResetEmail({
+      to: user.email,
+      name: user.name,
+      otp,
+    });
+  } catch (emailErr) {
+    console.error(`[AUTH] Failed to send email to ${user.email}:`, emailErr.message);
+    throw new Error('Unable to send verification email. Please verify your email configuration.');
+  }
 
   return {
     success: true,
-    message: 'Verification code sent successfully to your email',
+    message: 'Verification code sent successfully to your registered email address.',
     email: user.email,
-    otp, // Included for development convenience
   };
 };
+
 
 const resetPassword = async ({ email, otp, newPassword }) => {
   if (!email || !otp || !newPassword) {
