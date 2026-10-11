@@ -1,20 +1,24 @@
 /**
  * Travel Genesis - My Trips Page Handler
- * Connects to live /api/bookings/my-trips and renders dynamic booking cards
+ * Connects to live /api/bookings/my-trips, manages real-time tab counts,
+ * and dynamically filters upcoming vs cancelled trips.
  */
 
 document.addEventListener("DOMContentLoaded", async function () {
-  let activeBooking = null;
+  let allTrips = [];
+  let currentFilter = "upcoming";
 
   // 1. Sync passenger name from logged-in user
   const passengerNameElement = document.getElementById("passengerName");
+  let loggedInUserName = "Solo";
+  const cachedName = localStorage.getItem("userFullName") || localStorage.getItem("userName");
+  if (cachedName) {
+    loggedInUserName = cachedName;
+  } else if (window.API && typeof window.API.getUser === "function" && window.API.getUser()) {
+    loggedInUserName = window.API.getUser().name || "Solo";
+  }
   if (passengerNameElement) {
-    const cachedName = localStorage.getItem("userFullName") || localStorage.getItem("userName");
-    if (cachedName) {
-      passengerNameElement.textContent = cachedName;
-    } else if (window.API && window.API.getUser()) {
-      passengerNameElement.textContent = window.API.getUser().name;
-    }
+    passengerNameElement.textContent = loggedInUserName;
   }
 
   // 2. Load trips from Backend API or LocalStorage
@@ -23,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   async function loadTripsData() {
     let trips = [];
 
-    if (window.API && API.isAuthenticated()) {
+    if (window.API && typeof API.isAuthenticated === "function" && API.isAuthenticated()) {
       try {
         const response = await API.bookings.getMyTrips();
         if (response && response.data && response.data.length > 0) {
@@ -35,298 +39,510 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     }
 
-    // Fallback: check localStorage for last confirmed booking or chosen flight
+    // Fallback: check localStorage for last confirmed booking
     if (trips.length === 0) {
       const lastBookingRaw = localStorage.getItem("lastBooking");
       if (lastBookingRaw) {
         try {
-          trips.push(JSON.parse(lastBookingRaw));
+          const parsed = JSON.parse(lastBookingRaw);
+          if (parsed) trips.push(parsed);
         } catch (e) {}
       }
     }
 
-    if (trips.length > 0) {
-      activeBooking = trips[0];
-      renderBookingCard(activeBooking);
-    } else {
-      // Check chosen flight from flight selection
+    // Fallback 2: check chosen flight from booking wizard
+    if (trips.length === 0) {
       const chosenFlightRaw = localStorage.getItem("chosenFlight");
       if (chosenFlightRaw) {
         try {
           const flight = JSON.parse(chosenFlightRaw);
-          const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14B"]');
+          const bookingSeats = JSON.parse(localStorage.getItem("bookingSeats") || '["14A"]');
           const bookingDate = localStorage.getItem("bookingDate") || "Wed, 03 Dec 2025";
-          renderCustomFlight(flight, bookingSeats, bookingDate);
+          const mockBooking = {
+            _id: "local-mock-1",
+            bookingReference: `TG-${flight.destinationCity ? flight.destinationCity.substring(0, 3).toUpperCase() : "BK"}-8892`,
+            flightId: flight,
+            seatNumber: bookingSeats.join(", "),
+            flightClass: localStorage.getItem("bookingCabinClass") || "Economy",
+            passengerName: loggedInUserName,
+            date: bookingDate,
+            status: "Confirmed",
+          };
+          trips.push(mockBooking);
         } catch (e) {}
       }
     }
-  }
 
-  function renderBookingCard(booking) {
-    const flight = booking.flightId || {};
-    const refEl = document.getElementById("tripBookingRef");
-    const airlineEl = document.getElementById("tripAirline");
-    const flightNoEl = document.getElementById("tripFlightNo");
-    const depTimeEl = document.getElementById("tripDepTime");
-    const depDateEl = document.getElementById("tripDepDate");
-    const durationEl = document.getElementById("tripDuration");
-    const arrCityEl = document.getElementById("tripArrCity");
-    const arrCodeEl = document.getElementById("tripArrCode");
-    const arrAirportEl = document.getElementById("tripArrAirport");
-    const arrTimeEl = document.getElementById("tripArrTime");
-    const arrDateEl = document.getElementById("tripArrDate");
-    const seatEl = document.getElementById("tripSeat");
-    const statusTextEl = document.getElementById("tripStatusText");
-    const statusBadgeEl = document.getElementById("tripStatusBadge");
-
-    if (refEl) refEl.textContent = `Booking Ref: #${booking.bookingReference || "TG-CONFIRMED"}`;
-    if (airlineEl) airlineEl.textContent = flight.airline || "British Airways";
-    if (flightNoEl) flightNoEl.textContent = `Flight ${flight.flightNumber || "TG-101"} • Scheduled`;
-    if (durationEl) durationEl.textContent = flight.duration || "6h 30m";
-    if (seatEl) seatEl.textContent = `${booking.seatNumber || "14A"} (Confirmed)`;
-
-    if (flight.destination) {
-      if (arrCityEl) arrCityEl.textContent = flight.destination.city || "London";
-      if (arrCodeEl) arrCodeEl.textContent = flight.destination.code || "LHR";
-      if (arrAirportEl) arrAirportEl.textContent = flight.destination.airport || `${flight.destination.city} Airport`;
+    // Sync status with session storage if previously cancelled
+    const sessionTripStatus = localStorage.getItem("tripStatus");
+    if (sessionTripStatus === "Cancelled" && trips.length > 0) {
+      // Mark matching or first trip as Cancelled if not already
+      trips[0].status = "Cancelled";
     }
 
-    if (booking.status === "Cancelled") {
-      if (statusTextEl) statusTextEl.textContent = "Cancelled";
-      if (statusBadgeEl) {
-        statusBadgeEl.className = "flight-status-badge cancelled";
-        statusBadgeEl.style.background = "#fee2e2";
-        statusBadgeEl.style.color = "#991b1b";
-      }
+    allTrips = trips;
+
+    // Update tab badges and render active filter view
+    updateCounters();
+    renderTripsForFilter(currentFilter);
+  }
+
+  // 3. Dynamic Tab Counters
+  function updateCounters() {
+    const upcomingTrips = allTrips.filter((t) => t.status !== "Cancelled" && t.status !== "Completed");
+    const completedTrips = allTrips.filter((t) => t.status === "Completed");
+    const cancelledTrips = allTrips.filter((t) => t.status === "Cancelled");
+
+    const upcomingBadge = document.getElementById("upcomingCount");
+    const completedBadge = document.getElementById("completedCount");
+    const cancelledBadge = document.getElementById("cancelledCount");
+
+    if (upcomingBadge) upcomingBadge.textContent = upcomingTrips.length;
+    if (completedBadge) completedBadge.textContent = completedTrips.length;
+    if (cancelledBadge) cancelledBadge.textContent = cancelledTrips.length;
+  }
+
+  // 4. Render Trips Based on Filter (Upcoming / Completed / Cancelled)
+  function renderTripsForFilter(filter) {
+    const container = document.getElementById("tripsListContainer");
+    if (!container) return;
+
+    let filtered = [];
+    if (filter === "upcoming") {
+      filtered = allTrips.filter((t) => t.status !== "Cancelled" && t.status !== "Completed");
+    } else if (filter === "completed") {
+      filtered = allTrips.filter((t) => t.status === "Completed");
+    } else if (filter === "cancelled") {
+      filtered = allTrips.filter((t) => t.status === "Cancelled");
+    }
+
+    // Clean container contents
+    container.innerHTML = "";
+
+    if (filtered.length === 0) {
+      renderEmptyState(container, filter);
+      return;
+    }
+
+    // Render cards for filtered items
+    filtered.forEach((booking) => {
+      const cardWrapper = document.createElement("div");
+      cardWrapper.className = "trip-card-block";
+      cardWrapper.style.marginBottom = "24px";
+      cardWrapper.innerHTML = buildTripCardHTML(booking, filter);
+      container.appendChild(cardWrapper);
+    });
+
+    // Bind event handlers for cards in this view
+    bindCardActions(container, filtered);
+  }
+
+  // 5. Build HTML markup for a single trip card
+  function buildTripCardHTML(booking, filter) {
+    const flight = booking.flightId || booking.flight || {};
+    const dest = flight.destination || {};
+
+    const bookingRef = booking.bookingReference || "TG-CONFIRMED";
+    const airline = flight.airline || "British Airways";
+    const flightNo = flight.flightNumber || "TG-101";
+    const duration = flight.duration || "6h 30m";
+    const seatNumber = booking.seatNumber || "14A";
+    const cabinClass = booking.flightClass || "Economy";
+    const passenger = booking.passengerName || loggedInUserName;
+
+    const depCity = flight.originCity || "Lagos";
+    const depCode = flight.originCode || "LOS";
+    const depAirport = flight.originAirport || "Murtala Muhammed Intl";
+    const depTime = flight.depTime || "07:30 AM";
+    const depDate = booking.departureDate || booking.date || "Wed, 03 Dec 2025";
+
+    const arrCity = dest.city || flight.destinationCity || "London";
+    const arrCode = dest.code || flight.destinationCode || "LHR";
+    const arrAirport = dest.airport || flight.destinationAirport || `${arrCity} Airport`;
+    const arrTime = flight.arrTime || "02:15 PM";
+    const arrDate = booking.arrivalDate || booking.date || "Wed, 03 Dec 2025";
+
+    const isCancelled = booking.status === "Cancelled";
+    const isCompleted = booking.status === "Completed";
+
+    let sectionTitle = "Upcoming Flight";
+    if (isCancelled) sectionTitle = "Cancelled Flight";
+    if (isCompleted) sectionTitle = "Completed Journey";
+
+    let statusBadgeHTML = "";
+    if (isCancelled) {
+      statusBadgeHTML = `
+        <div class="flight-status-badge cancelled" style="background:#FEE2E2;color:#991B1B;">
+          <i class="fa-solid fa-ban"></i>
+          <span>Cancelled</span>
+        </div>
+      `;
+    } else if (isCompleted) {
+      statusBadgeHTML = `
+        <div class="flight-status-badge completed" style="background:#E0F2FE;color:#0369A1;">
+          <i class="fa-solid fa-plane-arrival"></i>
+          <span>Completed</span>
+        </div>
+      `;
     } else {
-      if (statusTextEl) statusTextEl.textContent = "Confirmed • On Schedule";
-      if (statusBadgeEl) {
-        statusBadgeEl.className = "flight-status-badge confirmed";
-        statusBadgeEl.style.background = "#dcfce7";
-        statusBadgeEl.style.color = "#166534";
-      }
+      statusBadgeHTML = `
+        <div class="flight-status-badge confirmed">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Confirmed • On Schedule</span>
+        </div>
+      `;
     }
+
+    let footerNoticeHTML = "";
+    let footerButtonsHTML = "";
+
+    if (isCancelled) {
+      footerNoticeHTML = `
+        <div class="checkin-notice">
+          <i class="fa-solid fa-circle-xmark" style="color:#EF4444;"></i>
+          <span style="color:#991B1B;font-weight:600;">This booking was cancelled.</span>
+        </div>
+      `;
+      footerButtonsHTML = `
+        <div class="footer-buttons">
+          <button class="action-btn ticket-btn" data-booking-ref="${bookingRef}">
+            <i class="fa-solid fa-ticket"></i>
+            <span>View E-Ticket</span>
+          </button>
+        </div>
+      `;
+    } else {
+      footerNoticeHTML = `
+        <div class="checkin-notice">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Online check-in opens 24 hours prior to departure.</span>
+        </div>
+      `;
+      footerButtonsHTML = `
+        <div class="footer-buttons">
+          <button class="action-btn cancel-btn" data-booking-id="${booking._id || ''}" data-booking-ref="${bookingRef}">
+            <i class="fa-solid fa-xmark"></i>
+            <span>Cancel Booking</span>
+          </button>
+          <button class="action-btn ticket-btn" data-booking-ref="${bookingRef}">
+            <i class="fa-solid fa-ticket"></i>
+            <span>View E-Ticket</span>
+          </button>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="section-label" style="margin-bottom:12px;">
+        <span>${sectionTitle}</span>
+        <span class="ref-tag">Booking Ref: #${bookingRef}</span>
+      </div>
+
+      <article class="desktop-flight-card" style="display:block;">
+        <div class="flight-card-header">
+          <div class="airline-brand">
+            <div class="airline-logo-box">
+              <i class="fa-solid fa-plane-departure"></i>
+            </div>
+            <div class="airline-meta">
+              <div class="airline-name">${airline}</div>
+              <div class="flight-no">Flight ${flightNo} • Scheduled</div>
+            </div>
+          </div>
+          ${statusBadgeHTML}
+        </div>
+
+        <!-- Route Visualizer -->
+        <div class="flight-route-body">
+          <div class="route-node departure-node">
+            <div class="city-name">${depCity}</div>
+            <div class="airport-code">${depCode}</div>
+            <div class="airport-detail">${depAirport}</div>
+            <div class="schedule-time">
+              <i class="fa-regular fa-clock"></i>
+              <span>${depTime}</span>
+            </div>
+            <div class="schedule-date">${depDate}</div>
+          </div>
+
+          <div class="flight-path-center">
+            <div class="flight-duration">${duration}</div>
+            <div class="path-visual">
+              <div class="path-dot start"></div>
+              <div class="path-line">
+                <div class="path-track"></div>
+                <div class="plane-marker">
+                  <i class="fa-solid fa-plane"></i>
+                </div>
+              </div>
+              <div class="path-dot end"></div>
+            </div>
+            <div class="flight-type-pill">Non-Stop • Direct</div>
+          </div>
+
+          <div class="route-node arrival-node">
+            <div class="city-name">${arrCity}</div>
+            <div class="airport-code">${arrCode}</div>
+            <div class="airport-detail">${arrAirport}</div>
+            <div class="schedule-time">
+              <i class="fa-regular fa-clock"></i>
+              <span>${arrTime}</span>
+            </div>
+            <div class="schedule-date">${arrDate}</div>
+          </div>
+        </div>
+
+        <!-- Passenger & Seat Detail Bar -->
+        <div class="flight-amenities-bar">
+          <div class="amenity-item">
+            <i class="fa-solid fa-user"></i>
+            <div>
+              <div class="amenity-label">Passenger</div>
+              <div class="amenity-value">${passenger}</div>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <i class="fa-solid fa-couch"></i>
+            <div>
+              <div class="amenity-label">Seat Assigned</div>
+              <div class="amenity-value">${seatNumber} (${cabinClass})</div>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <i class="fa-solid fa-suitcase-rolling"></i>
+            <div>
+              <div class="amenity-label">Baggage</div>
+              <div class="amenity-value">2 × 23kg Included</div>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <i class="fa-solid fa-door-open"></i>
+            <div>
+              <div class="amenity-label">Terminal / Gate</div>
+              <div class="amenity-value">Terminal 2 • Gate B14</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Action Footer -->
+        <div class="flight-card-footer">
+          ${footerNoticeHTML}
+          ${footerButtonsHTML}
+        </div>
+      </article>
+    `;
   }
 
-  function renderCustomFlight(flight, seats, dateStr) {
-    const refEl = document.getElementById("tripBookingRef");
-    const airlineEl = document.getElementById("tripAirline");
-    const flightNoEl = document.getElementById("tripFlightNo");
-    const depTimeEl = document.getElementById("tripDepTime");
-    const depDateEl = document.getElementById("tripDepDate");
-    const durationEl = document.getElementById("tripDuration");
-    const arrCityEl = document.getElementById("tripArrCity");
-    const arrCodeEl = document.getElementById("tripArrCode");
-    const arrAirportEl = document.getElementById("tripArrAirport");
-    const arrTimeEl = document.getElementById("tripArrTime");
-    const arrDateEl = document.getElementById("tripArrDate");
-    const seatEl = document.getElementById("tripSeat");
+  // 6. Bind event listeners for dynamically rendered cards
+  function bindCardActions(container, currentBookings) {
+    // Ticket buttons
+    const ticketBtns = container.querySelectorAll(".ticket-btn");
+    ticketBtns.forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const ref = this.getAttribute("data-booking-ref");
+        const found = allTrips.find((t) => (t.bookingReference || "TG-CONFIRMED") === ref);
+        if (found) {
+          localStorage.setItem("lastBooking", JSON.stringify(found));
+        }
+        window.location.href = "/e-ticket";
+      });
+    });
 
-    if (refEl) refEl.textContent = `Booking Ref: #TG-${flight.destinationCity ? flight.destinationCity.substring(0,3).toUpperCase() : "BK"}-8892`;
-    if (airlineEl) airlineEl.textContent = flight.airline || "Qatar Airways";
-    if (flightNoEl) flightNoEl.textContent = `Flight ${flight.flightNumber || "QA-204"} • Scheduled`;
-    if (depTimeEl && flight.depTime) depTimeEl.textContent = flight.depTime;
-    if (depDateEl && dateStr) depDateEl.textContent = dateStr;
-    if (durationEl && flight.duration) durationEl.textContent = flight.duration;
-    if (arrCityEl && flight.destinationCity) arrCityEl.textContent = flight.destinationCity;
-    if (arrCodeEl && flight.destinationCode) arrCodeEl.textContent = flight.destinationCode;
-    if (arrAirportEl && flight.destinationCity) arrAirportEl.textContent = `${flight.destinationCity} International Airport`;
-    if (arrTimeEl && flight.arrTime) arrTimeEl.textContent = flight.arrTime;
-    if (arrDateEl && dateStr) arrDateEl.textContent = dateStr;
-    if (seatEl && seats) seatEl.textContent = `${seats.join(", ")} (Window)`;
-  }
+    // Cancel buttons
+    const cancelBtns = container.querySelectorAll(".cancel-btn");
+    cancelBtns.forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const bookingId = this.getAttribute("data-booking-id");
+        const bookingRef = this.getAttribute("data-booking-ref");
 
-  // 3. View Ticket Navigation
-  const viewBtn = document.getElementById("viewBtn");
-  if (viewBtn) {
-    viewBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = "/e-ticket";
+        const targetBooking = allTrips.find(
+          (t) => (t._id && t._id === bookingId) || (t.bookingReference || "TG-CONFIRMED") === bookingRef
+        );
+
+        if (!targetBooking) return;
+
+        showCustomConfirm(
+          "Are you sure you want to cancel this booking? This flight will be moved to your Cancelled tab.",
+          async () => {
+            // Call API if real backend booking
+            if (targetBooking._id && !targetBooking._id.startsWith("local-") && window.API && API.isAuthenticated()) {
+              try {
+                await API.bookings.cancel(targetBooking._id, "Passenger cancellation request");
+                showCustomAlert("Booking cancelled successfully.");
+              } catch (err) {
+                console.warn("Cancel API error:", err.message);
+                showCustomAlert("Booking marked as cancelled locally.");
+              }
+            } else {
+              showCustomAlert("Booking cancelled successfully.");
+            }
+
+            // 1. Mark status as Cancelled
+            targetBooking.status = "Cancelled";
+            localStorage.setItem("tripStatus", "Cancelled");
+
+            // Also update localStorage lastBooking if matching
+            try {
+              const lb = JSON.parse(localStorage.getItem("lastBooking") || "null");
+              if (lb && (lb._id === targetBooking._id || lb.bookingReference === targetBooking.bookingReference)) {
+                lb.status = "Cancelled";
+                localStorage.setItem("lastBooking", JSON.stringify(lb));
+              }
+            } catch (_) {}
+
+            // 2. Immediately update the tab counts
+            updateCounters();
+
+            // 3. Re-render the current filter (it moves away immediately from Upcoming!)
+            renderTripsForFilter(currentFilter);
+          }
+        );
+      });
     });
   }
 
-  function showCustomConfirm(msg, onConfirm) {
-    const existing = document.getElementById('custom-confirm-modal');
-    if (existing) existing.remove();
-    
-    const overlay = document.createElement('div');
-    overlay.id = 'custom-confirm-modal';
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;transition:opacity 0.3s;';
-    
-    const modal = document.createElement('div');
-    modal.style.cssText = 'background:white;padding:32px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:400px;width:90%;text-align:center;transform:translateY(20px);transition:transform 0.3s;font-family:sans-serif;';
-    
-    modal.innerHTML = `
-      <h3 style="margin:0 0 16px 0;color:#0F172A;font-size:20px;">Cancel Booking</h3>
-      <p style="margin:0 0 24px 0;color:#64748B;font-size:15px;line-height:1.5;">${msg}</p>
-      <div style="display:flex;gap:12px;justify-content:center;">
-        <button id="cancel-no-btn" style="padding:12px 24px;border:none;background:#F1F5F9;color:#64748B;font-weight:600;border-radius:8px;cursor:pointer;flex:1;font-size:14px;transition:background 0.2s;">No, Keep it</button>
-        <button id="cancel-yes-btn" style="padding:12px 24px;border:none;background:#EF4444;color:white;font-weight:600;border-radius:8px;cursor:pointer;flex:1;font-size:14px;transition:background 0.2s;">Yes, Cancel</button>
+  // 7. Render Empty States
+  function renderEmptyState(container, filter) {
+    let icon = "fa-plane-departure";
+    let title = "No Upcoming Trips";
+    let desc = "You don't have any upcoming flights scheduled. Ready to take off on your next journey?";
+    let btnText = "Book New Flight";
+    let btnHref = "/home";
+
+    if (filter === "cancelled") {
+      icon = "fa-calendar-xmark";
+      title = "No Cancelled Trips";
+      desc = "You have no cancelled bookings on record. All your journeys remain active or completed.";
+      btnText = "Explore Destinations";
+      btnHref = "/explore";
+    } else if (filter === "completed") {
+      icon = "fa-passport";
+      title = "No Completed Trips Yet";
+      desc = "Your flight history will be cataloged here once your travels conclude.";
+      btnText = "Plan Your Trip";
+      btnHref = "/home";
+    }
+
+    container.innerHTML = `
+      <div id="trips-empty-state" style="background:#FFFFFF;border-radius:20px;padding:56px 28px;text-align:center;color:#64748B;border:1.5px dashed #CBD5E1;box-shadow:0 4px 20px rgba(0,0,0,0.03);margin-top:8px;">
+        <div style="width:72px;height:72px;background:rgba(0,122,140,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#007A8C;font-size:28px;">
+          <i class="fa-solid ${icon}"></i>
+        </div>
+        <h3 style="color:#0F172A;font-size:22px;font-weight:700;margin-bottom:8px;">${title}</h3>
+        <p style="font-size:15px;max-width:380px;margin:0 auto 24px;line-height:1.5;color:#64748B;">${desc}</p>
+        <a href="${btnHref}" class="book-new-btn" style="display:inline-flex;margin:0 auto;text-decoration:none;">
+          <i class="fa-solid fa-plus"></i>
+          <span>${btnText}</span>
+        </a>
       </div>
     `;
-    
+  }
+
+  // 8. Custom Modal & Alerts
+  function showCustomConfirm(msg, onConfirm) {
+    const existing = document.getElementById("custom-confirm-modal");
+    if (existing) existing.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "custom-confirm-modal";
+    overlay.style.cssText =
+      "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;transition:opacity 0.25s;";
+
+    const modal = document.createElement("div");
+    modal.style.cssText =
+      "background:white;padding:32px 28px;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,0.15);max-width:420px;width:90%;text-align:center;transform:scale(0.95);transition:transform 0.25s;font-family:'Plus Jakarta Sans',sans-serif;";
+
+    modal.innerHTML = `
+      <div style="width:60px;height:60px;background:#FEE2E2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#EF4444;font-size:24px;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 style="margin:0 0 10px 0;color:#0F172A;font-size:20px;font-weight:800;">Cancel Flight Booking?</h3>
+      <p style="margin:0 0 24px 0;color:#64748B;font-size:14.5px;line-height:1.5;">${msg}</p>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button id="cancel-no-btn" style="padding:12px 20px;border:none;background:#F1F5F9;color:#475569;font-weight:700;border-radius:12px;cursor:pointer;flex:1;font-size:14px;transition:background 0.2s;">Keep Booking</button>
+        <button id="cancel-yes-btn" style="padding:12px 20px;border:none;background:#EF4444;color:white;font-weight:700;border-radius:12px;cursor:pointer;flex:1;font-size:14px;box-shadow:0 4px 12px rgba(239,68,68,0.3);transition:background 0.2s;">Yes, Cancel</button>
+      </div>
+    `;
+
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
-    
+
     requestAnimationFrame(() => {
-      overlay.style.opacity = '1';
-      modal.style.transform = 'translateY(0)';
+      overlay.style.opacity = "1";
+      modal.style.transform = "scale(1)";
     });
-    
-    document.getElementById('cancel-no-btn').onclick = () => {
-      overlay.style.opacity = '0';
-      setTimeout(() => overlay.remove(), 300);
+
+    document.getElementById("cancel-no-btn").onclick = () => {
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.remove(), 250);
     };
-    
-    document.getElementById('cancel-yes-btn').onclick = () => {
-      overlay.style.opacity = '0';
-      setTimeout(() => overlay.remove(), 300);
+
+    document.getElementById("cancel-yes-btn").onclick = () => {
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.remove(), 250);
       onConfirm();
     };
   }
 
   function showCustomAlert(msg, isError = false) {
-    const existing = document.getElementById('custom-alert-toast');
+    const existing = document.getElementById("custom-alert-toast");
     if (existing) existing.remove();
-    const toast = document.createElement('div');
-    toast.id = 'custom-alert-toast';
-    const bg = isError ? '#EF4444' : '#10B981';
-    toast.style.cssText = `position:fixed;top:30px;left:50%;transform:translateX(-50%);background:${bg};color:white;padding:16px 24px;border-radius:8px;font-family:sans-serif;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:9999;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity 0.3s;`;
-    toast.innerHTML = `<span>${msg}</span><button style="background:none;border:none;color:white;font-weight:bold;cursor:pointer;padding:0;font-size:20px;margin-left:8px;">&times;</button>`;
+
+    const toast = document.createElement("div");
+    toast.id = "custom-alert-toast";
+    const bg = isError ? "#EF4444" : "#10B981";
+    toast.style.cssText = `position:fixed;top:30px;left:50%;transform:translateX(-50%);background:${bg};color:white;padding:14px 22px;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.18);z-index:9999;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity 0.25s;`;
+    toast.innerHTML = `
+      <i class="fa-solid ${isError ? "fa-circle-xmark" : "fa-circle-check"}"></i>
+      <span>${msg}</span>
+      <button style="background:none;border:none;color:white;font-weight:bold;cursor:pointer;padding:0;font-size:18px;margin-left:8px;">&times;</button>
+    `;
     document.body.appendChild(toast);
-    requestAnimationFrame(() => toast.style.opacity = '1');
-    toast.querySelector('button').onclick = () => {
-      toast.style.opacity = '0';
-      setTimeout(() => toast.remove(), 300);
+    requestAnimationFrame(() => (toast.style.opacity = "1"));
+
+    toast.querySelector("button").onclick = () => {
+      toast.style.opacity = "0";
+      setTimeout(() => toast.remove(), 250);
     };
+
     setTimeout(() => {
       if (document.body.contains(toast)) {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 250);
       }
-    }, 4000);
+    }, 3500);
   }
 
-  function updateCounters() {
-    const isCancelled = localStorage.getItem("tripStatus") === "Cancelled" || (activeBooking && activeBooking.status === "Cancelled");
-    const upcomingBadge = document.getElementById("upcoming-badge");
-    const cancelledBadge = document.getElementById("cancelled-badge");
-    
-    if (upcomingBadge) {
-      upcomingBadge.textContent = isCancelled ? "0" : "1";
-    }
-    if (cancelledBadge) {
-      cancelledBadge.textContent = isCancelled ? "1" : "0";
-    }
-  }
-
-  // Initial update of counters
-  updateCounters();
-
-  // 4. Cancel Booking Action
-  const cancelBtn = document.getElementById("cancelBtn");
-  if (cancelBtn) {
-    cancelBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      
-      showCustomConfirm("Are you sure you want to cancel this booking? This action cannot be undone.", async () => {
-        if (activeBooking && activeBooking._id && window.API && API.isAuthenticated()) {
-          try {
-            await API.bookings.cancel(activeBooking._id, "Passenger cancellation request");
-            showCustomAlert("Booking cancelled successfully.");
-          } catch (err) {
-            console.warn("Cancel API error:", err.message);
-            showCustomAlert("Error cancelling booking.", true);
-          }
-        } else {
-            showCustomAlert("Booking cancelled successfully.");
-        }
-
-        // Update UI state to cancelled
-        const statusTextEl = document.getElementById("tripStatusText");
-        const statusBadgeEl = document.getElementById("tripStatusBadge");
-        if (statusTextEl) statusTextEl.textContent = "Cancelled";
-        if (statusBadgeEl) {
-          statusBadgeEl.className = "flight-status-badge cancelled";
-          statusBadgeEl.style.background = "#fee2e2";
-          statusBadgeEl.style.color = "#991b1b";
-        }
-        localStorage.setItem("tripStatus", "Cancelled");
-        
-        // Dynamically update the badges
-        updateCounters();
-        
-        // Hide the card if we are currently on the upcoming tab
-        const upcomingTab = document.querySelector('.tab-btn[data-filter="upcoming"]');
-        if (upcomingTab && upcomingTab.classList.contains("active")) {
-          // Re-trigger the click event on the active tab to re-evaluate the filter logic
-          upcomingTab.click();
-        }
-      });
-    });
-  }
-
-  // 5. Filter Tabs
+  // 9. Tab Button Listeners
   const tabButtons = document.querySelectorAll(".tab-btn");
   tabButtons.forEach((btn) => {
     btn.addEventListener("click", function () {
       tabButtons.forEach((b) => b.classList.remove("active"));
       this.classList.add("active");
 
-      const filter = this.getAttribute("data-filter");
-      const listColumn = document.querySelector(".trips-list-column");
-      const flightCard = document.querySelector(".desktop-flight-card");
-      const isCancelled = localStorage.getItem("tripStatus") === "Cancelled" || (activeBooking && activeBooking.status === "Cancelled");
-
-      if (filter === "upcoming" && !isCancelled) {
-        if (flightCard) flightCard.style.display = "block";
-        const emptyState = document.getElementById("trips-empty-state");
-        if (emptyState) emptyState.remove();
-      } else if (filter === "cancelled" && isCancelled) {
-        if (flightCard) flightCard.style.display = "block";
-        const emptyState = document.getElementById("trips-empty-state");
-        if (emptyState) emptyState.remove();
-      } else {
-        if (flightCard) flightCard.style.display = "none";
-        let emptyState = document.getElementById("trips-empty-state");
-        if (!emptyState && listColumn) {
-          emptyState = document.createElement("div");
-          emptyState.id = "trips-empty-state";
-          emptyState.style.cssText =
-            "background:#fff;border-radius:16px;padding:48px 24px;text-align:center;color:#64748B;border:1px dashed #CBD5E1;margin-top:16px;";
-          emptyState.innerHTML = `
-            <i class="fa-solid fa-plane-slash" style="font-size:36px;color:#94A3B8;margin-bottom:12px;"></i>
-            <h3 style="color:#0F172A;font-size:18px;margin-bottom:6px;">No ${filter} trips found</h3>
-            <p style="font-size:14px;max-width:320px;margin:0 auto 16px;">You don't have any ${filter} journeys in this category.</p>
-            <a href="/home" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#007A8C;color:#fff;border-radius:9999px;text-decoration:none;font-weight:700;font-size:14px;">Explore Flights</a>
-          `;
-          listColumn.appendChild(emptyState);
-        }
-      }
+      currentFilter = this.getAttribute("data-filter") || "upcoming";
+      renderTripsForFilter(currentFilter);
     });
   });
 
-  // Mobile Bottom Navigation Handlers
+  // 10. Mobile Bottom Navigation
   const navItems = document.querySelectorAll(".bottom-nav .nav-item");
   navItems.forEach((item) => {
     const label = (item.textContent || "").trim().toLowerCase();
-
     if (label.includes("home")) {
-      item.addEventListener("click", function (e) {
+      item.addEventListener("click", (e) => {
         e.preventDefault();
         window.location.href = "/home";
       });
-    }
-
-    if (label.includes("explore")) {
-      item.addEventListener("click", function (e) {
+    } else if (label.includes("explore")) {
+      item.addEventListener("click", (e) => {
         e.preventDefault();
         window.location.href = "/explore";
       });
-    }
-
-    if (label.includes("profile")) {
-      item.addEventListener("click", function (e) {
+    } else if (label.includes("profile")) {
+      item.addEventListener("click", (e) => {
         e.preventDefault();
         window.location.href = "/profile";
       });
