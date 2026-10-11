@@ -224,38 +224,110 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------
-  // 6-DIGIT OTP BOXES INTERACTION
+  // 6-DIGIT OTP BOXES INTERACTION (Zero Latency & Responsive)
   // ----------------------------------------------------
-  otpBoxes.forEach((box, idx) => {
-    // Input handling
-    box.addEventListener("input", (e) => {
-      const val = e.target.value.replace(/\D/g, "");
-      e.target.value = val ? val[0] : "";
+  function populateOtp(digits, startIdx = 0) {
+    const chars = digits.split("");
+    chars.forEach((char, offset) => {
+      const targetIdx = startIdx + offset;
+      if (otpBoxes[targetIdx]) {
+        otpBoxes[targetIdx].value = char;
+        otpBoxes[targetIdx].classList.add("filled");
+        otpBoxes[targetIdx].classList.remove("error");
+      }
+    });
 
-      if (e.target.value) {
+    const nextIdx = startIdx + chars.length;
+    if (nextIdx < otpBoxes.length) {
+      setTimeout(() => {
+        otpBoxes[nextIdx].focus();
+        try { otpBoxes[nextIdx].select(); } catch (_) {}
+      }, 0);
+    } else if (newPassInput) {
+      setTimeout(() => {
+        newPassInput.focus();
+      }, 0);
+    }
+  }
+
+  otpBoxes.forEach((box, idx) => {
+    // Select contents on focus/click so typing replaces instantly
+    box.addEventListener("focus", () => {
+      setTimeout(() => {
+        try { box.select(); } catch (_) {}
+      }, 10);
+    });
+
+    box.addEventListener("click", () => {
+      try { box.select(); } catch (_) {}
+    });
+
+    // Keydown: Backspace & Arrow keys navigation
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace") {
+        if (!box.value && idx > 0) {
+          e.preventDefault();
+          otpBoxes[idx - 1].value = "";
+          otpBoxes[idx - 1].classList.remove("filled");
+          otpBoxes[idx - 1].focus();
+        } else if (box.value) {
+          box.value = "";
+          box.classList.remove("filled");
+        }
+      } else if (e.key === "Delete") {
+        box.value = "";
+        box.classList.remove("filled");
+      } else if (e.key === "ArrowLeft" && idx > 0) {
+        e.preventDefault();
+        otpBoxes[idx - 1].focus();
+        try { otpBoxes[idx - 1].select(); } catch (_) {}
+      } else if (e.key === "ArrowRight" && idx < otpBoxes.length - 1) {
+        e.preventDefault();
+        otpBoxes[idx + 1].focus();
+        try { otpBoxes[idx + 1].select(); } catch (_) {}
+      }
+    });
+
+    // Input handling (Handles normal typing, fast buffering, mobile virtual keyboards)
+    box.addEventListener("input", (e) => {
+      const raw = e.target.value;
+      const cleanDigits = raw.replace(/\D/g, "");
+
+      if (!cleanDigits) {
+        box.value = "";
+        box.classList.remove("filled");
+        // On Android Chrome, virtual keyboard backspace fires input event with deleteContentBackward
+        if (e.inputType === "deleteContentBackward" && idx > 0) {
+          setTimeout(() => {
+            otpBoxes[idx - 1].focus();
+            try { otpBoxes[idx - 1].select(); } catch (_) {}
+          }, 0);
+        }
+        return;
+      }
+
+      if (cleanDigits.length > 1) {
+        // Multi-digit burst (fast typing, autofill, or paste)
+        populateOtp(cleanDigits, idx);
+      } else {
+        box.value = cleanDigits;
         box.classList.add("filled");
         box.classList.remove("error");
-        // Auto-advance to next box
+
         if (idx < otpBoxes.length - 1) {
-          otpBoxes[idx + 1].focus();
+          setTimeout(() => {
+            otpBoxes[idx + 1].focus();
+            try { otpBoxes[idx + 1].select(); } catch (_) {}
+          }, 0);
         } else if (newPassInput) {
-          newPassInput.focus();
+          setTimeout(() => {
+            newPassInput.focus();
+          }, 0);
         }
-      } else {
-        box.classList.remove("filled");
       }
     });
 
-    // Keydown: backspace navigation
-    box.addEventListener("keydown", (e) => {
-      if (e.key === "Backspace" && !box.value && idx > 0) {
-        otpBoxes[idx - 1].focus();
-        otpBoxes[idx - 1].value = "";
-        otpBoxes[idx - 1].classList.remove("filled");
-      }
-    });
-
-    // Paste handling: supports pasting entire 6 digits
+    // Paste handling: supports pasting 6 digits anywhere
     box.addEventListener("paste", (e) => {
       e.preventDefault();
       const pasteData = (e.clipboardData || window.clipboardData)
@@ -264,40 +336,23 @@ document.addEventListener("DOMContentLoaded", () => {
         .slice(0, 6);
 
       if (!pasteData) return;
-
-      pasteData.split("").forEach((char, i) => {
-        if (otpBoxes[i]) {
-          otpBoxes[i].value = char;
-          otpBoxes[i].classList.add("filled");
-          otpBoxes[i].classList.remove("error");
-        }
-      });
-
-      if (pasteData.length === 6 && newPassInput) {
-        newPassInput.focus();
-      } else if (otpBoxes[pasteData.length]) {
-        otpBoxes[pasteData.length].focus();
-      }
+      const start = pasteData.length === 6 ? 0 : idx;
+      populateOtp(pasteData, start);
     });
   });
 
   // Resend OTP Action
-
   if (resendBtn) {
     resendBtn.addEventListener("click", async () => {
       if (!currentEmail || resendBtn.disabled) return;
 
       resendBtn.disabled = true;
       try {
-        let res;
         if (window.API && window.API.auth && typeof API.auth.forgotPassword === "function") {
-          res = await API.auth.forgotPassword({ email: currentEmail });
-        }
-        if (res && res.otp && devCodeEl) {
-          devCodeEl.textContent = res.otp;
+          await API.auth.forgotPassword({ email: currentEmail });
         }
         startResendCountdown();
-        showToast("A new verification code has been sent.", "success");
+        showToast("A new verification code has been sent to your email.", "success");
       } catch (err) {
         showToast(err.message || "Failed to resend code.");
         resendBtn.disabled = false;

@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
+  "cleanUrls": false,
   "outputDirectory": ".",
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -85,6 +85,10 @@
     { "source": "/confirmation.css", "destination": "/pages/auth/confirmation/confirmation.css" },
     { "source": "/confirmation.js", "destination": "/pages/auth/confirmation/confirmation.js" },
     { "source": "/forgot-password.css", "destination": "/pages/auth/forgot-password/forgot-password.css" },
-    { "source": "/forgot-password.js", "destination": "/pages/auth/forgot-password/forgot-password.js" }
+    { "source": "/forgot-password.js", "destination": "/pages/auth/forgot-password/forgot-password.js" },
+
+    { "source": "/shared/(.*)", "destination": "/shared/$1" },
+    { "source": "/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/pages/(.*)", "destination": "/pages/$1" }
   ]
 }

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node scripts/server.js",
     "start": "node scripts/server.js",
-    "check": "node scripts/check-links.js"
+    "check": "node scripts/check-links.js",
+    "build": "node -e \"console.log('Build complete')\""
   },
 
 
