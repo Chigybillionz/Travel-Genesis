@@ -5,38 +5,51 @@ let cachedTransporter = null;
 async function getTransporter() {
   if (cachedTransporter) return cachedTransporter;
 
-  // 1. If real SMTP credentials are provided in .env
-  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    cachedTransporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-      port: Number(process.env.EMAIL_PORT) || 587,
-      secure: Number(process.env.EMAIL_PORT) === 465,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+  const emailUser = (process.env.EMAIL_USER || process.env.SMTP_USER || '').trim();
+  const rawPass = (process.env.EMAIL_PASS || process.env.SMTP_PASS || '').trim();
+  // Strip any spaces from Google 16-character App Passwords (e.g. "abcd efgh ijkl mnop" -> "abcdefghijklmnop")
+  const emailPass = rawPass.replace(/\s+/g, '');
+
+  // 1. If real SMTP / Gmail credentials are provided
+  if (emailUser && emailPass) {
+    const isGmail = (process.env.EMAIL_HOST && process.env.EMAIL_HOST.toLowerCase().includes('gmail')) ||
+                    (!process.env.EMAIL_HOST && emailUser.toLowerCase().includes('@gmail.com')) ||
+                    (process.env.EMAIL_SERVICE && process.env.EMAIL_SERVICE.toLowerCase() === 'gmail');
+
+    if (isGmail) {
+      cachedTransporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+      });
+    } else {
+      cachedTransporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST || process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: Number(process.env.EMAIL_PORT || process.env.SMTP_PORT) || 587,
+        secure: Number(process.env.EMAIL_PORT || process.env.SMTP_PORT) === 465,
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+      });
+    }
+
+    try {
+      await cachedTransporter.verify();
+      console.log(`[EMAIL] ✅ Live SMTP connection verified for ${emailUser}`);
+    } catch (verifyErr) {
+      console.warn(`[EMAIL WARNING] Could not verify SMTP connection for ${emailUser}:`, verifyErr.message);
+    }
+
     return cachedTransporter;
   }
 
-  // 2. If SMTP_HOST / SMTP_USER / SMTP_PASS are set
-  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    cachedTransporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: Number(process.env.SMTP_PORT) === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-    return cachedTransporter;
-  }
-
-  // 3. Fallback to automated Ethereal test account (real emails with live preview URLs)
+  // 2. Fallback to automated Ethereal test account (sandbox preview link)
   try {
     const testAccount = await nodemailer.createTestAccount();
-    console.log(`[EMAIL] ℹ️ Using Ethereal test mail service: ${testAccount.user}`);
+    console.log(`[EMAIL] ℹ️ No real EMAIL_USER/EMAIL_PASS configured. Using Ethereal sandbox: ${testAccount.user}`);
     cachedTransporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
@@ -59,7 +72,8 @@ async function getTransporter() {
 async function sendPasswordResetEmail({ to, name, otp }) {
   const transporter = await getTransporter();
 
-  const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER || '"TravelGenesis" <noreply@travelgenesis.ng>';
+  const emailUser = (process.env.EMAIL_USER || process.env.SMTP_USER || '').trim();
+  const fromAddress = process.env.EMAIL_FROM || (emailUser ? `"TravelGenesis" <${emailUser}>` : '"TravelGenesis" <noreply@travelgenesis.ng>');
   const recipientName = name ? name.split(' ')[0] : 'Traveler';
 
   const htmlContent = `

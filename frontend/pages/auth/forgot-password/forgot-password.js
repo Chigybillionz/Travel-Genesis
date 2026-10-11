@@ -113,6 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeEmailBtn = document.getElementById("changeEmailBtn");
   const resendBtn = document.getElementById("resendOtpBtn");
 
+  const devBanner = document.getElementById("devOtpBanner");
+  const devCodeEl = document.getElementById("devOtpCode");
+  const devAutofillBtn = document.getElementById("devAutofillBtn");
+
   const otpBoxes = Array.from(document.querySelectorAll(".otp-box"));
 
 
@@ -188,6 +192,16 @@ document.addEventListener("DOMContentLoaded", () => {
         currentEmail = email;
         if (sentEmailDisplay) sentEmailDisplay.textContent = email;
 
+        // Show dev OTP hint if returned (when SMTP is not configured in .env)
+        if (res && res.otp) {
+          if (devBanner && devCodeEl) {
+            devCodeEl.textContent = res.otp;
+            devBanner.style.display = "flex";
+          }
+        } else {
+          if (devBanner) devBanner.style.display = "none";
+        }
+
         // Transition to Step 2
         step1.style.display = "none";
         step2.style.display = "block";
@@ -202,7 +216,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (otpBoxes[0]) otpBoxes[0].focus();
 
         startResendCountdown();
-        showToast("Verification code sent to your email inbox! Please check your email.", "success");
+        showToast(
+          res && res.otp
+            ? "Verification code generated! (Use the on-screen code or check terminal)"
+            : "Verification code sent to your email inbox! Please check your email.",
+          "success"
+        );
 
       } catch (err) {
         console.error("Forgot password request error:", err);
@@ -341,6 +360,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Dev Autofill Button
+  if (devAutofillBtn) {
+    devAutofillBtn.addEventListener("click", () => {
+      const code = devCodeEl ? devCodeEl.textContent.trim() : "";
+      if (!code) return;
+      populateOtp(code, 0);
+    });
+  }
+
   // Resend OTP Action
   if (resendBtn) {
     resendBtn.addEventListener("click", async () => {
@@ -348,11 +376,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       resendBtn.disabled = true;
       try {
+        let res;
         if (window.API && window.API.auth && typeof API.auth.forgotPassword === "function") {
-          await API.auth.forgotPassword({ email: currentEmail });
+          res = await API.auth.forgotPassword({ email: currentEmail });
+        }
+        if (res && res.otp && devCodeEl) {
+          devCodeEl.textContent = res.otp;
+          if (devBanner) devBanner.style.display = "flex";
         }
         startResendCountdown();
-        showToast("A new verification code has been sent to your email.", "success");
+        showToast(
+          res && res.otp
+            ? "New verification code generated! (Use on-screen code or check terminal)"
+            : "A new verification code has been sent to your email.",
+          "success"
+        );
       } catch (err) {
         showToast(err.message || "Failed to resend code.");
         resendBtn.disabled = false;

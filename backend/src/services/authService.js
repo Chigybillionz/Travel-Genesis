@@ -93,22 +93,43 @@ const forgotPassword = async ({ email }) => {
   user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
 
+  const hasRealSmtp = Boolean(
+    (process.env.EMAIL_USER || process.env.SMTP_USER) &&
+    (process.env.EMAIL_PASS || process.env.SMTP_PASS)
+  );
+
+  console.log(`\n========================================================`);
+  console.log(`[PASSWORD RESET OTP] Recipient: ${user.email} (${user.name})`);
+  console.log(`[PASSWORD RESET OTP] 6-Digit Code: ${otp}`);
+  if (!hasRealSmtp) {
+    console.log(`[PASSWORD RESET OTP] ℹ️ Real email NOT sent: EMAIL_USER / EMAIL_PASS not yet set in backend/.env`);
+    console.log(`[PASSWORD RESET OTP] Add your Gmail & App Password to backend/.env to deliver real emails to inbox.`);
+  }
+  console.log(`========================================================\n`);
+
   // Send verification email to the user's registered inbox
+  let emailResult = null;
   try {
-    await emailService.sendPasswordResetEmail({
+    emailResult = await emailService.sendPasswordResetEmail({
       to: user.email,
       name: user.name,
       otp,
     });
   } catch (emailErr) {
     console.error(`[AUTH] Failed to send email to ${user.email}:`, emailErr.message);
-    throw new Error('Unable to send verification email. Please verify your email configuration.');
+    if (hasRealSmtp) {
+      throw new Error(`Unable to send verification email: ${emailErr.message}`);
+    }
   }
 
   return {
     success: true,
-    message: 'Verification code sent successfully to your registered email address.',
+    message: hasRealSmtp
+      ? 'Verification code sent to your email inbox! Please check your email.'
+      : 'Verification code generated! (SMTP credentials not yet set in .env - code provided on-screen for testing)',
     email: user.email,
+    previewUrl: emailResult && emailResult.previewUrl ? emailResult.previewUrl : undefined,
+    ...(!hasRealSmtp ? { otp } : {}),
   };
 };
 
